@@ -1,0 +1,34 @@
+LED
+	https://jlcpcb.com/parts/componentSearch?searchTxt=LED
+	JLCPCB Part # C2286
+	Package 0603
+
+抵抗器 330Ω
+	https://jlcpcb.com/partdetail/12862-0402WGJ0331TCE/C12246
+	JLCPCB Part # C12246
+	Package 0402
+
+抵抗器 22KΩ
+	https://jlcpcb.com/partdetail/26511-0402WGF2202TCE/C25768
+	JLCPCB Part # C25768
+	Package 0402
+
+抵抗器 5.1kΩ
+	https://jlcpcb.com/partdetail/23913-0603WAF5101T5E/C23186
+	JLCPCB Part # C23186
+	Package 0603
+
+USB-C コネクタ
+	https://jlcpcb.com/partdetail/DEALON-USB_TYPE_C009/C2927029
+	JLCPCB Part # C2927029
+	Package SMD
+
+タクトスイッチ
+	https://jlcpcb.com/partdetail/ALPSALPINE-SKRABCE010/C19724057
+	JLCPCB Part # C19724057
+	Package SMD-4P,6.2x6.2mm
+
+MicroSDスロット
+	https://jlcpcb.com/partdetail/Korean_HropartsElec-TF01A/C91145
+	JLCPCB Part # C91145
+	Package SMD
