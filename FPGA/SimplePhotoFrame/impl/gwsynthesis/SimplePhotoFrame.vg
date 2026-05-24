@@ -1,0 +1,373 @@
+//
+//Written by GowinSynthesis
+//Tool Version "V1.9.11.02 (64-bit)"
+//Mon May 25 07:22:43 2026
+
+//Source file index table:
+//file0 "\C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v"
+`timescale 100 ps/100 ps
+module simple_photo_frame (
+  clk27m,
+  lcd_ck,
+  lcd_hs,
+  lcd_vs,
+  lcd_de,
+  lcd_r,
+  lcd_g,
+  lcd_b,
+  led,
+  fpga_spi_cs_n,
+  fpga_spi_sck,
+  fpga_spi_mosi,
+  fpga_spi_miso,
+  fpga_spi_intr,
+  i2s_bclk,
+  i2s_dout,
+  i2s_en,
+  i2s_lrck,
+  ws2812,
+  button,
+  O_sdram_clk,
+  O_sdram_cke,
+  O_sdram_cs_n,
+  O_sdram_ras_n,
+  O_sdram_cas_n,
+  O_sdram_wen_n,
+  IO_sdram_dq,
+  O_sdram_addr,
+  O_sdram_ba,
+  O_sdram_dqm
+)
+;
+input clk27m;
+output lcd_ck;
+output lcd_hs;
+output lcd_vs;
+output lcd_de;
+output [4:0] lcd_r;
+output [5:0] lcd_g;
+output [4:0] lcd_b;
+output [7:0] led;
+input fpga_spi_cs_n;
+input fpga_spi_sck;
+input fpga_spi_mosi;
+output fpga_spi_miso;
+output fpga_spi_intr;
+output i2s_bclk;
+output i2s_dout;
+output i2s_en;
+output i2s_lrck;
+output ws2812;
+input [1:0] button;
+output O_sdram_clk;
+output O_sdram_cke;
+output O_sdram_cs_n;
+output O_sdram_ras_n;
+output O_sdram_cas_n;
+output O_sdram_wen_n;
+inout [31:0] IO_sdram_dq;
+output [10:0] O_sdram_addr;
+output [1:0] O_sdram_ba;
+output [3:0] O_sdram_dqm;
+wire VCC;
+wire GND;
+  TBUF lcd_ck_s0 (
+    .O(lcd_ck),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_hs_s0 (
+    .O(lcd_hs),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_vs_s0 (
+    .O(lcd_vs),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_de_s0 (
+    .O(lcd_de),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_r_4_s0 (
+    .O(lcd_r[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_r_4_s1 (
+    .O(lcd_r[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_r_4_s2 (
+    .O(lcd_r[2]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_r_4_s3 (
+    .O(lcd_r[3]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_r_4_s4 (
+    .O(lcd_r[4]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_g_5_s0 (
+    .O(lcd_g[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_g_5_s1 (
+    .O(lcd_g[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_g_5_s2 (
+    .O(lcd_g[2]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_g_5_s3 (
+    .O(lcd_g[3]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_g_5_s4 (
+    .O(lcd_g[4]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_g_5_s5 (
+    .O(lcd_g[5]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_b_4_s0 (
+    .O(lcd_b[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_b_4_s1 (
+    .O(lcd_b[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_b_4_s2 (
+    .O(lcd_b[2]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_b_4_s3 (
+    .O(lcd_b[3]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF lcd_b_4_s4 (
+    .O(lcd_b[4]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s0 (
+    .O(led[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s1 (
+    .O(led[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s2 (
+    .O(led[2]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s3 (
+    .O(led[3]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s4 (
+    .O(led[4]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s5 (
+    .O(led[5]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s6 (
+    .O(led[6]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF led_7_s7 (
+    .O(led[7]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF fpga_spi_miso_s0 (
+    .O(fpga_spi_miso),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF fpga_spi_intr_s0 (
+    .O(fpga_spi_intr),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF i2s_bclk_s0 (
+    .O(i2s_bclk),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF i2s_dout_s0 (
+    .O(i2s_dout),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF i2s_en_s0 (
+    .O(i2s_en),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF i2s_lrck_s0 (
+    .O(i2s_lrck),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF ws2812_s0 (
+    .O(ws2812),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_clk_s0 (
+    .O(O_sdram_clk),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_cke_s0 (
+    .O(O_sdram_cke),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_cs_n_s0 (
+    .O(O_sdram_cs_n),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_ras_n_s0 (
+    .O(O_sdram_ras_n),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_cas_n_s0 (
+    .O(O_sdram_cas_n),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_wen_n_s0 (
+    .O(O_sdram_wen_n),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s0 (
+    .O(O_sdram_addr[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s1 (
+    .O(O_sdram_addr[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s2 (
+    .O(O_sdram_addr[2]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s3 (
+    .O(O_sdram_addr[3]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s4 (
+    .O(O_sdram_addr[4]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s5 (
+    .O(O_sdram_addr[5]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s6 (
+    .O(O_sdram_addr[6]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s7 (
+    .O(O_sdram_addr[7]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s8 (
+    .O(O_sdram_addr[8]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s9 (
+    .O(O_sdram_addr[9]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_addr_10_s10 (
+    .O(O_sdram_addr[10]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_ba_1_s0 (
+    .O(O_sdram_ba[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_ba_1_s1 (
+    .O(O_sdram_ba[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_dqm_3_s0 (
+    .O(O_sdram_dqm[0]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_dqm_3_s1 (
+    .O(O_sdram_dqm[1]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_dqm_3_s2 (
+    .O(O_sdram_dqm[2]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  TBUF O_sdram_dqm_3_s3 (
+    .O(O_sdram_dqm[3]),
+    .I(GND),
+    .OEN(VCC) 
+);
+  VCC VCC_cZ (
+    .V(VCC)
+);
+  GND GND_cZ (
+    .G(GND)
+);
+  GSR GSR (
+    .GSRI(VCC) 
+);
+endmodule /* simple_photo_frame */

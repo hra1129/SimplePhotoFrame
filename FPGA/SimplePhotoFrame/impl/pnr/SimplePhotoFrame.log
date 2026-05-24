@@ -1,0 +1,12 @@
+Reading netlist file: "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg"
+Parsing netlist file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg" completed
+Processing netlist completed
+Reading constraint file: "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst"
+ERROR  (CT1108) : "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst":87 | Illegal port attribute value specified 'PULL_MODE = UP' on 'i2s_dout'
+ERROR  (CT1136) : Bank 3 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'lcd_de_s0' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'led_7_s7' : IO_TYPE = SSTL33_II in the same bank
+ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'led_7_s6' : IO_TYPE = SSTL33_II in the same bank
+ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'gowin_ibuf_fpga_spi_cs_n' : IO_TYPE = SSTL33_II in the same bank
+ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'gowin_ibuf_fpga_spi_sck' : IO_TYPE = SSTL33_II in the same bank
+ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'gowin_ibuf_fpga_spi_mosi' : IO_TYPE = SSTL33_II in the same bank
+Physical Constraint parsed completed with errors
