@@ -5,6 +5,16 @@
   "InstName" : "simple_photo_frame",
   "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
   "ModuleLine" : 6,
-  "ModuleName" : "simple_photo_frame"
+  "ModuleName" : "simple_photo_frame",
+  "SubInsts" : [
+   {
+    "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
+    "InstLine" : 51,
+    "InstName" : "your_instance_name",
+    "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/gowin_rpll/gowin_rpll.v",
+    "ModuleLine" : 10,
+    "ModuleName" : "Gowin_rPLL"
+   }
+  ]
  }
 ]

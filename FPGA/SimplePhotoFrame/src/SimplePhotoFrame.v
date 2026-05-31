@@ -42,4 +42,15 @@ module simple_photo_frame (
 	output	[ 1:0]	O_sdram_ba,		//	GOWIN FPGA Internal
 	output	[ 3:0]	O_sdram_dqm		//	GOWIN FPGA Internal
 );
+	wire			clk132m;
+	wire			clk66m;
+
+	// ---------------------------------------------------------
+	//	クロック生成
+	// ---------------------------------------------------------
+    Gowin_rPLL your_instance_name(
+        .clkout		( clk132m		),		//	132MHz
+        .clkoutd	( clk66m		),		//	66MHz
+        .clkin		( clk27m		)		//	27MHz
+    );
 endmodule
