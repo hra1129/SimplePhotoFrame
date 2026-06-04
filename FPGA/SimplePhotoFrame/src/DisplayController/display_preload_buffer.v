@@ -1,5 +1,5 @@
 //
-// preload_buffer.v
+// display_preload_buffer.v
 //
 //	Copyright (C) 2026 Takayuki Hara
 //
@@ -54,7 +54,7 @@
 //
 //-----------------------------------------------------------------------------
 
-module preload_buffer (
+module display_preload_buffer (
 	input			clk,
 	input			reset,
 	//	DRAM からくるデータを受けるポート
@@ -226,7 +226,7 @@ module preload_buffer (
 	wire	[10:0]	w_sram0_addr	= w_sram0_we ? w_wr_addr : w_rd_addr;
 	wire	[10:0]	w_sram1_addr	= w_sram1_we ? w_wr_addr : w_rd_addr;
 
-	single_port_ram u_sram0 (
+	display_single_port_ram u_sram0 (
 		.clk		( clk			),
 		.we			( w_sram0_we	),
 		.address	( w_sram0_addr	),
@@ -234,7 +234,7 @@ module preload_buffer (
 		.dout		( w_sram0_dout	)
 	);
 
-	single_port_ram u_sram1 (
+	display_single_port_ram u_sram1 (
 		.clk		( clk			),
 		.we			( w_sram1_we	),
 		.address	( w_sram1_addr	),

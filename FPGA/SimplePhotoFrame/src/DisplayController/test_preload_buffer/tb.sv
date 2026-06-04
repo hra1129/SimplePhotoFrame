@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-//	Test of preload_buffer.v
+//	Test of display_preload_buffer.v
 //	Copyright (C)2026 Takayuki Hara (HRA!)
 //
 //	本ソフトウェアおよび本ソフトウェアに基づいて作成された派生物は、以下の条件を
@@ -79,16 +79,16 @@ module tb ();
 	// -----------------------------------------------------------------------
 	//	DUT インスタンス
 	// -----------------------------------------------------------------------
-	preload_buffer u_dut (
-		.clk		( clk		),
-		.reset		( reset		),
-		.in_data	( in_data	),
-		.in_valid	( in_valid	),
-		.in_ready	( in_ready	),
+	display_preload_buffer u_dut (
+		.clk			( clk				),
+		.reset			( reset				),
+		.in_data		( in_data			),
+		.in_valid		( in_valid			),
+		.in_ready		( in_ready			),
 		.in_nearly_full	( in_nearly_full	),
-		.out_data	( out_data	),
-		.out_valid	( out_valid	),
-		.out_ready	( out_ready	)
+		.out_data		( out_data			),
+		.out_valid		( out_valid			),
+		.out_ready		( out_ready			)
 	);
 
 	// -----------------------------------------------------------------------

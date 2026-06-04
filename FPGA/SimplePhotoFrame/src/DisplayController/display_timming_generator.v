@@ -1,5 +1,5 @@
 //
-// timming_generator.v
+// display_timming_generator.v
 //
 //	Copyright (C) 2026 Takayuki Hara
 //
@@ -54,9 +54,16 @@
 //
 //-----------------------------------------------------------------------------
 
-module timming_generator (
+module display_timming_generator (
 	input			clk,
 	input			reset,
+	// Pixel input (valid/ready handshake, RGB565 format)
+	//   p_data[15:11] = R[4:0]
+	//   p_data[10: 5] = G[5:0]  (G[0] is discarded; lcd_g[0] is fixed 0)
+	//   p_data[ 4: 0] = B[4:0]
+	input			p_valid,
+	output			p_ready,
+	input	[15:0]	p_data,
 	// LCD interface
 	output			lcd_ck,
 	output			lcd_hs,
@@ -64,14 +71,7 @@ module timming_generator (
 	output			lcd_de,
 	output	[4:0]	lcd_r,
 	output	[5:0]	lcd_g,		// bit0 is fixed 0
-	output	[4:0]	lcd_b,
-	// Pixel input (valid/ready handshake, RGB565 format)
-	//   p_data[15:11] = R[4:0]
-	//   p_data[10: 5] = G[5:0]  (G[0] is discarded; lcd_g[0] is fixed 0)
-	//   p_data[ 4: 0] = B[4:0]
-	input			p_valid,
-	output			p_ready,
-	input	[15:0]	p_data
+	output	[4:0]	lcd_b
 );
 
 	// -------------------------------------------------------------------------

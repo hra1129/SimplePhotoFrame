@@ -1,6 +1,7 @@
-// -----------------------------------------------------------------------------
-//	Test of display_timming_generator.v
-//	Copyright (C)2026 Takayuki Hara (HRA!)
+//
+// display_single_port_ram.v
+//
+//	Copyright (C) 2026 Takayuki Hara
 //
 //	本ソフトウェアおよび本ソフトウェアに基づいて作成された派生物は、以下の条件を
 //	満たす場合に限り、再頒布および使用が許可されます。
@@ -51,89 +52,24 @@
 //	ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 //	POSSIBILITY OF SUCH DAMAGE.
 //
-// --------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-module tb ();
-	// 66 MHz clock: period = 1,000,000 ps / 66 = 15151.5... ps
-	//   half period = 7576 ps  (actual freq ≈ 66.007 MHz)
-	localparam		CLK_HALF_PS		= 7576;
+module display_single_port_ram (
+	input			clk,
+	input			we,
+	input	[10:0]	address,
+	input	[15:0]	din,
+	output	[15:0]	dout
+);
+	reg		[15:0]	ff_ram	[0:2047];
+	reg		[15:0]	ff_dout;
 
-	reg				clk;
-	reg				reset;
-
-	wire			lcd_ck;
-	wire			lcd_hs;
-	wire			lcd_vs;
-	wire			lcd_de;
-	wire	[4:0]	lcd_r;
-	wire	[5:0]	lcd_g;
-	wire	[4:0]	lcd_b;
-
-	reg				p_valid;
-	wire			p_ready;
-	reg		[15:0]	p_data;
-
-	// -----------------------------------------------------------------------
-	// DUT
-	// -----------------------------------------------------------------------
-	display_timming_generator u_dut (
-		.clk		( clk		),
-		.reset		( reset		),
-		.lcd_ck		( lcd_ck	),
-		.lcd_hs		( lcd_hs	),
-		.lcd_vs		( lcd_vs	),
-		.lcd_de		( lcd_de	),
-		.lcd_r		( lcd_r		),
-		.lcd_g		( lcd_g		),
-		.lcd_b		( lcd_b		),
-		.p_valid	( p_valid	),
-		.p_ready	( p_ready	),
-		.p_data		( p_data	)
-	);
-
-	// -----------------------------------------------------------------------
-	// 66 MHz clock generation
-	// -----------------------------------------------------------------------
-	initial		clk		= 1'b0;
-	always		#(CLK_HALF_PS) clk = ~clk;
-
-	// -----------------------------------------------------------------------
-	// Pixel data supply
-	//   p_data is updated on each rising edge of lcd_ck during active area.
-	//   This ensures the next pixel value is ready before the next low phase
-	//   of lcd_ck (= next p_ready assertion).
-	// -----------------------------------------------------------------------
-	always @( posedge lcd_ck or posedge reset ) begin
-		if( reset ) begin
-			p_data <= 16'h0000;
+	always @( posedge clk ) begin
+		if( we ) begin
+			ff_ram[address] <= din;
 		end
-		else if( lcd_de ) begin
-			p_data <= p_data + 16'd1;
-		end
+		ff_dout <= ff_ram[address];
 	end
 
-	// -----------------------------------------------------------------------
-	// Stimulus
-	// -----------------------------------------------------------------------
-	initial begin
-		reset	= 1'b1;
-		p_valid	= 1'b0;
-
-		// Hold reset for 20 clocks
-		repeat( 20 ) @( posedge clk );
-		@( negedge clk );
-		reset	= 1'b0;
-		p_valid	= 1'b1;
-
-		// --- Stall test ---
-		// Wait until well inside the first active line then withhold p_valid
-		// for 10 clocks to verify the whole timing machine stalls.
-		repeat( 3000 ) @( posedge clk );
-		p_valid = 1'b0;
-		repeat( 10 ) @( posedge clk );
-		p_valid = 1'b1;
-
-		// Simulation ends via run.do
-	end
-
+	assign	dout = ff_dout;
 endmodule

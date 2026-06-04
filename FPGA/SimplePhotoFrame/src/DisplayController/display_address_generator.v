@@ -1,5 +1,5 @@
 //
-// single_port_ram.v
+// display_address_generator.v
 //
 //	Copyright (C) 2026 Takayuki Hara
 //
@@ -54,22 +54,25 @@
 //
 //-----------------------------------------------------------------------------
 
-module single_port_ram (
+module display_address_generator (
 	input			clk,
-	input			we,
-	input	[10:0]	address,
-	input	[15:0]	din,
-	output	[15:0]	dout
+	input			reset,
+	input			sdram_init_busy,
+	//	Register interface
+	input			bus_address,
+	input			bus_valid,
+	output			bus_ready,
+	input			bus_write,
+	input	[15:0]	bus_wdata,
+	output	[15:0]	bus_rdata,
+	output			bus_rdata_valid,
+	//	SDRAM address
+	output	[22:5]	sdram_address,
+	output			sdram_address_valid,
+	input			sdram_address_ready
 );
-	reg		[15:0]	ff_ram	[0:2047];
-	reg		[15:0]	ff_dout;
-
-	always @( posedge clk ) begin
-		if( we ) begin
-			ff_ram[address] <= din;
-		end
-		ff_dout <= ff_ram[address];
-	end
-
-	assign	dout = ff_dout;
+	localparam		IMG_WIDTH	= 800 / 16;	//	ピクセル数/バーストリードワード数
+	localparam		IMG_HEIGHT	= 480;
+	localparam		IMG_SIZE	= IMG_WIDTH * IMG_HEIGHT;
+	reg		[22:5]	reg_base_address;
 endmodule

@@ -139,7 +139,9 @@ module ip_sdram #(
 	reg		[10:0]				ff_sdr_address;
 	reg		[31:0]				ff_sdr_write_data;
 	reg		[ 3:0]				ff_sdr_dq_mask;
-	reg		[31:0]				ff_sdr_read_data;
+	reg		[255:0]			ff_sdr_read_data;
+	reg		[ 2:0]				ff_sdr_read_data_index;
+	reg							ff_sdr_read_data_capture;
 	reg							ff_sdr_read_data_en;
 	reg							ff_do_command;
 	reg							ff_write;
@@ -380,6 +382,7 @@ module ip_sdram #(
 				end
 			default:
 				begin
+					//	モードレジスタ BL=8, BT=0, CAS=2, OP=0, WB=1
 					ff_sdr_bank <= 2'd0;			//	Ignore
 					ff_sdr_address <= { 
 						1'b0,						//	Reserved
@@ -387,7 +390,7 @@ module ip_sdram #(
 						2'b00,						//	Operation mode    00: Standard Operation, others: Reserved
 						3'b010,						//	CAS Latency       010: 2cyc, 011: 3cyc, others: Reserved
 						1'b0,						//	Burst type        0: Sequential Access, 1: Interleave Access
-						3'b000						//	Burst length      000: 1, 001: 2, 010: 4, 011: 8, 111: full page (Sequential Access only), others: Reserved
+						3'b011						//	Burst length      000: 1, 001: 2, 010: 4, 011: 8, 111: full page (Sequential Access only), others: Reserved
 					};
 				end
 			endcase
@@ -440,10 +443,36 @@ module ip_sdram #(
 
 	always @( posedge clk_sdram ) begin
 		if( !reset_n ) begin
-			ff_sdr_read_data	<= 32'd0;
+			ff_sdr_read_data			<= 256'd0;
+			ff_sdr_read_data_index		<= 3'd0;
+			ff_sdr_read_data_capture	<= 1'b0;
 		end
-		else if( ff_main_state == c_main_state_finish ) begin
-			ff_sdr_read_data	<= IO_sdram_dq;
+		else if( (ff_main_state == c_main_state_finish) && !ff_write && !ff_do_refresh ) begin
+			ff_sdr_read_data[31:0]		<= IO_sdram_dq;
+			ff_sdr_read_data_index		<= 3'd1;
+			ff_sdr_read_data_capture	<= 1'b1;
+		end
+		else if( ff_sdr_read_data_capture ) begin
+			case( ff_sdr_read_data_index )
+			3'd1: ff_sdr_read_data[ 63: 32]	<= IO_sdram_dq;
+			3'd2: ff_sdr_read_data[ 95: 64]	<= IO_sdram_dq;
+			3'd3: ff_sdr_read_data[127: 96]	<= IO_sdram_dq;
+			3'd4: ff_sdr_read_data[159:128]	<= IO_sdram_dq;
+			3'd5: ff_sdr_read_data[191:160]	<= IO_sdram_dq;
+			3'd6: ff_sdr_read_data[223:192]	<= IO_sdram_dq;
+			3'd7: ff_sdr_read_data[255:224]	<= IO_sdram_dq;
+			default: begin
+				// hold
+			end
+			endcase
+
+			if( ff_sdr_read_data_index == 3'd7 ) begin
+				ff_sdr_read_data_index		<= 3'd0;
+				ff_sdr_read_data_capture	<= 1'b0;
+			end
+			else begin
+				ff_sdr_read_data_index		<= ff_sdr_read_data_index + 3'd1;
+			end
 		end
 	end
 
@@ -472,6 +501,6 @@ module ip_sdram #(
 	assign O_sdram_addr			= ff_sdr_address;
 	assign IO_sdram_dq			= ff_sdr_write_data;
 
-	assign bus_rdata			= ff_sdr_read_data;
+	assign bus_rdata			= ff_sdr_read_data[31:0];
 	assign bus_rdata_en			= ff_sdr_read_data_en;
 endmodule
