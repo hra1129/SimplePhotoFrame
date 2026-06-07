@@ -3222,6 +3222,16 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "DAT0(DO) - MISO\nCMD(DI) - MOSI"
+		(exclude_from_sim no)
+		(at 231.902 144.272 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "216708a0-2370-4762-af04-3227166909f4")
+	)
 	(text "L で点灯\nH で消灯\nLEDx は、FPGA内PullUp"
 		(exclude_from_sim no)
 		(at 16.002 152.908 0)
