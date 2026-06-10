@@ -116,7 +116,7 @@ module display_preload_buffer (
 		if( reset ) begin
 			ff_initial_charge <= 1'b1;
 		end
-		else if( w_full ) begin
+		else if( w_nearly_full ) begin
 			// 空き容量がなくなったら、初期チャージは完了
 			ff_initial_charge <= 1'b0;
 		end

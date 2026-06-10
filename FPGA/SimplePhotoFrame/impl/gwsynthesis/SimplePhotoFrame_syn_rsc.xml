@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="simple_photo_frame" Register="1" T_Register="652(1)" T_Alu="47(0)" T_Lut="643(0)" T_MULT9X9="1(0)" T_Bsram="4(0)">
+<Module name="simple_photo_frame" Register="1" T_Register="655(1)" T_Alu="47(0)" T_Lut="652(0)" T_MULT9X9="1(0)" T_Bsram="4(0)">
  <SubModule name="u_rpll"/>
  <SubModule name="u_ip_spi" Register="35" Lut="54" T_Register="63(35)" T_Lut="83(54)">
   <SubModule name="u_spi" Register="28" Lut="29" T_Register="28(28)" T_Lut="29(29)"/>
  </SubModule>
- <SubModule name="u_display_controller" T_Register="246(0)" T_Alu="47(0)" T_Lut="327(0)" T_MULT9X9="1(0)" T_Bsram="4(0)">
-  <SubModule name="display_address_generator" Register="72" Alu="36" Lut="70" MULT9X9="1" T_Register="72(72)" T_Alu="36(36)" T_Lut="70(70)" T_MULT9X9="1(1)"/>
+ <SubModule name="u_display_controller" T_Register="249(0)" T_Alu="47(0)" T_Lut="336(0)" T_MULT9X9="1(0)" T_Bsram="4(0)">
+  <SubModule name="display_address_generator" Register="75" Alu="36" Lut="79" MULT9X9="1" T_Register="75(75)" T_Alu="36(36)" T_Lut="79(79)" T_MULT9X9="1(1)"/>
   <SubModule name="display_preload_buffer" Register="151" Alu="11" Lut="192" T_Register="151(151)" T_Alu="11(11)" T_Lut="192(192)" T_Bsram="4(0)">
    <SubModule name="u_sram0" Bsram="2" T_Bsram="2(2)"/>
    <SubModule name="u_sram1" Bsram="2" T_Bsram="2(2)"/>

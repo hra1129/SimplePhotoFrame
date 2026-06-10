@@ -14,15 +14,15 @@ module Gowin_rPLL (
 	input			clkin
 );
 	reg		r_clkout	= 1'b0;
-	reg		r_clkoutd	= 1'b1;
+	reg		r_clkoutp	= 1'b1;
 
 	//	132.00000MHz
 	always #(1_000_000_000.0 / 132_000_000.0 / 2.0) begin
-		r_clkout  = ~r_clkout;
-		r_clkoutd  = ~r_clkoutd;
+		r_clkout	= ~r_clkout;
+		r_clkoutp	= ~r_clkoutp;
 	end
 
 	assign clkout	= r_clkout;
-	assign clkoutd	= r_clkoutd;
+	assign clkoutp	= r_clkoutp;
 	assign lock		= 1'b1;
 endmodule

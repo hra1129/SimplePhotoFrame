@@ -16,7 +16,7 @@ Compiling module 'ip_spi'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FP
 Compiling module 'spi'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SPI\spi.v":38)
 Compiling module 'display_controller'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_controller.v":57)
 Compiling module 'display_address_generator'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v":57)
-WARN  (EX3791) : Expression size 20 truncated to fit in target size 18("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v":223)
+WARN  (EX3791) : Expression size 20 truncated to fit in target size 18("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v":248)
 Compiling module 'display_preload_buffer'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_preload_buffer.v":57)
 Compiling module 'display_single_port_ram'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_single_port_ram.v":57)
 Extracting RAM for identifier 'ff_ram'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_single_port_ram.v":64)

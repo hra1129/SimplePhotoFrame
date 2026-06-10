@@ -79,12 +79,14 @@ module display_address_generator (
 );
 	localparam		IMG_WIDTH	= 800 / 16;	//	ピクセル数/バーストリードワード数
 	localparam		IMG_HEIGHT	= 480;
+	localparam		BURST_WORDS	= 8;
 	localparam	[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_MAX = IMG_WIDTH - 1;
 	localparam	[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_ONE = {{($clog2(IMG_WIDTH)-1){1'b0}}, 1'b1};
 	localparam	[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_MAX = IMG_HEIGHT - 1;
 	localparam	[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_ONE = {{($clog2(IMG_HEIGHT)-1){1'b0}}, 1'b1};
 	reg		[$clog2(IMG_WIDTH)-1:0]		ff_h_counter;
 	reg		[$clog2(IMG_HEIGHT)-1:0]	ff_v_counter;
+	reg		[2:0]					ff_fill_burst_remain;
 
 	reg				ff_ready;
 	reg				ff_rdata_valid;
@@ -95,9 +97,17 @@ module display_address_generator (
 	reg		[22:5]	ff_sdram_address;
 	reg		[22:5]	ff_base_address;
 	reg				ff_display_on;
+	wire			w_can_request;
+	wire			w_fill_burst_active;
+	wire			w_fill_burst_start;
+	wire			w_fill_burst_step;
 	wire			w_valid;
 
-	assign w_valid = sdram_address_ready | ~reg_display_on;
+	assign w_can_request = ~fifo_full;
+	assign w_fill_burst_active = (ff_fill_burst_remain != 3'd0);
+	assign w_fill_burst_start = w_can_request && ~ff_display_on && ~w_fill_burst_active;
+	assign w_fill_burst_step = w_can_request && ~ff_display_on && w_fill_burst_active;
+	assign w_valid = w_can_request && (ff_display_on ? sdram_address_ready : ~w_fill_burst_active);
 
 	// ---------------------------------------------------------
 	//	Access ready/busy logic
@@ -178,6 +188,21 @@ module display_address_generator (
 	// ---------------------------------------------------------
 	always @( posedge clk ) begin
 		if( reset ) begin
+			ff_fill_burst_remain <= 3'd0;
+		end
+		else if( ff_display_on ) begin
+			ff_fill_burst_remain <= 3'd0;
+		end
+		else if( w_fill_burst_start ) begin
+			ff_fill_burst_remain <= BURST_WORDS - 1;
+		end
+		else if( w_fill_burst_step ) begin
+			ff_fill_burst_remain <= ff_fill_burst_remain - 3'd1;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
 			ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
 		end
 		else if( fifo_full ) begin
@@ -243,8 +268,9 @@ module display_address_generator (
 	assign bus_rdata_valid		= ff_rdata_valid;
 
 	assign sdram_address		= ff_sdram_address;
-	assign sdram_address_valid	= ~fifo_full;
+	assign sdram_address_valid	= ff_display_on & w_can_request;
 
-	assign fifo_wdata			= ff_display_on ? sdram_rdata : { ff_v_counter, ff_h_counter, 1'b1, ff_v_counter, ff_h_counter, 1'b0 };	//{ reg_fill_color, reg_fill_color };
-	assign fifo_valid			= sdram_rdata_valid | ~ff_display_on;
+	//assign fifo_wdata			= ff_display_on ? sdram_rdata : { reg_fill_color, reg_fill_color };
+	assign fifo_wdata			= ff_display_on ? sdram_rdata : { ff_v_counter[4:0], ff_h_counter, ff_v_counter[8:5], 1'b0, ff_v_counter[4:0], ff_h_counter, ff_v_counter[8:5], 1'b0 };
+	assign fifo_valid			= (ff_display_on && sdram_rdata_valid) || w_fill_burst_start || w_fill_burst_step;
 endmodule
