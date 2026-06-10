@@ -71,13 +71,14 @@ module display_timming_generator (
 	output			lcd_de,
 	output	[4:0]	lcd_r,
 	output	[5:0]	lcd_g,		// bit0 is fixed 0
-	output	[4:0]	lcd_b
+	output	[4:0]	lcd_b,
+	output			lcd_bl
 );
 
 	// -------------------------------------------------------------------------
 	// Parameters
 	// -------------------------------------------------------------------------
-	// Horizontal (unit: pixel = 1 lcd_ck cycle = 2 clocks @ 66MHz)
+	// Horizontal (unit: pixel = 1 lcd_ck cycle = 4 clocks @ 132MHz)
 	//   sync+BP:    0..45   (46 pixels total; sync=20px, remaining BP=26px, negative logic during 0..19)
 	//   active :   46..845  (800 pixels)
 	//   FP     :  846..1055 (210 pixels)  total 1056
@@ -99,6 +100,7 @@ module display_timming_generator (
 	// Register declarations
 	// -------------------------------------------------------------------------
 	reg			ff_lcd_ck;
+	reg			ff_ck_phase;
 	reg [10:0]	ff_h_counter;
 	reg [9:0]	ff_v_counter;
 
@@ -111,35 +113,42 @@ module display_timming_generator (
 
 	// p_ready: asserted during the low phase of lcd_ck inside active area.
 	//          The upstream module must hold p_data stable until the handshake.
-	assign p_ready = ( !ff_lcd_ck && w_de );
+	assign p_ready = ( !ff_lcd_ck && ff_ck_phase && w_de );
 
 	// w_stall: hold the entire timing machine when pixel data is not available
 	wire w_stall = p_ready && !p_valid;
 
 	// -------------------------------------------------------------------------
-	// lcd_ck: 2-divider of 66MHz → 33MHz  (stalls when pixel data is missing)
+	// lcd_ck: 4-divider of 132MHz → 33MHz  (stalls when pixel data is missing)
 	// -------------------------------------------------------------------------
 
 	always @( posedge clk or posedge reset ) begin
 		if( reset ) begin
+			ff_ck_phase <= 1'b0;
 			ff_lcd_ck <= 1'b0;
 		end
 		else if( !w_stall ) begin
-			ff_lcd_ck <= ~ff_lcd_ck;
+			ff_ck_phase <= ~ff_ck_phase;
+			if( ff_ck_phase ) begin
+				ff_lcd_ck <= ~ff_lcd_ck;
+			end
 		end
 	end
 
 	assign lcd_ck = ff_lcd_ck;
 
+	// true on cycles where lcd_ck will rise (0 -> 1)
+	wire w_lcd_ck_rise = ( !w_stall && ff_ck_phase && !ff_lcd_ck );
+
 	// -------------------------------------------------------------------------
 	// Horizontal counter (11bit)
-	// Increments on every lcd_ck rising edge (when !ff_lcd_ck and no stall)
+	// Increments on every lcd_ck rising edge
 	// -------------------------------------------------------------------------
 	always @( posedge clk or posedge reset ) begin
 		if( reset ) begin
 			ff_h_counter <= 11'd0;
 		end
-		else if( !ff_lcd_ck && !w_stall ) begin
+		else if( w_lcd_ck_rise ) begin
 			if( ff_h_counter == H_TOTAL ) begin
 				ff_h_counter <= 11'd0;
 			end
@@ -157,7 +166,7 @@ module display_timming_generator (
 		if( reset ) begin
 			ff_v_counter <= 10'd0;
 		end
-		else if( !ff_lcd_ck && !w_stall && ( ff_h_counter == H_TOTAL ) ) begin
+		else if( w_lcd_ck_rise && ( ff_h_counter == H_TOTAL ) ) begin
 			if( ff_v_counter == V_TOTAL ) begin
 				ff_v_counter <= 10'd0;
 			end
@@ -189,5 +198,5 @@ module display_timming_generator (
 	assign lcd_r = w_de ? p_data[15:11]        : 5'd0;
 	assign lcd_g = w_de ? {p_data[10:6], 1'b0} : 6'd0;	// G[0] fixed 0
 	assign lcd_b = w_de ? p_data[4:0]          : 5'd0;
-
+	assign lcd_bl = 1'b1;
 endmodule

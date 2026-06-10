@@ -3,12 +3,12 @@
 -pn GW2AR-LV18QN88C8/I7
 -cst C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst
 -cfg C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\device.cfg
+-sdc C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.sdc
 -bit
 -tr
 -ph
 -timing
 -cst_error
--convert_sdp32_36_to_sdp16_18
 -place_option 0
 -route_option 0
 -clock_route_order 0

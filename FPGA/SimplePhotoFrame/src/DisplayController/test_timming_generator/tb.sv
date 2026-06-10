@@ -54,9 +54,9 @@
 // --------------------------------------------------------------------
 
 module tb ();
-	// 66 MHz clock: period = 1,000,000 ps / 66 = 15151.5... ps
-	//   half period = 7576 ps  (actual freq ≈ 66.007 MHz)
-	localparam		CLK_HALF_PS		= 7576;
+	// 132 MHz clock: period = 1,000,000 ps / 132 = 7575.7... ps
+	//   half period = 3788 ps  (actual freq ≈ 131.996 MHz)
+	localparam		CLK_HALF_PS		= 3788;
 
 	reg				clk;
 	reg				reset;
@@ -92,7 +92,7 @@ module tb ();
 	);
 
 	// -----------------------------------------------------------------------
-	// 66 MHz clock generation
+	// 132 MHz clock generation
 	// -----------------------------------------------------------------------
 	initial		clk		= 1'b0;
 	always		#(CLK_HALF_PS) clk = ~clk;

@@ -65,15 +65,15 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Physical Constraints File</td>
-<td>---</td>
+<td>C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst</td>
 </tr>
 <tr>
 <td class="label">Timing Constraints File</td>
-<td>---</td>
+<td>C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.sdc</td>
 </tr>
 <tr>
 <td class="label">Tool Version</td>
-<td>V1.9.11.02 (64-bit)</td>
+<td>V1.9.12.02_SP2 (64-bit)</td>
 </tr>
 <tr>
 <td class="label">Part Number</td>
@@ -89,12 +89,12 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Created Time</td>
-<td>Mon May 25 06:56:43 2026
+<td>Wed Jun 10 22:30:58 2026
 </td>
 </tr>
 <tr>
 <td class="label">Legal Announcement</td>
-<td>Copyright (C)2014-2025 Gowin Semiconductor Corporation. All rights reserved.</td>
+<td>Copyright (C)2014-2026 Gowin Semiconductor Corporation. All rights reserved.</td>
 </tr>
 </table>
 <h2><a name="Configure_Info">Configure Information:</a></h2>
@@ -161,22 +161,22 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <table class="summary_table">
 <tr>
 <td class="label">Total Power (mW)</td>
-<td>121.795</td>
+<td>192.619</td>
 </tr>
 <tr>
 <td class="label">Quiescent Power (mW)</td>
-<td>121.795</td>
+<td>122.800</td>
 </tr>
 <tr>
 <td class="label">Dynamic Power (mW)</td>
-<td>0.000</td>
+<td>69.819</td>
 </tr>
 </table>
 <h2><a name="Thermal_Info">Thermal Information:</a></h2>
 <table class="summary_table">
 <tr>
 <td class="label">Junction Temperature</td>
-<td>28.634</td>
+<td>30.748</td>
 </tr>
 <tr>
 <td class="label">Theta JA</td>
@@ -184,7 +184,7 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Max Allowed Ambient Temperature</td>
-<td>81.366</td>
+<td>79.252</td>
 </tr>
 </table>
 <h2><a name="Supply_Summary">Supply Information:</a></h2>
@@ -199,30 +199,23 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <tr>
 <td>VCC</td>
 <td>1.000</td>
-<td>0.000</td>
-<td>69.952</td>
-<td>69.952</td>
+<td>29.491</td>
+<td>70.000</td>
+<td>99.491</td>
 </tr>
 <tr>
 <td>VCCX</td>
 <td>3.300</td>
-<td>0.000</td>
+<td>6.110</td>
 <td>15.000</td>
-<td>49.500</td>
-</tr>
-<tr>
-<td>VCCIO18</td>
-<td>1.800</td>
-<td>0.000</td>
-<td>0.575</td>
-<td>1.035</td>
+<td>69.664</td>
 </tr>
 <tr>
 <td>VCCIO33</td>
 <td>3.300</td>
-<td>0.000</td>
-<td>0.397</td>
-<td>1.309</td>
+<td>6.110</td>
+<td>1.000</td>
+<td>23.464</td>
 </tr>
 </table>
 <h1><a name="Detail">Power Details</a></h1>
@@ -235,10 +228,34 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <th class="label">Average Toggle Rate(millions of transitions/sec)</th>
 </tr>
 <tr>
+<td>Logic</td>
+<td>1.763</td>
+<td>NA</td>
+<td>16.500</td>
+</tr>
+<tr>
 <td>IO</td>
-<td>14.155
-<td>14.155
-<td>0.000
+<td>66.511
+<td>20.069
+<td>6.059
+</tr>
+<tr>
+<td>BSRAM</td>
+<td>7.223
+<td>NA</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>PLL</td>
+<td>13.808
+<td>NA</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>DSP</td>
+<td>0.520
+<td>NA</td>
+<td>13.166
 </tr>
 </table>
 <h2><a name="By_Hierarchy">Power By Hierarchy:</a></h2>
@@ -250,8 +267,48 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td>simple_photo_frame</td>
-<td>0.000</td>
-<td>0.000(0.000)</td>
+<td>23.313</td>
+<td>23.313(23.313)</td>
+<tr>
+<td>simple_photo_frame/u_display_controller/</td>
+<td>8.813</td>
+<td>8.813(8.813)</td>
+<tr>
+<td>simple_photo_frame/u_display_controller/display_address_generator/</td>
+<td>1.025</td>
+<td>1.025(0.000)</td>
+<tr>
+<td>simple_photo_frame/u_display_controller/display_preload_buffer/</td>
+<td>7.688</td>
+<td>7.688(7.223)</td>
+<tr>
+<td>simple_photo_frame/u_display_controller/display_preload_buffer/u_sram0/</td>
+<td>3.612</td>
+<td>3.612(0.000)</td>
+<tr>
+<td>simple_photo_frame/u_display_controller/display_preload_buffer/u_sram1/</td>
+<td>3.612</td>
+<td>3.612(0.000)</td>
+<tr>
+<td>simple_photo_frame/u_display_controller/display_timming_generator/</td>
+<td>0.101</td>
+<td>0.101(0.000)</td>
+<tr>
+<td>simple_photo_frame/u_ip_spi/</td>
+<td>0.151</td>
+<td>0.151(0.056)</td>
+<tr>
+<td>simple_photo_frame/u_ip_spi/u_spi/</td>
+<td>0.056</td>
+<td>0.056(0.000)</td>
+<tr>
+<td>simple_photo_frame/u_rpll/</td>
+<td>13.808</td>
+<td>13.808(0.000)</td>
+<tr>
+<td>simple_photo_frame/u_sdram_controller/</td>
+<td>0.541</td>
+<td>0.541(0.000)</td>
 </table>
 <h2><a name="By_Clock_Domain">Power By Clock Domain:</a></h2>
 <table class="detail_table">
@@ -259,6 +316,21 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <th class="label">Clock Domain</th>
 <th class="label">Clock Frequency(Mhz)</th>
 <th class="label">Total Dynamic Power(mW)</th>
+</tr>
+<tr>
+<td>clk132m</td>
+<td>132.000</td>
+<td>9.201</td>
+</tr>
+<tr>
+<td>u_rpll/rpll_inst/CLKOUTP.default_gen_clk</td>
+<td>132.000</td>
+<td>0.368</td>
+</tr>
+<tr>
+<td>clk27m</td>
+<td>27.000</td>
+<td>13.808</td>
 </tr>
 </table>
 </div><!-- content -->

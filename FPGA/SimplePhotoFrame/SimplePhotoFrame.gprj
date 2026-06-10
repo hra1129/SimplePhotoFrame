@@ -5,8 +5,17 @@
     <Version>5</Version>
     <Device name="GW2AR-18C" pn="GW2AR-LV18QN88C8/I7">gw2ar18c-000</Device>
     <FileList>
+        <File path="src/DisplayController/display_address_generator.v" type="file.verilog" enable="1"/>
+        <File path="src/DisplayController/display_controller.v" type="file.verilog" enable="1"/>
+        <File path="src/DisplayController/display_preload_buffer.v" type="file.verilog" enable="1"/>
+        <File path="src/DisplayController/display_single_port_ram.v" type="file.verilog" enable="1"/>
+        <File path="src/DisplayController/display_timming_generator.v" type="file.verilog" enable="1"/>
+        <File path="src/SPI/ip_spi.v" type="file.verilog" enable="1"/>
+        <File path="src/SPI/spi.v" type="file.verilog" enable="1"/>
+        <File path="src/SdramController/ip_sdram_tangnano20k.v" type="file.verilog" enable="1"/>
         <File path="src/SimplePhotoFrame.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>
         <File path="src/SimplePhotoFrame.cst" type="file.cst" enable="1"/>
+        <File path="src/SimplePhotoFrame.sdc" type="file.sdc" enable="1"/>
     </FileList>
 </Project>

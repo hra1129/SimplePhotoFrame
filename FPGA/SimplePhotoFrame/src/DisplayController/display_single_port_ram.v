@@ -57,12 +57,12 @@
 module display_single_port_ram (
 	input			clk,
 	input			we,
-	input	[10:0]	address,
-	input	[15:0]	din,
-	output	[15:0]	dout
+	input	[ 9:0]	address,
+	input	[31:0]	din,
+	output	[31:0]	dout
 );
-	reg		[15:0]	ff_ram	[0:2047];
-	reg		[15:0]	ff_dout;
+	reg		[31:0]	ff_ram	[0:1023];
+	reg		[31:0]	ff_dout;
 
 	always @( posedge clk ) begin
 		if( we ) begin

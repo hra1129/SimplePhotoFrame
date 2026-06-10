@@ -59,20 +59,192 @@ module display_address_generator (
 	input			reset,
 	input			sdram_init_busy,
 	//	Register interface
-	input			bus_address,
+	input	[7:0]	bus_address,
 	input			bus_valid,
 	output			bus_ready,
 	input			bus_write,
 	input	[15:0]	bus_wdata,
 	output	[15:0]	bus_rdata,
 	output			bus_rdata_valid,
+	//	FIFO interface
+	input			fifo_full,
+	output	[31:0]	fifo_wdata,
+	output			fifo_valid,
 	//	SDRAM address
 	output	[22:5]	sdram_address,
 	output			sdram_address_valid,
-	input			sdram_address_ready
+	input			sdram_address_ready,
+	input	[31:0]	sdram_rdata,
+	input			sdram_rdata_valid
 );
 	localparam		IMG_WIDTH	= 800 / 16;	//	ピクセル数/バーストリードワード数
 	localparam		IMG_HEIGHT	= 480;
-	localparam		IMG_SIZE	= IMG_WIDTH * IMG_HEIGHT;
+	localparam	[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_MAX = IMG_WIDTH - 1;
+	localparam	[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_ONE = {{($clog2(IMG_WIDTH)-1){1'b0}}, 1'b1};
+	localparam	[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_MAX = IMG_HEIGHT - 1;
+	localparam	[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_ONE = {{($clog2(IMG_HEIGHT)-1){1'b0}}, 1'b1};
+	reg		[$clog2(IMG_WIDTH)-1:0]		ff_h_counter;
+	reg		[$clog2(IMG_HEIGHT)-1:0]	ff_v_counter;
+
+	reg				ff_ready;
+	reg				ff_rdata_valid;
 	reg		[22:5]	reg_base_address;
+	reg		[2:0]	reg_register_address;
+	reg				reg_display_on;
+	reg		[15:0]	reg_fill_color;
+	reg		[22:5]	ff_sdram_address;
+	reg		[22:5]	ff_base_address;
+	reg				ff_display_on;
+	wire			w_valid;
+
+	assign w_valid = sdram_address_ready | ~reg_display_on;
+
+	// ---------------------------------------------------------
+	//	Access ready/busy logic
+	// ---------------------------------------------------------
+	always @(posedge clk) begin
+		if( reset ) begin
+			ff_ready <= 1'b0;
+			ff_rdata_valid <= 1'b0;
+		end
+		else if( sdram_init_busy ) begin
+			ff_ready <= 1'b0;
+			ff_rdata_valid <= 1'b0;
+		end 
+		else if( bus_valid && bus_write && bus_address <= 3'd3 ) begin
+			ff_ready <= 1'b1;
+			ff_rdata_valid <= 1'b0;
+		end 
+		else if( bus_valid && !bus_write && bus_address == 3'd4 ) begin
+			ff_ready <= 1'b0;
+			ff_rdata_valid <= 1'b1;
+		end 
+		else begin
+			ff_ready <= 1'b1;
+			ff_rdata_valid <= 1'b0;
+		end
+	end
+
+	// ---------------------------------------------------------
+	//	Register interface
+	//	Register# | Description
+	//	----------+---------------------------------------------
+	//		0     | bit0-7:レジスタアドレスL [20:5]
+	//		1     | bit0-1:レジスタアドレスH [22:21], bit2-15: 未使用
+	//		2     | bit0: 液晶表示 ON(1)/OFF(0:Default)
+	//		3     | bit0: SDRAM初期化完了フラグ(読み取り専用)
+	//		4     | bit0-7: display off 時の色
+	//		5-7   | 未使用
+	// ---------------------------------------------------------
+	always @(posedge clk) begin
+		if (reset) begin
+			reg_base_address <= 18'd0;
+			reg_register_address <= 3'd0;
+			reg_display_on <= 1'b0;
+			reg_fill_color <= { 5'd31, 6'd0, 5'd0 };	// 赤
+		end else if (bus_valid && bus_ready && bus_write) begin
+			case (bus_address)
+				3'd0: begin
+					reg_base_address[20:5] <= bus_wdata;
+				end
+				3'd1: begin
+					reg_base_address[22:21] <= bus_wdata[1:0];
+				end
+				3'd2: begin
+					reg_display_on <= bus_wdata[0];
+				end
+				3'd4: begin
+					reg_fill_color <= bus_wdata;
+				end
+				default: begin
+					// それ以外のアドレスは無視
+				end
+			endcase
+		end
+	end
+
+	always @(posedge clk) begin
+		if( reset ) begin
+			ff_base_address <= 18'd0;
+		end
+		else if( bus_valid && bus_ready && !bus_write && bus_address == 3'd1 ) begin
+			// 必ず、下位→上位の順で更新するルール
+			ff_base_address <= reg_base_address;
+		end
+	end
+
+	// ---------------------------------------------------------
+	//	カウンター
+	// ---------------------------------------------------------
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
+		end
+		else if( fifo_full ) begin
+			// FIFOが満杯の場合は、カウンターを止めて待つ
+		end
+		else if( w_valid ) begin
+			if( ff_h_counter == H_COUNTER_MAX ) begin
+				ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
+			end 
+			else begin
+				ff_h_counter <= ff_h_counter + H_COUNTER_ONE;
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_v_counter <= { $clog2(IMG_HEIGHT){1'b0} };
+		end
+		else if( fifo_full ) begin
+			// FIFOが満杯の場合は、カウンターを止めて待つ
+		end
+		else if( w_valid ) begin
+			if( ff_h_counter == H_COUNTER_MAX ) begin
+				if( ff_v_counter == V_COUNTER_MAX ) begin
+					ff_v_counter <= { $clog2(IMG_HEIGHT){1'b0} };
+				end 
+				else begin
+					ff_v_counter <= ff_v_counter + V_COUNTER_ONE;
+				end
+			end 
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_sdram_address <= 18'd0;
+		end
+		else if( fifo_full ) begin
+			// FIFOが満杯の場合は、アドレスの更新を止めて待つ
+		end
+		else if( w_valid ) begin
+			ff_sdram_address <= ff_base_address + ff_v_counter * IMG_WIDTH + ff_h_counter;
+		end
+	end
+
+	always @(posedge clk) begin
+		if( reset ) begin
+			ff_display_on <= 1'b0;
+		end
+		else if( w_valid ) begin
+			if( ff_h_counter == H_COUNTER_MAX ) begin
+				if( ff_v_counter == V_COUNTER_MAX ) begin
+					// 表示ON/OFFの更新は、フレーム更新と同期する
+					ff_display_on <= reg_display_on;
+				end
+			end
+		end
+	end
+
+	assign bus_ready			= ff_ready;
+	assign bus_rdata			= { 15'd0, sdram_init_busy };
+	assign bus_rdata_valid		= ff_rdata_valid;
+
+	assign sdram_address		= ff_sdram_address;
+	assign sdram_address_valid	= ~fifo_full;
+
+	assign fifo_wdata			= ff_display_on ? sdram_rdata : { ff_v_counter, ff_h_counter, 1'b1, ff_v_counter, ff_h_counter, 1'b0 };	//{ reg_fill_color, reg_fill_color };
+	assign fifo_valid			= sdram_rdata_valid | ~ff_display_on;
 endmodule

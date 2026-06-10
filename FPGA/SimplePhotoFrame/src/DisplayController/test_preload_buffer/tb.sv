@@ -58,7 +58,9 @@
 module tb ();
 	// 66 MHz clock: half period ≈ 7.576 ns
 	localparam		CLK_HALF_NS			= 8;		// 62.5 MHz (十分速い)
-	localparam		FIFO_DEPTH			= 4096;		// SRAM0 + SRAM1 合計
+	localparam		FIFO_DEPTH			= 2048;		// SRAM0 + SRAM1 合計 (1024 + 1024)
+	localparam		FIFO_USABLE_DEPTH	= FIFO_DEPTH - 1;	// リングFIFOの都合で1word未使用
+	localparam		OUT_DEPTH			= FIFO_USABLE_DEPTH * 2;	// 32bit -> 16bit x2 出力
 	localparam		NEARLY_FULL_SPACE	= 16;		// in_nearly_full を使用する前段が 1アクセスに要求するワード数
 
 	// -----------------------------------------------------------------------
@@ -67,7 +69,7 @@ module tb ();
 	reg				clk;
 	reg				reset;
 
-	reg		[15:0]	in_data;
+	reg		[31:0]	in_data;
 	reg				in_valid;
 	wire			in_ready;
 	wire			in_nearly_full;
@@ -103,17 +105,145 @@ module tb ();
 	int				error_count;
 	int				test_number;
 
+	function automatic [31:0] pack_word( input int word_index );
+		logic [15:0] low16;
+		logic [15:0] high16;
+		// 32bit入力の下位16bitが先、上位16bitが後の順で出力される前提のデータ生成
+		low16  = word_index * 2;
+		high16 = word_index * 2 + 1;
+		pack_word = { high16, low16 };
+	endfunction
+
+	// -----------------------------------------------------------------------
+	//	タスク: FIFO への書き込み
+	//	negedge で入力を安定化し、posedge でハンドシェイク成立を確認する
+	// -----------------------------------------------------------------------
+	task automatic write_words_to_fifo( input int word_count );
+		int wr_cnt;
+		begin
+			wr_cnt = 0;
+			in_valid <= 1'b0;
+			while( wr_cnt < word_count ) begin
+				@( negedge clk );
+				in_data	 <= pack_word( wr_cnt );
+				in_valid <= 1'b1;
+				@( posedge clk );
+				if( in_ready ) begin
+					wr_cnt++;
+				end
+			end
+			@( negedge clk );
+			in_valid <= 1'b0;
+		end
+	endtask
+
 	// -----------------------------------------------------------------------
 	//	タスク: リセット
 	// -----------------------------------------------------------------------
 	task do_reset();
 		reset		<= 1'b1;
 		in_valid	<= 1'b0;
-		in_data		<= 16'h0000;
+		in_data		<= 32'h0000_0000;
 		out_ready	<= 1'b0;
 		repeat( 10 ) @( posedge clk );
 		@( posedge clk ) begin
 			reset	<= 1'b0;
+		end
+	endtask
+
+	// -----------------------------------------------------------------------
+	//	タスク: ランダムフロー試験
+	//	random_in_valid0=1: 入力 valid=0 をランダム挿入
+	//	random_out_ready0=1: 出力 ready=0 をランダム挿入
+	// -----------------------------------------------------------------------
+	task automatic run_randomized_flow_test(
+		input int tnum,
+		input bit random_in_valid0,
+		input bit random_out_ready0
+	);
+		int			wr_cnt;
+		int			rd_cnt;
+		int			timeout;
+		int			max_timeout;
+		logic [15:0]	expected;
+		bit			preload_reported;
+		begin
+			test_number = tnum;
+			$display("[TEST %0d] Random flow test (random_in_valid0=%0d, random_out_ready0=%0d)",
+				test_number, random_in_valid0, random_out_ready0);
+
+			do_reset();
+			wr_cnt = 0;
+			rd_cnt = 0;
+			timeout = 0;
+			max_timeout = OUT_DEPTH * 80;
+			expected = 16'h0000;
+			preload_reported = 1'b0;
+
+			while( (rd_cnt < OUT_DEPTH) && (timeout < max_timeout) ) begin
+				@( negedge clk );
+
+				if( wr_cnt < FIFO_USABLE_DEPTH ) begin
+					in_data <= pack_word( wr_cnt );
+					if( random_in_valid0 && ($urandom_range(0, 3) == 0) ) begin
+						in_valid <= 1'b0;
+					end
+					else begin
+						in_valid <= 1'b1;
+					end
+				end
+				else begin
+					in_valid <= 1'b0;
+				end
+
+				if( random_out_ready0 && ($urandom_range(0, 4) == 0) ) begin
+					out_ready <= 1'b0;
+				end
+				else begin
+					out_ready <= 1'b1;
+				end
+
+				@( posedge clk );
+				timeout++;
+
+				if( in_valid && in_ready ) begin
+					wr_cnt++;
+					if( (wr_cnt == FIFO_USABLE_DEPTH) && !preload_reported ) begin
+						$display("[PASS] TEST %0d: Passed preload phase.", test_number);
+						preload_reported = 1'b1;
+					end
+				end
+
+				if( out_valid && out_ready ) begin
+					if( out_data !== expected ) begin
+						if( error_count < 10 ) begin
+							$display("[FAIL] TEST %0d: rd[%0d] expected=0x%04X got=0x%04X",
+								test_number, rd_cnt, expected, out_data);
+						end
+						error_count++;
+					end
+					expected = expected + 16'd1;
+					rd_cnt++;
+				end
+			end
+
+			in_valid = 1'b0;
+			out_ready = 1'b0;
+
+			if( wr_cnt != FIFO_USABLE_DEPTH ) begin
+				$display("[FAIL] TEST %0d: write timeout wr_cnt=%0d/%0d",
+					test_number, wr_cnt, FIFO_USABLE_DEPTH);
+				error_count++;
+			end
+			if( rd_cnt != OUT_DEPTH ) begin
+				$display("[FAIL] TEST %0d: read timeout rd_cnt=%0d/%0d",
+					test_number, rd_cnt, OUT_DEPTH);
+				error_count++;
+			end
+			if( (wr_cnt == FIFO_USABLE_DEPTH) && (rd_cnt == OUT_DEPTH) && (error_count == 0) ) begin
+				$display("[PASS] TEST %0d: Random flow verified (%0d/%0d transferred)",
+					test_number, rd_cnt, OUT_DEPTH);
+			end
 		end
 	endtask
 
@@ -134,41 +264,32 @@ module tb ();
 		out_ready = 1'b1;
 
 		// FIFO が満タンになる前に out_valid が立つことがないかを確認しながら書き込む
-		// 4096 ワード書き込むと満タンになる
+		// FIFO_USABLE_DEPTH ワード受理で満タンになる
 		fork
 			// 書き込みスレッド
 			begin : write_thread
-				int		wr_cnt;
-				wr_cnt = 0;
-				while( wr_cnt < FIFO_DEPTH ) begin
-					@( posedge clk ) begin
-						if( in_ready ) begin
-							in_data		= wr_cnt[15:0];
-							in_valid	= 1'b1;
-							wr_cnt++;
-						end
-					end
-				end
-				in_valid = 1'b0;
+				write_words_to_fifo( FIFO_USABLE_DEPTH );
 			end
 			// 監視スレッド: 満タン前に out_valid が立ったらエラー
 			begin : monitor_thread
-				// 満タン判定 = DUT 内部の ff_ever_full。テストベンチからは
-				// out_valid が立ち始めるタイミングで間接的に確認する。
-				// ただし 4095 ワード書き込む前に out_valid が立ったらエラー。
-				int		wr_before_valid;
-				wr_before_valid = u_dut.ff_wr_ptr - u_dut.ff_rd_ptr;
-				// FIFO_DEPTH - 1 ワード書き込まれる前に out_valid が立ったらNG
-				wait( out_valid === 1'b1 );
-				wr_before_valid = u_dut.ff_wr_ptr;
-				if( wr_before_valid < (FIFO_DEPTH - NEARLY_FULL_SPACE - 1) ) begin
-					$display("[FAIL] TEST %0d: out_valid asserted before FIFO full (wr_ptr=%0d)",
-						test_number, wr_before_valid);
+				int timeout;
+				timeout = 0;
+				while( (out_valid !== 1'b1) && (timeout < (FIFO_DEPTH * 8)) ) begin
+					@( posedge clk );
+					timeout++;
+				end
+				if( out_valid !== 1'b1 ) begin
+					$display("[FAIL] TEST %0d: out_valid timeout before assertion", test_number);
+					error_count++;
+				end
+				else if( u_dut.ff_initial_charge ) begin
+					$display("[FAIL] TEST %0d: out_valid asserted before initial charge completed",
+						test_number);
 					error_count++;
 				end
 				else begin
-					$display("[PASS] TEST %0d: out_valid first asserted after FIFO full (wr_ptr=%0d)",
-						test_number, wr_before_valid);
+					$display("[PASS] TEST %0d: out_valid asserted after initial charge completed",
+						test_number);
 				end
 			end
 		join
@@ -177,75 +298,51 @@ module tb ();
 
 		// ===================================================================
 		//	TEST 2: データ順序の正確性確認
-		//	FIFO に 0〜4095 を書き込み、読み出した値が順番通りか確認
+		//	FIFO に 32bit ワードを連番で書き込み、16bit 出力が
+		//	low16 -> high16 の順で連番になるか確認
 		// ===================================================================
 		test_number = 2;
-		$display("[TEST %0d] Data ordering check (write 0..4095, read back)", test_number);
+		$display("[TEST %0d] Data ordering check (32bit write, 16bit low/high read back)", test_number);
 
 		do_reset();
 
-		// 4096-17 ワード書き込み（FIFO を一度満タンにする）
-		begin
-			int		wr_cnt;
-			wr_cnt = 0;
-			while( wr_cnt < (FIFO_DEPTH - NEARLY_FULL_SPACE - 1) ) begin
-				@( posedge clk ) begin
-					if( in_ready ) begin
-						in_data		= wr_cnt[15:0];
-						in_valid	= 1'b1;
-						wr_cnt++;
-					end
-				end
-			end
-		end
+		// FIFO を一度満タンにする
+		write_words_to_fifo( FIFO_USABLE_DEPTH );
 		$display( "[PASS] TEST %0d: Passed preload phase.", test_number );
 
-		fork
-			// 残りの 17word を書き込む側
-			begin
-				int		wr_cnt;
-				wr_cnt = FIFO_DEPTH - NEARLY_FULL_SPACE - 1;
-				while( wr_cnt <= FIFO_DEPTH ) begin
-					@( posedge clk ) begin
-						if( in_ready ) begin
-							in_data		= wr_cnt[15:0];
-							in_valid	= 1'b1;
-							wr_cnt++;
+		// 16bit 出力を順序確認
+		begin
+			int				rd_cnt;
+			int				timeout;
+			logic [15:0]	expected;
+			rd_cnt	 = 0;
+			timeout	 = 0;
+			expected = 16'h0000;
+			out_ready = 1'b1;
+			while( (rd_cnt < OUT_DEPTH) && (timeout < (OUT_DEPTH * 8)) ) begin
+				@( posedge clk );
+				timeout++;
+				if( out_valid && out_ready ) begin
+					if( out_data !== expected ) begin
+						if( error_count < 10 ) begin
+							$display("[FAIL] TEST %0d: rd[%0d] expected=0x%04X got=0x%04X",
+								test_number, rd_cnt, expected, out_data);
 						end
+						error_count++;
 					end
-				end
-				in_valid = 1'b0;
-			end
-			// 読み出し側
-			begin
-				// 4096 ワード読み出して順序確認
-				begin
-					int				rd_cnt;
-					logic [15:0]	expected;
-					rd_cnt	 = 0;
-					expected = 16'h0000;
-					out_ready = 1'b1;
-					while( rd_cnt < FIFO_DEPTH ) begin
-						@( posedge clk );
-						if( out_valid && out_ready ) begin
-							if( out_data !== expected ) begin
-								if( error_count < 10 ) begin
-									$display("[FAIL] TEST %0d: rd[%0d] expected=0x%04X got=0x%04X",
-										test_number, rd_cnt, expected, out_data);
-								end
-								error_count++;
-							end
-							expected = expected + 16'd1;
-							rd_cnt++;
-						end
-					end
-					out_ready = 1'b0;
-					if( error_count == 0 ) begin
-						$display("[PASS] TEST %0d: All %0d words in correct order", test_number, FIFO_DEPTH);
-					end
+					expected = expected + 16'd1;
+					rd_cnt++;
 				end
 			end
-		join
+			out_ready = 1'b0;
+			if( rd_cnt != OUT_DEPTH ) begin
+				$display("[FAIL] TEST %0d: read timeout rd_cnt=%0d/%0d", test_number, rd_cnt, OUT_DEPTH);
+				error_count++;
+			end
+			if( error_count == 0 ) begin
+				$display("[PASS] TEST %0d: All %0d halfwords in correct order", test_number, OUT_DEPTH);
+			end
+		end
 
 		repeat( 10 ) @( posedge clk );
 
@@ -259,66 +356,57 @@ module tb ();
 
 		do_reset();
 
-		// FIFO を一度満タンにして初期チャージ完了、その後 4080 ワード読み出す
-		begin
-			int		wr_cnt;
-			wr_cnt = 0;
-			while( wr_cnt < FIFO_DEPTH ) begin
-				@( posedge clk );
-				if( in_ready ) begin
-					in_data		= wr_cnt[15:0];
-					in_valid	= 1'b1;
-					wr_cnt++;
-				end
-			end
-			in_valid = 1'b0;
-		end
+		// FIFO を一度満タンにして初期チャージ完了、その後読み出し
+		write_words_to_fifo( FIFO_USABLE_DEPTH );
 		$display( "[PASS] TEST %0d: Passed preload phase.", test_number );
 
 		begin
 			int			rd_cnt;
 			int			stall_done;
+			int			stall_count;
 			logic [15:0]	expected;
 			rd_cnt	 = 0;
 			stall_done = 0;
+			stall_count = 0;
 			expected = 16'h0000;
+			out_ready = 1'b1;
 
-			while( rd_cnt < (FIFO_DEPTH - NEARLY_FULL_SPACE) ) begin
-				@( posedge clk ) begin
-					if( rd_cnt == 0 ) begin
-						out_ready	<= 1'b1;
-					end
-					else if( rd_cnt == 128 && stall_done == 0 ) begin
-						// 128 ワード読み出したところで 20 サイクルストール
-						stall_done	= 1;
-						out_ready	<= 1'b0;
-						repeat( 20 ) @( posedge clk ) begin
-							// ストール中に out_data が変化していないことを確認
-							// (out_valid のまま保持されているはず)
-							if( out_valid !== 1'b1 ) begin
-								$display("[FAIL] TEST %0d: out_valid dropped during out_ready=0 stall", test_number);
-								error_count++;
-							end
-						end
-						out_ready <= 1'b1;
-					end
+			while( rd_cnt < (OUT_DEPTH - (NEARLY_FULL_SPACE * 2)) ) begin
+				@( posedge clk );
 
-					if( out_valid && out_ready ) begin
-						if( out_data !== expected ) begin
-							if( error_count < 10 ) begin
-								$display("[FAIL] TEST %0d: rd[%0d] expected=0x%04X got=0x%04X",
-									test_number, rd_cnt, expected, out_data);
-							end
-							error_count++;
+				if( out_valid && out_ready ) begin
+					if( out_data !== expected ) begin
+						if( error_count < 10 ) begin
+							$display("[FAIL] TEST %0d: rd[%0d] expected=0x%04X got=0x%04X",
+								test_number, rd_cnt, expected, out_data);
 						end
-						expected <= expected + 16'd1;
-						rd_cnt++;
+						error_count++;
+					end
+					expected = expected + 16'd1;
+					rd_cnt++;
+				end
+
+				if( (rd_cnt == 129) && (stall_done == 0) ) begin
+					// 0x0080 受理後に 20 サイクルだけストールし、0x0081 が保持されることを確認
+					stall_done = 1;
+					stall_count = 20;
+					out_ready = 1'b0;
+				end
+
+				if( stall_count > 0 ) begin
+					if( out_valid !== 1'b1 ) begin
+						$display("[FAIL] TEST %0d: out_valid dropped during out_ready=0 stall", test_number);
+						error_count++;
+					end
+					stall_count--;
+					if( stall_count == 1 ) begin
+						out_ready = 1'b1;
 					end
 				end
 			end
 			out_ready = 1'b0;
 			if( error_count == 0 ) begin
-				$display("[PASS] TEST %0d: Stall/resume verified, all %0d words correct", test_number, FIFO_DEPTH);
+				$display("[PASS] TEST %0d: Stall/resume verified, read %0d halfwords correctly", test_number, OUT_DEPTH - (NEARLY_FULL_SPACE * 2));
 			end
 		end
 
@@ -342,16 +430,16 @@ module tb ();
 			while( 1 ) begin
 				@( posedge clk );
 				if( in_ready ) begin
-					in_data		= wr_cnt[15:0];
+					in_data		= pack_word( wr_cnt );
 					in_valid	= 1'b1;
 					wr_cnt++;
 				end
 				// in_nearly_full が立ったことを検出
 				if( in_nearly_full && nf_detected == 0 ) begin
 					nf_detected = 1;
-					if( u_dut.w_count > (FIFO_DEPTH - NEARLY_FULL_SPACE - 1) ) begin
+					if( u_dut.w_count > (FIFO_USABLE_DEPTH - NEARLY_FULL_SPACE) ) begin
 						$display("[PASS] TEST %0d: in_nearly_full=1 at count=%0d (threshold=%0d)",
-							test_number, u_dut.w_count, FIFO_DEPTH - NEARLY_FULL_SPACE);
+							test_number, u_dut.w_count, FIFO_USABLE_DEPTH - NEARLY_FULL_SPACE + 1);
 					end
 					else begin
 						$display("[FAIL] TEST %0d: in_nearly_full=1 too early at count=%0d",
@@ -390,7 +478,7 @@ module tb ();
 			while( 1 ) begin
 				@( posedge clk );
 				if( in_ready ) begin
-					in_data		= wr_cnt[15:0];
+					in_data		= pack_word( wr_cnt );
 					in_valid	= 1'b1;
 					wr_cnt++;
 				end
@@ -398,7 +486,7 @@ module tb ();
 				if( !in_ready && bp_detected == 0 ) begin
 					bp_detected = 1;
 					// このとき蓄積量が期待値（FIFO_DEPTH - 1 以上）かチェック
-					if( u_dut.w_count >= (FIFO_DEPTH - 1) ) begin
+					if( u_dut.w_count >= FIFO_USABLE_DEPTH ) begin
 						$display("[PASS] TEST %0d: in_ready=0 at count=%0d (FIFO full)",
 							test_number, u_dut.w_count);
 					end
@@ -418,6 +506,27 @@ module tb ();
 			end
 			in_valid = 1'b0;
 		end
+
+		repeat( 20 ) @( posedge clk );
+
+		// ===================================================================
+		//	TEST 6: 入力 valid=0 ランダム挿入
+		// ===================================================================
+		run_randomized_flow_test( 6, 1'b1, 1'b0 );
+
+		repeat( 20 ) @( posedge clk );
+
+		// ===================================================================
+		//	TEST 7: 出力 ready=0 ランダム挿入
+		// ===================================================================
+		run_randomized_flow_test( 7, 1'b0, 1'b1 );
+
+		repeat( 20 ) @( posedge clk );
+
+		// ===================================================================
+		//	TEST 8: 入力 valid=0 / 出力 ready=0 ランダム挿入 (組み合わせ)
+		// ===================================================================
+		run_randomized_flow_test( 8, 1'b1, 1'b1 );
 
 		repeat( 20 ) @( posedge clk );
 

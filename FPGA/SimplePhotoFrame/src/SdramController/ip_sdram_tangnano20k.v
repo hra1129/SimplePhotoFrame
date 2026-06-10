@@ -55,21 +55,23 @@
 //-----------------------------------------------------------------------------
 
 module ip_sdram #(
-	parameter		FREQ = 85_909_080	//	Hz
+	parameter		FREQ = 132_000_000	//	Hz
 ) (
-	input				reset_n,
-	input				clk,				//	85.90908MHz
-	input				clk_sdram,
+	input				reset,
+	input				clk,				//	132MHz
+	input				clk_sdram,			//	132MHz (180deg phase shift)
 	output				sdram_init_busy,
 
-	input	[22:2]		bus_address,
-	input				bus_valid,
+	input	[22:5]		bus_address,
 	input				bus_write,
 	input				bus_refresh,
+	input				bus_valid,
+	output				bus_ready,
 	input	[31:0]		bus_wdata,
 	input	[3:0]		bus_wdata_mask,
+	input				bus_wdata_valid,
 	output	[31:0]		bus_rdata,
-	output				bus_rdata_en,
+	output				bus_rdata_valid,
 
 	// SDRAM ports
 	output				O_sdram_clk,
@@ -139,48 +141,130 @@ module ip_sdram #(
 	reg		[10:0]				ff_sdr_address;
 	reg		[31:0]				ff_sdr_write_data;
 	reg		[ 3:0]				ff_sdr_dq_mask;
-	reg		[255:0]			ff_sdr_read_data;
+	reg		[255:0]				ff_sdr_read_data;
 	reg		[ 2:0]				ff_sdr_read_data_index;
 	reg							ff_sdr_read_data_capture;
-	reg							ff_sdr_read_data_en;
 	reg							ff_do_command;
 	reg							ff_write;
-	reg		[31:0]				ff_wdata;
-	reg		[ 3:0]				ff_wdata_mask;
 	reg		[ 1:0]				ff_bank;
 	reg		[10:0]				ff_row_address;
 	reg		[ 7:0]				ff_col_address;
+	reg		[255:0]				ff_wdata_burst;
+	reg		[31:0]				ff_wdata_mask_burst;
+	reg		[ 3:0]				ff_wdata_count;
+	reg							ff_wdata_burst_ready;
+	reg							ff_read_done_toggle_sdram;
+	reg							ff_read_done_sync1;
+	reg							ff_read_done_sync2;
+	reg		[ 2:0]				ff_rdata_index;
+	reg							ff_rdata_streaming;
+	reg		[31:0]				ff_bus_rdata;
+	reg							ff_bus_rdata_valid;
+	reg		[ 2:0]				ff_write_burst_index;
+	reg		[31:0]				ff_write_burst_word;
+	reg		[ 3:0]				ff_write_burst_mask;
 	wire						w_busy;
 	reg							ff_initial_finish;
+	wire						w_accept_request;
+	wire						w_read_burst_done;
+	wire						w_write_burst_phase;
+	wire	[ 3:0]				w_curr_write_mask;
+	wire	[31:0]				w_curr_write_data;
+
+	assign w_accept_request		= (ff_main_state == c_main_state_ready) && ff_sdr_ready && !ff_do_command && bus_valid;
+	assign w_read_burst_done	= ff_read_done_sync1 ^ ff_read_done_sync2;
+	assign w_write_burst_phase	= ff_do_command && ff_write && !ff_do_refresh &&
+		(	(ff_main_state == c_main_state_read_or_write)
+			|| (ff_main_state == c_main_state_nop3)
+			|| (ff_main_state == c_main_state_data_fetch)
+			|| (ff_main_state == c_main_state_finish)
+			|| (ff_main_state == c_main_state_nop4)
+			|| (ff_main_state == c_main_state_nop5)
+			|| (ff_main_state == c_main_state_nop6)
+			|| (ff_main_state == c_main_state_nop7)
+		);
+
+	assign w_curr_write_mask =
+		(ff_main_state == c_main_state_read_or_write)	? ff_wdata_mask_burst[ 3: 0] :
+		(ff_main_state == c_main_state_nop3)				? ff_wdata_mask_burst[ 7: 4] :
+		(ff_main_state == c_main_state_data_fetch)		? ff_wdata_mask_burst[11: 8] :
+		(ff_main_state == c_main_state_finish)			? ff_wdata_mask_burst[15:12] :
+		(ff_main_state == c_main_state_nop4)				? ff_wdata_mask_burst[19:16] :
+		(ff_main_state == c_main_state_nop5)				? ff_wdata_mask_burst[23:20] :
+		(ff_main_state == c_main_state_nop6)				? ff_wdata_mask_burst[27:24] :
+		(ff_main_state == c_main_state_nop7)				? ff_wdata_mask_burst[31:28] :
+														  4'hF;
+
+	assign w_curr_write_data =
+		(ff_main_state == c_main_state_read_or_write)	? ff_wdata_burst[ 31:  0] :
+		(ff_main_state == c_main_state_nop3)				? ff_wdata_burst[ 63: 32] :
+		(ff_main_state == c_main_state_data_fetch)		? ff_wdata_burst[ 95: 64] :
+		(ff_main_state == c_main_state_finish)			? ff_wdata_burst[127: 96] :
+		(ff_main_state == c_main_state_nop4)				? ff_wdata_burst[159:128] :
+		(ff_main_state == c_main_state_nop5)				? ff_wdata_burst[191:160] :
+		(ff_main_state == c_main_state_nop6)				? ff_wdata_burst[223:192] :
+		(ff_main_state == c_main_state_nop7)				? ff_wdata_burst[255:224] :
+														  32'd0;
 
 	// --------------------------------------------------------------------
 	//	Request latch
 	// --------------------------------------------------------------------
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_do_command	<= 1'b0;
 			ff_write		<= 1'b0;
-			ff_wdata		<= 32'd0;
-			ff_wdata_mask	<= 4'd0;
 			ff_bank			<= 2'd0;
 			ff_row_address	<= 11'd0;
 			ff_col_address	<= 8'd0;
 			ff_do_refresh	<= 1'b0;
+			ff_wdata_burst	<= 256'd0;
+			ff_wdata_mask_burst	<= 32'd0;
+			ff_wdata_count	<= 4'd0;
+			ff_wdata_burst_ready	<= 1'b0;
 		end
-		else if( (ff_main_state == c_main_state_ready) && (bus_valid || bus_refresh) ) begin
+		else if( w_accept_request ) begin
 			ff_do_command	<= 1'b1;
 			ff_do_refresh	<= bus_refresh;
-			ff_write		<= bus_write;
-			ff_wdata		<= bus_wdata;
-			ff_wdata_mask	<= bus_wdata_mask;
+			ff_write		<= bus_write & ~bus_refresh;
 			ff_bank			<= bus_address[22:21];
 			ff_row_address	<= bus_address[20:10];
-			ff_col_address	<= bus_address[9:2];
+			ff_col_address	<= { bus_address[9:5], 3'b000 };
+			ff_wdata_count	<= 4'd0;
+			if( bus_refresh || !bus_write ) begin
+				ff_wdata_burst_ready	<= 1'b1;
+			end
+			else begin
+				ff_wdata_burst_ready	<= 1'b0;
+			end
 		end
-		else if( (ff_main_state == c_main_state_finish) || (ff_main_state == c_main_state_finish2) ) begin
+		else if( ff_do_command && ff_write && !ff_wdata_burst_ready ) begin
+			if( bus_wdata_valid ) begin
+				case( ff_wdata_count[2:0] )
+				3'd0: begin ff_wdata_burst[ 31:  0] <= bus_wdata; ff_wdata_mask_burst[ 3: 0] <= bus_wdata_mask; end
+				3'd1: begin ff_wdata_burst[ 63: 32] <= bus_wdata; ff_wdata_mask_burst[ 7: 4] <= bus_wdata_mask; end
+				3'd2: begin ff_wdata_burst[ 95: 64] <= bus_wdata; ff_wdata_mask_burst[11: 8] <= bus_wdata_mask; end
+				3'd3: begin ff_wdata_burst[127: 96] <= bus_wdata; ff_wdata_mask_burst[15:12] <= bus_wdata_mask; end
+				3'd4: begin ff_wdata_burst[159:128] <= bus_wdata; ff_wdata_mask_burst[19:16] <= bus_wdata_mask; end
+				3'd5: begin ff_wdata_burst[191:160] <= bus_wdata; ff_wdata_mask_burst[23:20] <= bus_wdata_mask; end
+				3'd6: begin ff_wdata_burst[223:192] <= bus_wdata; ff_wdata_mask_burst[27:24] <= bus_wdata_mask; end
+				3'd7: begin ff_wdata_burst[255:224] <= bus_wdata; ff_wdata_mask_burst[31:28] <= bus_wdata_mask; end
+				default: begin end
+				endcase
+
+				if( ff_wdata_count == 4'd7 ) begin
+					ff_wdata_burst_ready	<= 1'b1;
+				end
+				else begin
+					ff_wdata_count	<= ff_wdata_count + 4'd1;
+				end
+			end
+		end
+		else if( ff_main_state == c_main_state_finish2 ) begin
 			ff_do_command	<= 1'b0;
 			ff_do_refresh	<= 1'b0;
 			ff_write		<= 1'b0;
+			ff_wdata_burst_ready	<= 1'b0;
+			ff_wdata_count	<= 4'd0;
 		end
 	end
 
@@ -188,7 +272,7 @@ module ip_sdram #(
 	//	Main State
 	// --------------------------------------------------------------------
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_main_state		<= c_init_state_begin_first_wait;
 			ff_do_main_state	<= 1'b0;
 		end
@@ -206,7 +290,7 @@ module ip_sdram #(
 				ff_main_state	<= c_init_state_wait_mode_register_set;
 			// ----------------------------------------------------------------
 			c_main_state_ready:
-				if( bus_valid || bus_refresh ) begin
+				if( ff_do_command && ( !ff_write || ff_wdata_burst_ready ) ) begin
 					ff_main_state		<= c_main_state_activate;
 				end
 			c_main_state_activate:
@@ -223,7 +307,12 @@ module ip_sdram #(
 						ff_main_state		<= c_main_state_nop3;
 					end
 				end
-			c_main_state_finish, c_main_state_finish2:
+			c_main_state_finish:
+				begin
+					ff_main_state		<= c_main_state_nop4;
+					ff_do_main_state	<= 1'b1;
+				end
+			c_main_state_finish2:
 				begin
 					ff_main_state		<= c_main_state_ready;
 					ff_do_main_state	<= 1'b0;
@@ -240,7 +329,7 @@ module ip_sdram #(
 	end
 
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_initial_finish	<= 1'b0;
 		end
 		else if( w_end_of_main_timer && ff_main_state == c_init_state_first_wait ) begin
@@ -255,7 +344,7 @@ module ip_sdram #(
 	//	Sub State
 	// --------------------------------------------------------------------
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_sdr_ready	<= 1'b0;
 		end
 		else if( (ff_main_state == c_init_state_wait_mode_register_set) && w_end_of_main_timer ) begin
@@ -298,7 +387,7 @@ module ip_sdram #(
 	//	SDRAM Command Signal
 	// --------------------------------------------------------------------
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_sdr_command		<= c_sdr_command_no_operation;
 			ff_sdr_dq_mask		<= 4'b1111;
 		end
@@ -340,11 +429,25 @@ module ip_sdram #(
 						end
 						else if( ff_write ) begin
 							ff_sdr_command		<= c_sdr_command_write;
-							ff_sdr_dq_mask		<= ff_wdata_mask;
+							ff_sdr_dq_mask		<= ff_wdata_mask_burst[3:0];
 						end
 						else begin
 							ff_sdr_command		<= c_sdr_command_read;
 							ff_sdr_dq_mask		<= 4'b0000;
+						end
+					c_main_state_nop3, c_main_state_data_fetch, c_main_state_finish,
+					c_main_state_nop4, c_main_state_nop5, c_main_state_nop6, c_main_state_nop7:
+						begin
+							ff_sdr_command		<= c_sdr_command_no_operation;
+							if( w_write_burst_phase ) begin
+								ff_sdr_dq_mask	<= w_curr_write_mask;
+							end
+							else if( ff_do_command && !ff_write && !ff_do_refresh ) begin
+								ff_sdr_dq_mask	<= 4'b0000;
+							end
+							else begin
+								ff_sdr_dq_mask	<= 4'b1111;
+							end
 						end
 					default:
 						begin
@@ -366,7 +469,7 @@ module ip_sdram #(
 	//	[Bank1][Bank0][RSV][WB][OP1][OP0][CAS2][CAS1][CAS0][BT][BL2][BL1][BL0] : mode
 	//	
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_sdr_bank <= 2'd0;
 			ff_sdr_address <= 11'd0;
 		end
@@ -382,11 +485,11 @@ module ip_sdram #(
 				end
 			default:
 				begin
-					//	モードレジスタ BL=8, BT=0, CAS=2, OP=0, WB=1
+					//	モードレジスタ BL=8, BT=0, CAS=2, OP=0, WB=0
 					ff_sdr_bank <= 2'd0;			//	Ignore
 					ff_sdr_address <= { 
 						1'b0,						//	Reserved
-						1'b1,						//	Write burst mode  0: Programmed Burst Length, 1: Single Location Access
+						1'b0,						//	Write burst mode  0: Programmed Burst Length, 1: Single Location Access
 						2'b00,						//	Operation mode    00: Standard Operation, others: Reserved
 						3'b010,						//	CAS Latency       010: 2cyc, 011: 3cyc, others: Reserved
 						1'b0,						//	Burst type        0: Sequential Access, 1: Interleave Access
@@ -430,22 +533,32 @@ module ip_sdram #(
 	end
 
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_sdr_write_data <= 32'dz;
-		end
-		else if( ff_main_state == c_main_state_read_or_write ) begin
-			ff_sdr_write_data <= ff_wdata;
+			ff_write_burst_index <= 3'd0;
+			ff_write_burst_word <= 32'd0;
+			ff_write_burst_mask <= 4'd0;
 		end
 		else begin
-			ff_sdr_write_data <= 32'dz;
+			ff_write_burst_index <= 3'd0;
+			ff_write_burst_word <= w_curr_write_data;
+			ff_write_burst_mask <= w_curr_write_mask;
+
+			if( w_write_burst_phase ) begin
+				ff_sdr_write_data <= w_curr_write_data;
+			end
+			else begin
+				ff_sdr_write_data <= 32'dz;
+			end
 		end
 	end
 
 	always @( posedge clk_sdram ) begin
-		if( !reset_n ) begin
+		if( reset ) begin
 			ff_sdr_read_data			<= 256'd0;
 			ff_sdr_read_data_index		<= 3'd0;
 			ff_sdr_read_data_capture	<= 1'b0;
+			ff_read_done_toggle_sdram	<= 1'b0;
 		end
 		else if( (ff_main_state == c_main_state_finish) && !ff_write && !ff_do_refresh ) begin
 			ff_sdr_read_data[31:0]		<= IO_sdram_dq;
@@ -469,6 +582,7 @@ module ip_sdram #(
 			if( ff_sdr_read_data_index == 3'd7 ) begin
 				ff_sdr_read_data_index		<= 3'd0;
 				ff_sdr_read_data_capture	<= 1'b0;
+				ff_read_done_toggle_sdram	<= ~ff_read_done_toggle_sdram;
 			end
 			else begin
 				ff_sdr_read_data_index		<= ff_sdr_read_data_index + 3'd1;
@@ -477,14 +591,44 @@ module ip_sdram #(
 	end
 
 	always @( posedge clk ) begin
-		if( !reset_n ) begin
-			ff_sdr_read_data_en	<= 1'b0;
+		if( reset ) begin
+			ff_read_done_sync1	<= 1'b0;
+			ff_read_done_sync2	<= 1'b0;
+			ff_rdata_index		<= 3'd0;
+			ff_rdata_streaming	<= 1'b0;
+			ff_bus_rdata		<= 32'd0;
+			ff_bus_rdata_valid	<= 1'b0;
 		end
-		else if( ff_main_state == c_main_state_finish ) begin
-			ff_sdr_read_data_en	<= ~ff_write & ~ff_do_refresh;
-		end
-		else if( ff_sdr_read_data_en ) begin
-			ff_sdr_read_data_en	<= 1'b0;
+		else begin
+			ff_read_done_sync1	<= ff_read_done_toggle_sdram;
+			ff_read_done_sync2	<= ff_read_done_sync1;
+			ff_bus_rdata_valid	<= 1'b0;
+
+			if( w_read_burst_done ) begin
+				ff_rdata_streaming	<= 1'b1;
+				ff_rdata_index		<= 3'd0;
+			end
+			else if( ff_rdata_streaming ) begin
+				case( ff_rdata_index )
+				3'd0: ff_bus_rdata <= ff_sdr_read_data[ 31:  0];
+				3'd1: ff_bus_rdata <= ff_sdr_read_data[ 63: 32];
+				3'd2: ff_bus_rdata <= ff_sdr_read_data[ 95: 64];
+				3'd3: ff_bus_rdata <= ff_sdr_read_data[127: 96];
+				3'd4: ff_bus_rdata <= ff_sdr_read_data[159:128];
+				3'd5: ff_bus_rdata <= ff_sdr_read_data[191:160];
+				3'd6: ff_bus_rdata <= ff_sdr_read_data[223:192];
+				3'd7: ff_bus_rdata <= ff_sdr_read_data[255:224];
+				default: ff_bus_rdata <= 32'd0;
+				endcase
+
+				ff_bus_rdata_valid	<= 1'b1;
+				if( ff_rdata_index == 3'd7 ) begin
+					ff_rdata_streaming	<= 1'b0;
+				end
+				else begin
+					ff_rdata_index	<= ff_rdata_index + 3'd1;
+				end
+			end
 		end
 	end
 
@@ -501,6 +645,7 @@ module ip_sdram #(
 	assign O_sdram_addr			= ff_sdr_address;
 	assign IO_sdram_dq			= ff_sdr_write_data;
 
-	assign bus_rdata			= ff_sdr_read_data[31:0];
-	assign bus_rdata_en			= ff_sdr_read_data_en;
+	assign bus_ready			= (ff_main_state == c_main_state_ready) && ff_sdr_ready && !ff_do_command;
+	assign bus_rdata			= ff_bus_rdata;
+	assign bus_rdata_valid		= ff_bus_rdata_valid;
 endmodule

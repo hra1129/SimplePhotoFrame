@@ -58,7 +58,7 @@ module display_preload_buffer (
 	input			clk,
 	input			reset,
 	//	DRAM からくるデータを受けるポート
-	input	[15:0]	in_data,
+	input	[31:0]	in_data,
 	input			in_valid,
 	output			in_ready,
 	output			in_nearly_full,
@@ -69,36 +69,36 @@ module display_preload_buffer (
 );
 	// -------------------------------------------------------------------------
 	//	書き込みポインタ / 読み出しポインタ
-	//	bit[11:1]: SRAM アドレス, bit[0]: SRAM0/1 選択
+	//	bit[10:1]: SRAM アドレス, bit[0]: SRAM0/1 選択
 	// -------------------------------------------------------------------------
-	reg		[11:0]	ff_wr_ptr;					// {wrap, addr[10:0]}　偶奇で SRAM0/1 を選択
-	reg		[11:0]	ff_rd_ptr;					// 同上
+	reg		[10:0]	ff_wr_ptr;					// {wrap, addr[9:0]}　偶奇で SRAM0/1 を選択
+	reg		[10:0]	ff_rd_ptr;					// 同上
 
 	// wr_ptr は SRAM0/1 を交互にカウント → 合計インデックス
 	// 偶数インデックス → SRAM0、奇数インデックス → SRAM1
-	// addr[10:0] = インデックス >> 1
-	wire	[11:0]	w_wr_ptr_next	= (ff_wr_ptr == 12'd4095) ? 12'd0 : ff_wr_ptr + 12'd1;
-	wire	[11:0]	w_rd_ptr_next	= (ff_rd_ptr == 12'd4095) ? 12'd0 : ff_rd_ptr + 12'd1;
+	// addr[9:0] = インデックス >> 1
+	wire	[10:0]	w_wr_ptr_next	= (ff_wr_ptr == 11'd2047) ? 11'd0 : ff_wr_ptr + 11'd1;
+	wire	[10:0]	w_rd_ptr_next	= (ff_rd_ptr == 11'd2047) ? 11'd0 : ff_rd_ptr + 11'd1;
 
 	// wr_ptr と rd_ptr の差分 = 蓄積ワード数
-	// 差分計算は 12bit の符号なし減算（ラップアラウンド考慮）
+	// 差分計算は 11bit の符号なし減算（ラップアラウンド考慮）
 	// wr_ptr の指すアドレスは次に書く場所であり、まだデータは存在していない。
 	// rd_ptr の指すアドレスは次に読む場所であり、データが存在している。
 	// 引き算した結果がそのまま蓄積されている数と一致する。
-	// ただし、wr_ptr = 10, rd_ptr = 4000 の循環点をまたぐケースもあるため、
+	// ただし、wr_ptr = 10, rd_ptr = 2000 の循環点をまたぐケースもあるため、
 	// 符号なしの引き算で求めて桁借りビットを捨てる。
-	// 0～4095 の値しか取り得ないため、SRAM の 1word は必ず未使用となる。
-	wire	[11:0]	w_count			= ff_wr_ptr - ff_rd_ptr;	// 自動ラップ
+	// 0～2047 の値しか取り得ないため、SRAM の 1word は必ず未使用となる。
+	wire	[10:0]	w_count			= ff_wr_ptr - ff_rd_ptr;	// 自動ラップ
 
 	// DRAM に対する1アクセス分を確実に保持できる空きがなければ in_ready = 0 にして 
-	// DRAM への要求を止める。4095個の値までしか蓄積できないため、１アクセス = 16word の
-	// 空き容量チェックは、蓄積数が 4095 - 16 = 4079 より多いなら、
+	// DRAM への要求を止める。2047個の値までしか蓄積できないため、１アクセス = 16word の
+	// 空き容量チェックは、蓄積数が 2047 - 16 = 2031 より多いなら、
 	// 空き容量が足りないことになる。
 	// DRAM にリクエストを発行するモジュールにはこれを通知する。
-	wire			w_nearly_full	= (w_count > 12'd4079);
+	wire			w_nearly_full	= (w_count > 11'd2031);
 
 	// 本来の FIFO FULL 信号。in_ready はこれを使って制御。
-	wire			w_full			= (w_count == 12'd4095);
+	wire			w_full			= (w_count == 11'd2047);
 
 	// -------------------------------------------------------------------------
 	// 初期チャージフラグ
@@ -134,14 +134,14 @@ module display_preload_buffer (
 	// -------------------------------------------------------------------------
 	wire			w_wr_en			= in_valid & w_in_ready;
 	wire			w_wr_sram_sel	= ff_wr_ptr[0];		// 0: SRAM0, 1: SRAM1
-	wire	[10:0]	w_wr_addr		= ff_wr_ptr[11:1];
+	wire	[9:0]	w_wr_addr		= ff_wr_ptr[10:1];
 
 	wire			w_sram0_we		= w_wr_en & ~w_wr_sram_sel;
 	wire			w_sram1_we		= w_wr_en &  w_wr_sram_sel;
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_wr_ptr <= 12'd0;
+			ff_wr_ptr <= 11'd0;
 		end
 		else if( w_wr_en ) begin
 			ff_wr_ptr <= w_wr_ptr_next;
@@ -159,28 +159,45 @@ module display_preload_buffer (
 	reg				ff_pipe_valid;		// Stage1: SRAM 読み出し発行済みフラグ
 	reg				ff_pipe_sram_sel;	// Stage1: どちらの SRAM の dout を使うか
 
-	// SRAM 受け FF: SRAM の dout を登録する段
-	// out_ready = 0 のときはここでデータを保持する
-	reg		[15:0]	ff_sram_data;
-	reg				ff_sram_valid;
+	// SRAM 受け FIFO (32bit word, 2段)
+	reg		[31:0]	ff_word0_data;
+	reg				ff_word0_valid;
+	reg		[31:0]	ff_word1_data;
+	reg				ff_word1_valid;
 
-	// FIFO-FF: out_ready = 0 のストール中に Stage1 のデータが到着した場合の退避バッファ
-	reg		[15:0]	ff_fifo_data;
-	reg				ff_fifo_valid;
+	reg		[31:0]	ff_word0_data_n;
+	reg				ff_word0_valid_n;
+	reg		[31:0]	ff_word1_data_n;
+	reg				ff_word1_valid_n;
+
+	// 32bit word を 16bit x2 に分割するステージ (下位→上位)
+	reg		[31:0]	ff_split_word;
+	reg		[1:0]	ff_split_rem;		// 0:none, 2:lower+upper, 1:upper only
+
+	// 出力 FIFO (16bit, FF 2段)
+	reg		[15:0]	ff_out0_data;
+	reg				ff_out0_valid;
+	reg		[15:0]	ff_out1_data;
+	reg				ff_out1_valid;
+
+	reg		[15:0]	ff_out0_data_n;
+	reg				ff_out0_valid_n;
+	reg		[15:0]	ff_out1_data_n;
+	reg				ff_out1_valid_n;
 
 	wire			w_rd_sram_sel	= ff_rd_ptr[0];
-	wire	[10:0]	w_rd_addr		= ff_rd_ptr[11:1];
+	wire	[9:0]	w_rd_addr		= ff_rd_ptr[10:1];
 
 	// 読み出し可能 = データが存在 & 初期チャージ完了
-	wire			w_data_exist	= (w_count != 12'd0) & ~ff_initial_charge;
+	wire			w_data_exist	= (w_count != 11'd0) & ~ff_initial_charge;
 
 	// SRAM リードを発行できる条件（プリフェッチ方式）:
 	//   ・データが存在する & 初期チャージ完了
 	//   ・Stage1 が空き（前のリードが完了している）
-	//   ・FIFO-FF が空き（FIFO-FF が埋まっていたらこれ以上読めない）
+	//   ・word FIFO が空き（2段とも埋まっていたらこれ以上読めない）
 	//   ※ out_ready は条件に含めない。プリフェッチして出力パイプラインを常に満たす。
-	wire			w_sram_consumed	= out_ready & ff_sram_valid & ~ff_fifo_valid;
-	wire			w_do_read_req	= w_data_exist & ~ff_pipe_valid & ~ff_fifo_valid;
+	wire			w_word_buf_full	= ff_word0_valid & ff_word1_valid;
+	wire			w_do_read_req	= w_data_exist & ~ff_pipe_valid & ~w_word_buf_full;
 
 	// 書き込みと読み出しが同一 SRAM に対して同時に発生する場合はコンフリクト
 	// 書き込みを優先し、読み出しを1サイクル待機させる
@@ -191,7 +208,7 @@ module display_preload_buffer (
 	// Stage1 制御
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_rd_ptr		<= 12'd0;
+			ff_rd_ptr		<= 11'd0;
 			ff_pipe_valid	<= 1'b0;
 			ff_pipe_sram_sel<= 1'b0;
 		end
@@ -212,8 +229,8 @@ module display_preload_buffer (
 	// -------------------------------------------------------------------------
 	//	SRAM インスタンス
 	// -------------------------------------------------------------------------
-	wire	[15:0]	w_sram0_dout;
-	wire	[15:0]	w_sram1_dout;
+	wire	[31:0]	w_sram0_dout;
+	wire	[31:0]	w_sram1_dout;
 
 	// 書き込みと読み出しで同時アクセスが起きる場合、書き込み側を優先 (we=1 で書き込み)
 	// 読み出しアドレスは w_rd_addr を使用
@@ -223,8 +240,8 @@ module display_preload_buffer (
 	// 同一 SRAM に同一サイクルで書き込みと読み出しが重なるケースは稀だが、
 	// 書き込み優先（we=1 のとき書き込みアドレスを使用）とする。
 
-	wire	[10:0]	w_sram0_addr	= w_sram0_we ? w_wr_addr : w_rd_addr;
-	wire	[10:0]	w_sram1_addr	= w_sram1_we ? w_wr_addr : w_rd_addr;
+	wire	[9:0]	w_sram0_addr	= w_sram0_we ? w_wr_addr : w_rd_addr;
+	wire	[9:0]	w_sram1_addr	= w_sram1_we ? w_wr_addr : w_rd_addr;
 
 	display_single_port_ram u_sram0 (
 		.clk		( clk			),
@@ -245,66 +262,148 @@ module display_preload_buffer (
 	// -------------------------------------------------------------------------
 	//	SRAM 出力マルチプレクサ
 	// -------------------------------------------------------------------------
-	wire	[15:0]	w_sram_dout	= ff_pipe_sram_sel ? w_sram1_dout : w_sram0_dout;
+	wire	[31:0]	w_sram_dout	= ff_pipe_sram_sel ? w_sram1_dout : w_sram0_dout;
 
 	// -------------------------------------------------------------------------
-	//	SRAM 受け FF / FIFO-FF 制御
-	//
-	//	【不変条件】
-	//	  w_do_read を発行するのは ~ff_pipe_valid & ~ff_fifo_valid のときのみ。
-	//	  ff_pipe_valid=1 のサイクルに ff_sram_valid=1 が残っている場合:
-	//	    - out_ready=1 → w_sram_consumed=1、古いデータ消費と同時に新データ上書き (gap なし)
-	//	    - out_ready=0 → FIFO-FF が空（発行条件より保証）なので ff_sram_data を FIFO-FF に退避、
-	//	                     ff_sram_data に新データを格納
-	//
-	//	【FIFO-FF の役割】
-	//	  out_ready=0 ストール中にプリフェッチデータが到着したとき、古い ff_sram_data を一時退避する。
-	//	  FIFO-FF が埋まっている間はリードを発行しないため、オーバーフローは起きない。
+	//	word FIFO 制御 (32bit, 2段)
 	// -------------------------------------------------------------------------
+	wire			w_word_push		= ff_pipe_valid;
+	wire			w_take_new_word	= (ff_split_rem == 2'd0) & ff_word0_valid;
+	wire			w_word_pop		= w_take_new_word;
 
-	// SRAM 受け FF 更新
-	always @( posedge clk ) begin
-		if( reset ) begin
-			ff_sram_data	<= 16'd0;
-			ff_sram_valid	<= 1'b0;
-		end
-		else begin
-			if( ff_pipe_valid ) begin
-				// Stage1 のリード結果が到着 → SRAM 受け FF に登録
-				// ff_sram_valid=1 かつ out_ready=0 の場合は FIFO-FF ブロックが先に ff_sram_data を退避済み
-				ff_sram_data	<= w_sram_dout;
-				ff_sram_valid	<= 1'b1;
+	always @* begin
+		ff_word0_data_n	= ff_word0_data;
+		ff_word0_valid_n	= ff_word0_valid;
+		ff_word1_data_n	= ff_word1_data;
+		ff_word1_valid_n	= ff_word1_valid;
+
+		// pop を先に適用
+		if( w_word_pop ) begin
+			if( ff_word1_valid ) begin
+				ff_word0_data_n	= ff_word1_data;
+				ff_word0_valid_n	= 1'b1;
+				ff_word1_valid_n	= 1'b0;
 			end
-			else if( w_sram_consumed ) begin
-				// 下流に消費された
-				ff_sram_valid	<= 1'b0;
+			else begin
+				ff_word0_valid_n	= 1'b0;
+			end
+		end
+
+		// push を後に適用
+		if( w_word_push ) begin
+			if( ~ff_word0_valid_n ) begin
+				ff_word0_data_n	= w_sram_dout;
+				ff_word0_valid_n	= 1'b1;
+			end
+			else if( ~ff_word1_valid_n ) begin
+				ff_word1_data_n	= w_sram_dout;
+				ff_word1_valid_n	= 1'b1;
 			end
 		end
 	end
 
-	// FIFO-FF 更新
-	// ff_pipe_valid=1 到着時に ff_sram_valid=1 かつ消費できない（out_ready=0）場合に
-	// 古い ff_sram_data を退避する。発行条件（~ff_fifo_valid）により空きが保証されている。
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_fifo_data	<= 16'd0;
-			ff_fifo_valid	<= 1'b0;
+			ff_word0_data	<= 32'd0;
+			ff_word0_valid	<= 1'b0;
+			ff_word1_data	<= 32'd0;
+			ff_word1_valid	<= 1'b0;
 		end
 		else begin
-			if( ff_pipe_valid & ff_sram_valid & ~w_sram_consumed & ~ff_fifo_valid ) begin
-				ff_fifo_data	<= ff_sram_data;
-				ff_fifo_valid	<= 1'b1;
+			ff_word0_data	<= ff_word0_data_n;
+			ff_word0_valid	<= ff_word0_valid_n;
+			ff_word1_data	<= ff_word1_data_n;
+			ff_word1_valid	<= ff_word1_valid_n;
+		end
+	end
+
+	// -------------------------------------------------------------------------
+	//	32bit → 16bit 分割ステージ (下位を先に出力)
+	// -------------------------------------------------------------------------
+	wire			w_split_can_emit	= (ff_split_rem != 2'd0) | w_take_new_word;
+	wire	[15:0]	w_split_emit_data	= (ff_split_rem != 2'd0)
+										? ((ff_split_rem == 2'd2) ? ff_split_word[15:0] : ff_split_word[31:16])
+										: ff_word0_data[15:0];
+
+	// -------------------------------------------------------------------------
+	//	出力 FIFO 制御 (16bit, FF 2段)
+	// -------------------------------------------------------------------------
+	wire			w_out_pop		= out_ready & ff_out0_valid;
+	wire			w_out_can_push	= ~ff_out1_valid | w_out_pop;
+	wire			w_out_push		= w_split_can_emit & w_out_can_push;
+
+	always @* begin
+		ff_out0_data_n	= ff_out0_data;
+		ff_out0_valid_n	= ff_out0_valid;
+		ff_out1_data_n	= ff_out1_data;
+		ff_out1_valid_n	= ff_out1_valid;
+
+		// pop を先に適用
+		if( w_out_pop ) begin
+			if( ff_out1_valid ) begin
+				ff_out0_data_n	= ff_out1_data;
+				ff_out0_valid_n	= 1'b1;
+				ff_out1_valid_n	= 1'b0;
 			end
-			else if( ff_fifo_valid & out_ready ) begin
-				ff_fifo_valid	<= 1'b0;
+			else begin
+				ff_out0_valid_n	= 1'b0;
 			end
+		end
+
+		// push を後に適用
+		if( w_out_push ) begin
+			if( ~ff_out0_valid_n ) begin
+				ff_out0_data_n	= w_split_emit_data;
+				ff_out0_valid_n	= 1'b1;
+			end
+			else if( ~ff_out1_valid_n ) begin
+				ff_out1_data_n	= w_split_emit_data;
+				ff_out1_valid_n	= 1'b1;
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_split_word	<= 32'd0;
+			ff_split_rem	<= 2'd0;
+			ff_out0_data	<= 16'd0;
+			ff_out0_valid	<= 1'b0;
+			ff_out1_data	<= 16'd0;
+			ff_out1_valid	<= 1'b0;
+		end
+		else begin
+			// 分割ステージ更新
+			if( w_take_new_word ) begin
+				ff_split_word	<= ff_word0_data;
+				if( w_out_push ) begin
+					// 今サイクルで lower を押し込んだので upper のみ残す
+					ff_split_rem	<= 2'd1;
+				end
+				else begin
+					ff_split_rem	<= 2'd2;
+				end
+			end
+			else if( w_out_push & (ff_split_rem != 2'd0) ) begin
+				if( ff_split_rem == 2'd2 ) begin
+					ff_split_rem	<= 2'd1;
+				end
+				else begin
+					ff_split_rem	<= 2'd0;
+				end
+			end
+
+			ff_out0_data	<= ff_out0_data_n;
+			ff_out0_valid	<= ff_out0_valid_n;
+			ff_out1_data	<= ff_out1_data_n;
+			ff_out1_valid	<= ff_out1_valid_n;
 		end
 	end
 
 	// -------------------------------------------------------------------------
 	//	出力
 	// -------------------------------------------------------------------------
-	assign	out_valid	= ff_fifo_valid | ff_sram_valid;
-	assign	out_data	= ff_fifo_valid ? ff_fifo_data : ff_sram_data;
+	assign	out_valid	= ff_out0_valid;
+	assign	out_data	= ff_out0_data;
 
 endmodule

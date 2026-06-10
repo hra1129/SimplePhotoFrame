@@ -2,6 +2,38 @@
  "Device" : "GW2AR-18C",
  "Files" : [
   {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_address_generator.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_controller.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_preload_buffer.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_single_port_ram.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_timming_generator.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SPI/ip_spi.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SPI/spi.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SdramController/ip_sdram_tangnano20k.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
    "Type" : "verilog"
   },
@@ -13,9 +45,9 @@
  "IncludePath" : [
 
  ],
- "LoopLimit" : 2000,
+ "LoopLimit" : 99999,
  "ResultFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/impl/temp/rtl_parser.result",
- "Top" : "",
+ "Top" : "simple_photo_frame",
  "VerilogStd" : "verilog_2001",
  "VhdlStd" : "vhdl_93"
 }

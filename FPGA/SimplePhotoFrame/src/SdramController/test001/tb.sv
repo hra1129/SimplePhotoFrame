@@ -54,21 +54,23 @@
 // --------------------------------------------------------------------
 
 module tb ();
-	localparam		TIMEOUT_COUNT	= 50;
+	localparam		TIMEOUT_COUNT	= 20000;
+	localparam		BURST_LEN		= 8;
 	longint			clk_base		= 64'd1_000_000_000_000 / 64'd85_909_080;	//	ps
 	reg				reset_n;
-	reg				clk21m;				//	21.47727MHz
-	reg		[1:0]	ff_21m;
 	reg				clk;				//	85.90908MHz
 	reg				clk_sdram;			//	85.90908MHz
 	wire			sdram_init_busy;
-	reg		[22:0]	bus_address;
+	reg		[22:5]	bus_address;
 	reg				bus_valid;
+	wire			bus_ready;
 	reg				bus_write;
 	reg				bus_refresh;
-	reg		[ 7:0]	bus_wdata;
-	wire	[15:0]	bus_rdata;
-	wire			bus_rdata_en;
+	reg		[31:0]	bus_wdata;
+	reg		[ 3:0]	bus_wdata_mask;
+	reg				bus_wdata_valid;
+	wire	[31:0]	bus_rdata;
+	wire			bus_rdata_valid;
 	wire			O_sdram_clk;
 	wire			O_sdram_cke;
 	wire			O_sdram_cs_n;		// chip select
@@ -79,7 +81,7 @@ module tb ();
 	wire	[10:0]	O_sdram_addr;		// 11 bit multiplexed address bus
 	wire	[ 1:0]	O_sdram_ba;			// two banks
 	wire	[ 3:0]	O_sdram_dqm;		// data mask
-	reg		[ 1:0]	ff_video_clk;
+	int				error_count;
 
 	// --------------------------------------------------------------------
 	//	DUT
@@ -90,12 +92,15 @@ module tb ();
 		.clk_sdram			( clk				),
 		.sdram_init_busy	( sdram_init_busy	),
 		.bus_address		( bus_address		),
-		.bus_valid			( bus_valid			),
 		.bus_write			( bus_write			),
 		.bus_refresh		( bus_refresh		),
+		.bus_valid			( bus_valid			),
+		.bus_ready			( bus_ready			),
 		.bus_wdata			( bus_wdata			),
+		.bus_wdata_mask		( bus_wdata_mask	),
+		.bus_wdata_valid	( bus_wdata_valid	),
 		.bus_rdata			( bus_rdata			),
-		.bus_rdata_en		( bus_rdata_en		),
+		.bus_rdata_valid	( bus_rdata_valid	),
 		.O_sdram_clk		( O_sdram_clk		),
 		.O_sdram_cke		( O_sdram_cke		),
 		.O_sdram_cs_n		( O_sdram_cs_n		),
@@ -130,89 +135,138 @@ module tb ();
 		clk_sdram <= ~clk_sdram;
 	end
 
-	always @( posedge clk ) begin
-		ff_21m <= ff_21m + 2'd1;
-	end
-	assign clk21m	= ff_21m[1];
+	function automatic [31:0] make_test_word(
+		input [7:0] burst_id,
+		input [2:0] beat_idx
+	);
+		make_test_word = { 8'hA5, burst_id, 8'h5A, {5'd0, beat_idx} };
+	endfunction
 
 	// --------------------------------------------------------------------
 	//	Tasks
 	// --------------------------------------------------------------------
-	task write_data(
-		input	[22:0]	p_address,
-		input	[7:0]	p_data
+	task automatic issue_request(
+		input	[22:5]	p_address,
+		input				p_write,
+		input				p_refresh
 	);
 		int timeout;
+		begin
+			timeout = 0;
+			@( negedge clk );
+			bus_address	<= p_address;
+			bus_write	<= p_write;
+			bus_refresh	<= p_refresh;
+			bus_valid	<= 1'b1;
 
-		@( posedge clk21m );
-		bus_address		<= p_address;
-		bus_wdata		<= p_data;
-		bus_write		<= 1'b1;
-		bus_valid		<= 1'b1;
-		@( posedge clk21m );
+			while( timeout < TIMEOUT_COUNT ) begin
+				@( posedge clk );
+				if( bus_ready ) begin
+					break;
+				end
+				timeout++;
+			end
 
-		$display( "[%t] write( 0x%06X, 0x%02X )", $realtime, p_address, p_data );
-		bus_address		<= 0;
-		bus_wdata		<= 0;
-		bus_write		<= 1'b0;
-		bus_valid		<= 1'b0;
-		@( posedge clk21m );
-		$display( "-- done" );
-	endtask: write_data
+			if( timeout >= TIMEOUT_COUNT ) begin
+				$display("[FAIL] request timeout write=%0d refresh=%0d addr=0x%05X", p_write, p_refresh, p_address);
+				error_count++;
+			end
+
+			@( negedge clk );
+			bus_valid	<= 1'b0;
+			bus_write	<= 1'b0;
+			bus_refresh	<= 1'b0;
+			bus_address	<= 'd0;
+		end
+	endtask: issue_request
 
 	// --------------------------------------------------------------------
-	task read_data(
-		input	[22:0]	p_address,
-		input	[15:0]	p_data
+	task automatic write_burst(
+		input	[22:5]	p_address,
+		input	[7:0]	p_burst_id
+	);
+		int i;
+		begin
+			$display("[%t] write_burst req addr=0x%05X id=%0d", $realtime, p_address, p_burst_id);
+			issue_request( p_address, 1'b1, 1'b0 );
+
+			for( i = 0; i < BURST_LEN; i++ ) begin
+				@( negedge clk );
+				bus_wdata		<= make_test_word( p_burst_id, i[2:0] );
+				bus_wdata_mask	<= 4'b0000;
+				bus_wdata_valid	<= 1'b1;
+				@( posedge clk );
+			end
+
+			@( negedge clk );
+			bus_wdata_valid	<= 1'b0;
+			bus_wdata		<= 32'd0;
+			bus_wdata_mask	<= 4'hF;
+			$display("-- write_burst done");
+		end
+	endtask: write_burst
+
+	// --------------------------------------------------------------------
+	task automatic read_burst_and_check(
+		input	[22:5]	p_address,
+		input	[7:0]	p_burst_id
 	);
 		int timeout;
+		int beat;
+		reg [31:0] expected;
+		begin
+			$display("[%t] read_burst req addr=0x%05X id=%0d", $realtime, p_address, p_burst_id);
+			issue_request( p_address, 1'b0, 1'b0 );
 
-		@( posedge clk21m );
-		bus_address		<= p_address;
-		bus_write		<= 1'b0;
-		bus_valid		<= 1'b1;
-		@( posedge clk21m );
+			timeout = 0;
+			beat = 0;
+			while( (beat < BURST_LEN) && (timeout < TIMEOUT_COUNT) ) begin
+				@( posedge clk );
+				timeout++;
+				if( bus_rdata_valid ) begin
+					expected = make_test_word( p_burst_id, beat[2:0] );
+					if( bus_rdata !== expected ) begin
+						$display("[FAIL] read mismatch beat=%0d got=0x%08X expected=0x%08X", beat, bus_rdata, expected);
+						error_count++;
+					end
+					beat++;
+				end
+			end
 
-		$display( "[%t] read( 0x%06X )", $realtime, p_address );
-		bus_valid		<= 1'b0;
-		timeout			<= 0;
-		while( !bus_rdata_en && (timeout < TIMEOUT_COUNT) ) begin
-			@( posedge clk21m );
-			timeout++;
+			if( beat != BURST_LEN ) begin
+				$display("[FAIL] read timeout beat=%0d/%0d", beat, BURST_LEN);
+				error_count++;
+			end
+			else begin
+				$display("-- read_burst done");
+			end
 		end
-		@( posedge clk21m );
-		assert( p_data == bus_rdata );
-		if( p_data == bus_rdata ) begin
-			$display( "-- done (0x%04X)", bus_rdata );
-		end
-		else begin
-			$display( "[ERROR] no match (0x%04X != 0x%04X(ref))", bus_rdata, p_data );
-		end
-	endtask: read_data
+	endtask: read_burst_and_check
 
 	// --------------------------------------------------------------------
-	task exec_refresh(
-	);
-		@( posedge clk21m );
-		bus_refresh		<= 1'b1;
-		@( posedge clk21m );
-		bus_refresh		<= 1'b0;
-		@( posedge clk21m );
+	task automatic exec_refresh();
+		begin
+			$display("[%t] refresh request", $realtime);
+			issue_request( 18'd0, 1'b0, 1'b1 );
+			$display("-- refresh done");
+		end
 	endtask: exec_refresh
 
 	// --------------------------------------------------------------------
 	//	Test bench
 	// --------------------------------------------------------------------
 	initial begin
-		ff_21m = 0;
+		error_count = 0;
 		reset_n = 0;
 		clk = 0;
 		clk_sdram = 1;
-		bus_write = 0;
-		bus_valid = 0;
-		bus_address = 0;
-		bus_wdata = 0;
-		bus_refresh = 0;
+		bus_address = 'd0;
+		bus_write = 1'b0;
+		bus_refresh = 1'b0;
+		bus_valid = 1'b0;
+		bus_wdata = 32'd0;
+		bus_wdata_mask = 4'hF;
+		bus_wdata_valid = 1'b0;
 
 		@( negedge clk );
 		@( negedge clk );
@@ -228,31 +282,35 @@ module tb ();
 		$display( "Finished initialization" );
 
 		repeat( 16 ) @( posedge clk );
-		repeat( 7 ) @( posedge clk );
 
-		write_data( 'h000000, 'h12 );
-		write_data( 'h000001, 'h23 );
-		write_data( 'h000002, 'h34 );
-		write_data( 'h000003, 'h45 );
-		write_data( 'h000004, 'h56 );
-		write_data( 'h000005, 'h67 );
-		write_data( 'h000006, 'h78 );
-		write_data( 'h000007, 'h89 );
+		// TEST 1: write burst -> read burst
+		$display("[TEST 1] write/read burst #0");
+		write_burst( 18'h00000, 8'h10 );
+		read_burst_and_check( 18'h00000, 8'h10 );
 
-		read_data(  'h000000, 'h2312 );
-		read_data(  'h000001, 'h2312 );
-		read_data(  'h000002, 'h4534 );
-		read_data(  'h000003, 'h4534 );
-		read_data(  'h000004, 'h6756 );
-		read_data(  'h000005, 'h6756 );
-		read_data(  'h000006, 'h8978 );
-		read_data(  'h000007, 'h8978 );
+		// TEST 2: second burst at different address
+		$display("[TEST 2] write/read burst #1");
+		write_burst( 18'h00001, 8'h22 );
+		read_burst_and_check( 18'h00001, 8'h22 );
 
+		// TEST 3: refresh interleaved, then re-read both bursts
+		$display("[TEST 3] refresh and retention");
 		exec_refresh();
 		exec_refresh();
 		exec_refresh();
+		read_burst_and_check( 18'h00000, 8'h10 );
+		read_burst_and_check( 18'h00001, 8'h22 );
 
-		repeat( 12 ) @( posedge clk );
+		$display("--------------------------------------------");
+		if( error_count == 0 ) begin
+			$display("ALL TESTS PASSED");
+		end
+		else begin
+			$display("FAILED: %0d error(s)", error_count);
+		end
+		$display("--------------------------------------------");
+
+		repeat( 20 ) @( posedge clk );
 		$finish;
 	end
 endmodule

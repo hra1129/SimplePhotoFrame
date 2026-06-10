@@ -59,7 +59,7 @@ module display_controller (
 	input			reset,
 	input			sdram_init_busy,
 	//	Register interface
-	input			bus_address,
+	input	[7:0]	bus_address,
 	input			bus_valid,
 	output			bus_ready,
 	input			bus_write,
@@ -74,11 +74,17 @@ module display_controller (
 	output	[4:0]	lcd_r,
 	output	[5:0]	lcd_g,
 	output	[4:0]	lcd_b,
-	//	SDRAM address
+	output			lcd_bl,
+	// SDRAM interface
 	output	[22:5]	sdram_address,
 	output			sdram_address_valid,
-	input			sdram_address_ready
+	input			sdram_address_ready,
+	input	[31:0]	sdram_rdata,
+	input			sdram_rdata_valid
 );
+	wire			fifo_full;
+	wire	[31:0]	fifo_wdata;
+	wire			fifo_valid;
 	wire			p_valid;
 	wire			p_ready;
 	wire	[15:0]	p_data;
@@ -94,18 +100,23 @@ module display_controller (
 		.bus_wdata				( bus_wdata				),
 		.bus_rdata				( bus_rdata				),
 		.bus_rdata_valid		( bus_rdata_valid		),
+		.fifo_full				( fifo_full				),
+		.fifo_wdata				( fifo_wdata			),
+		.fifo_valid				( fifo_valid			),
 		.sdram_address			( sdram_address			),
 		.sdram_address_valid	( sdram_address_valid	),
-		.sdram_address_ready	( sdram_address_ready	)
+		.sdram_address_ready	( sdram_address_ready	),
+		.sdram_rdata			( sdram_rdata			),
+		.sdram_rdata_valid		( sdram_rdata_valid		)
 	);
 
 	display_preload_buffer display_preload_buffer (
 		.clk					( clk					),
 		.reset					( reset					),
-		.in_data				( in_data				),
-		.in_valid				( in_valid				),
-		.in_ready				( in_ready				),
-		.in_nearly_full			( in_nearly_full		),
+		.in_data				( fifo_wdata			),
+		.in_valid				( fifo_valid			),
+		.in_ready				( 						),
+		.in_nearly_full			( fifo_full				),
 		.out_data				( p_data				),
 		.out_valid				( p_valid				),
 		.out_ready				( p_ready				)
@@ -123,6 +134,7 @@ module display_controller (
 		.lcd_de					( lcd_de				),
 		.lcd_r					( lcd_r					),
 		.lcd_g					( lcd_g					),
-		.lcd_b					( lcd_b					)
+		.lcd_b					( lcd_b					),
+		.lcd_bl					( lcd_bl				)
 	);
 endmodule

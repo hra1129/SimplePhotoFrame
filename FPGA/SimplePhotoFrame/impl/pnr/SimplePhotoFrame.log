@@ -2,11 +2,29 @@ Reading netlist file: "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_V
 Parsing netlist file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg" completed
 Processing netlist completed
 Reading constraint file: "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst"
-ERROR  (CT1108) : "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst":87 | Illegal port attribute value specified 'PULL_MODE = UP' on 'i2s_dout'
-ERROR  (CT1136) : Bank 3 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'lcd_de_s0' : IO_TYPE = LVCMOS18 in the same bank
-ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'led_7_s7' : IO_TYPE = SSTL33_II in the same bank
-ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'led_7_s6' : IO_TYPE = SSTL33_II in the same bank
-ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'gowin_ibuf_fpga_spi_cs_n' : IO_TYPE = SSTL33_II in the same bank
-ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'gowin_ibuf_fpga_spi_sck' : IO_TYPE = SSTL33_II in the same bank
-ERROR  (CT1136) : Bank 1 vccio(1.8) is locked by other constraint or embedded port, conflicting BANK_VCCIO set by 'gowin_ibuf_fpga_spi_mosi' : IO_TYPE = SSTL33_II in the same bank
-Physical Constraint parsed completed with errors
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk27m_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.power.html" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.pin.html" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.rpt.html" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.rpt.txt" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.tr.html" completed
+Wed Jun 10 22:30:58 2026
+

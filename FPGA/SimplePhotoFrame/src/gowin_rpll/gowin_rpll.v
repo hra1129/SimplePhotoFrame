@@ -1,30 +1,33 @@
-//Copyright (C)2014-2025 Gowin Semiconductor Corporation.
+//Copyright (C)2014-2026 Gowin Semiconductor Corporation.
 //All rights reserved.
 //File Title: IP file
-//Tool Version: V1.9.11.02 (64-bit)
+//Tool Version: V1.9.12.02_SP2 (64-bit)
+//IP Version: 1.0
 //Part Number: GW2AR-LV18QN88C8/I7
 //Device: GW2AR-18
 //Device Version: C
-//Created Time: Sat May 30 21:18:52 2026
+//Created Time: Wed Jun 10 18:29:56 2026
 
-module Gowin_rPLL (clkout, clkoutd, clkin);
+module Gowin_rPLL (clkout, clkoutp, clkin);
 
 output clkout;
-output clkoutd;
+output clkoutp;
 input clkin;
 
 wire lock_o;
-wire clkoutp_o;
+wire clkoutd_o;
 wire clkoutd3_o;
+wire gw_vcc;
 wire gw_gnd;
 
+assign gw_vcc = 1'b1;
 assign gw_gnd = 1'b0;
 
 rPLL rpll_inst (
     .CLKOUT(clkout),
     .LOCK(lock_o),
-    .CLKOUTP(clkoutp_o),
-    .CLKOUTD(clkoutd),
+    .CLKOUTP(clkoutp),
+    .CLKOUTD(clkoutd_o),
     .CLKOUTD3(clkoutd3_o),
     .RESET(gw_gnd),
     .RESET_P(gw_gnd),
@@ -35,7 +38,7 @@ rPLL rpll_inst (
     .ODSEL({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd}),
     .PSDA({gw_gnd,gw_gnd,gw_gnd,gw_gnd}),
     .DUTYDA({gw_gnd,gw_gnd,gw_gnd,gw_gnd}),
-    .FDLY({gw_gnd,gw_gnd,gw_gnd,gw_gnd})
+    .FDLY({gw_vcc,gw_vcc,gw_vcc,gw_vcc})
 );
 
 defparam rpll_inst.FCLKIN = "27";
@@ -45,8 +48,8 @@ defparam rpll_inst.DYN_FBDIV_SEL = "false";
 defparam rpll_inst.FBDIV_SEL = 43;
 defparam rpll_inst.DYN_ODIV_SEL = "false";
 defparam rpll_inst.ODIV_SEL = 4;
-defparam rpll_inst.PSDA_SEL = "0000";
-defparam rpll_inst.DYN_DA_EN = "true";
+defparam rpll_inst.PSDA_SEL = "1000";
+defparam rpll_inst.DYN_DA_EN = "false";
 defparam rpll_inst.DUTYDA_SEL = "1000";
 defparam rpll_inst.CLKOUT_FT_DIR = 1'b1;
 defparam rpll_inst.CLKOUTP_FT_DIR = 1'b1;
