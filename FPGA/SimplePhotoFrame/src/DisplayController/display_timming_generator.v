@@ -78,23 +78,23 @@ module display_timming_generator (
 	// -------------------------------------------------------------------------
 	// Parameters
 	// -------------------------------------------------------------------------
-	// Horizontal (unit: pixel = 1 lcd_ck cycle = 4 clocks @ 132MHz)
-	//   sync+BP:    0..45   (46 pixels total; sync=20px, remaining BP=26px, negative logic during 0..19)
-	//   active :   46..845  (800 pixels)
-	//   FP     :  846..1055 (210 pixels)  total 1056
+	// Horizontal (unit: pixel = 1 lcd_ck cycle = 4 clocks @ 108MHz)
+	//   sync+BP:    0..24   (25 pixels total; sync=20px, remaining BP=5px, negative logic during 0..19)
+	//   active :   25..824  (800 pixels)
+	//   FP     :  825..899  (75 pixels)  total 900
 	localparam [10:0] H_SYNC_END   = 11'd19;
-	localparam [10:0] H_BP_END     = 11'd45;
-	localparam [10:0] H_ACTIVE_END = 11'd845;
-	localparam [10:0] H_TOTAL      = 11'd1055;
+	localparam [10:0] H_BP_END     = 11'd24;
+	localparam [10:0] H_ACTIVE_END = 11'd824;
+	localparam [10:0] H_TOTAL      = 11'd899;
 
 	// Vertical (unit: line)
-	//   sync+BP:   0..22  (23 lines total; sync=10line, remaining BP=13line, negative logic during 0..9)
-	//   active :  23..502 (480 lines)
-	//   FP     : 503..520 (18 lines)  total 521
+	//   sync+BP:   0..14  (15 lines total; sync=10line, remaining BP=5line, negative logic during 0..9)
+	//   active :  15..494 (480 lines)
+	//   FP     : 495..499 (5 lines)  total 500
 	localparam [9:0] V_SYNC_END   = 10'd9;
-	localparam [9:0] V_BP_END     = 10'd22;
-	localparam [9:0] V_ACTIVE_END = 10'd502;
-	localparam [9:0] V_TOTAL      = 10'd520;
+	localparam [9:0] V_BP_END     = 10'd14;
+	localparam [9:0] V_ACTIVE_END = 10'd494;
+	localparam [9:0] V_TOTAL      = 10'd499;
 
 	// -------------------------------------------------------------------------
 	// Register declarations
@@ -119,7 +119,7 @@ module display_timming_generator (
 	wire w_stall = p_ready && !p_valid;
 
 	// -------------------------------------------------------------------------
-	// lcd_ck: 4-divider of 132MHz → 33MHz  (stalls when pixel data is missing)
+	// lcd_ck: 4-divider of 108MHz -> 27MHz  (stalls when pixel data is missing)
 	// -------------------------------------------------------------------------
 
 	always @( posedge clk or posedge reset ) begin

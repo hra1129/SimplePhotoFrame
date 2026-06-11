@@ -43,8 +43,8 @@ module simple_photo_frame (
 	output	[ 1:0]	O_sdram_ba,		//	GOWIN FPGA Internal
 	output	[ 3:0]	O_sdram_dqm		//	GOWIN FPGA Internal
 );
-	wire			clk132m;
-	wire			clk132m_n;
+	wire			clk108m;
+	wire			clk108m_n;
 	reg				ff_reset = 1'b1;
 	wire			bus_io;
 	wire	[7:0]	bus_address;
@@ -69,16 +69,16 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	//	クロック生成
 	// ---------------------------------------------------------
-    Gowin_rPLL u_rpll (
-        .clkout					( clk132m				),		//	132MHz
-        .clkoutp				( clk132m_n				),		//	132MHz (inverted)
-        .clkin					( clk27m				)		//	27MHz
-    );
+	Gowin_rPLL u_rpll (
+		.clkout					( clk108m				),		//	108MHz
+		.clkoutp				( clk108m_n				),		//	108MHz (inverted)
+		.clkin					( clk27m				)		//	27MHz
+	);
 
 	// ---------------------------------------------------------
 	//	リセット生成
 	// ---------------------------------------------------------
-	always @( posedge clk132m ) begin
+	always @( posedge clk108m ) begin
 		ff_reset <= 1'b0;
 	end
 
@@ -87,8 +87,8 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	ip_spi u_ip_spi (
 		.reset					( ff_reset				),
-		.clk					( clk132m				),
-		.clk_serial				( clk132m				),
+		.clk					( clk108m				),
+		.clk_serial				( clk108m				),
 		.bus_io					( bus_io				),
 		.bus_write				( bus_write				),
 		.bus_valid				( bus_valid				),
@@ -108,7 +108,7 @@ module simple_photo_frame (
 	//	表示コントローラ
 	// ---------------------------------------------------------
 	display_controller u_display_controller (
-		.clk					( clk132m				),
+		.clk					( clk108m				),
 		.reset					( ff_reset				),
 		.sdram_init_busy		( sdram_init_busy		),
 		.bus_address			( bus_address			),
@@ -143,8 +143,8 @@ module simple_photo_frame (
 	assign sdram_wdata_valid = 1'b0;
 
 	ip_sdram u_sdram_controller (
-		.clk					( clk132m				),
-		.clk_sdram				( clk132m_n				),
+		.clk					( clk108m				),
+		.clk_sdram				( clk108m_n				),
 		.reset					( ff_reset				),
 		.sdram_init_busy		( sdram_init_busy		),
 		.bus_address			( sdram_address			),

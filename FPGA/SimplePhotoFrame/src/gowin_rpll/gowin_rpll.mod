@@ -14,11 +14,11 @@
 -ip_version 1.0
 -dev_type GW2AR-18C
 -dyn_idiv_sel false
--idiv_sel 9
+-idiv_sel 1
 -dyn_fbdiv_sel false
--fbdiv_sel 44
+-fbdiv_sel 4
 -dyn_odiv_sel false
--odiv_sel 4
+-odiv_sel 8
 -dyn_da_en false
 -rst_sig false
 -rst_sig_p false
