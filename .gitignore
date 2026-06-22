@@ -19,3 +19,5 @@ generated
 pico-sdk
 pioasm
 pioasm-install
+MT48LC2M32B2.v
+W25Q32JVxxIM.v
