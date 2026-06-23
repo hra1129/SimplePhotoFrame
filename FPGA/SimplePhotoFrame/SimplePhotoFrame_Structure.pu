@@ -1,0 +1,39 @@
+```plantuml
+@startuml
+
+nwdiag {
+	Controller [description = "Controller: RasPiPico2W"];
+	Controller -- bus_bridge;
+	bus_bridge [description = "SPI to Register BUS bridge" address = "SPI"];
+
+    network bus {
+        description = "Register BUS";
+		bus_bridge;
+        DisplayController [address = "00h-1Fh"];
+        GraphicProcessor1 [address = "20h-3Fh"];
+        GraphicProcessor2 [address = "40h-5Fh"];
+		VideoMemoryAccessor [address = "60h-7Fh" description = "Video Memory Accessor"];
+        QSPI_ROM_Controller [address = "E0h-FFh" description = "QSPI ROM Controller"];
+    }
+
+	network dram_bus {
+		description = "DRAM BUS";
+		DisplayController;
+		GraphicProcessor1;
+		GraphicProcessor2;
+		VideoMemoryAccessor;
+		bus_arbiter [description = "Bus Arbiter"];
+	}
+	bus_arbiter -- dram_controller;
+	dram_controller [description = "DRAM Controller"];
+	dram_controller -- SDRAM;
+	SDRAM [description = "TangNano20K built-in SDRAM"];
+
+	DisplayController -- LCD_Panel;
+	QSPI_ROM_Controller -- ConfigROM;
+
+	LCD_Panel [description = "LCD Panel"];
+	ConfigROM [description = "Configuration ROM"];
+}
+@enduml
+```

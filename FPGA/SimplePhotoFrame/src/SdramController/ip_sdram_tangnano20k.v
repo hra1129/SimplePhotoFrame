@@ -142,6 +142,9 @@ module ip_sdram #(
 	reg		[31:0]				ff_sdr_write_data;
 	reg		[ 3:0]				ff_sdr_dq_mask;
 	reg		[31:0]				ff_sdr_read_word;
+	reg		[255:0]				ff_sdr_read_data;		// 8-word burst read buffer
+	reg		[2:0]				ff_read_word_count_sdram;	// word count in clk_sdram domain
+	reg							ff_read_capture_active_sdram;
 	reg							ff_do_command;
 	reg							ff_write;
 	reg		[ 1:0]				ff_bank;
@@ -156,6 +159,8 @@ module ip_sdram #(
 	reg							ff_read_done_sync2;
 	reg		[31:0]				ff_bus_rdata;
 	reg							ff_bus_rdata_valid;
+	reg		[2:0]				ff_read_word_index;		// word index for bus output
+	reg							ff_read_burst_active;	// flag for 8-cycle output phase
 	reg		[ 2:0]				ff_write_burst_index;
 	reg		[31:0]				ff_write_burst_word;
 	reg		[ 3:0]				ff_write_burst_mask;
@@ -540,21 +545,53 @@ module ip_sdram #(
 
 	always @( posedge clk_sdram ) begin
 		if( reset ) begin
-			ff_sdr_read_word			<= 32'd0;
-			ff_read_done_toggle_sdram	<= 1'b0;
+			ff_sdr_read_word				<= 32'd0;
+			ff_read_done_toggle_sdram		<= 1'b0;
+			ff_sdr_read_data				<= 256'd0;
+			ff_read_word_count_sdram		<= 3'd0;
+			ff_read_capture_active_sdram	<= 1'b0;
 		end
-		else if( (ff_main_state == c_main_state_finish) && !ff_write && !ff_do_refresh ) begin
+		else if( !ff_read_capture_active_sdram ) begin
+			if( (ff_main_state == c_main_state_finish) && ff_do_command && !ff_write && !ff_do_refresh ) begin
+				// Start capture from the first valid read word.
+				ff_sdr_read_word				<= IO_sdram_dq;
+				ff_sdr_read_data[31:0]			<= IO_sdram_dq;
+				ff_read_word_count_sdram		<= 3'd1;
+				ff_read_capture_active_sdram	<= 1'b1;
+			end
+		end
+		else begin
+			// Continue capture for remaining burst words regardless of state.
 			ff_sdr_read_word			<= IO_sdram_dq;
-			ff_read_done_toggle_sdram	<= ~ff_read_done_toggle_sdram;
+			case( ff_read_word_count_sdram )
+			3'd1: ff_sdr_read_data[ 63: 32]	<= IO_sdram_dq;
+			3'd2: ff_sdr_read_data[ 95: 64]	<= IO_sdram_dq;
+			3'd3: ff_sdr_read_data[127: 96]	<= IO_sdram_dq;
+			3'd4: ff_sdr_read_data[159:128]	<= IO_sdram_dq;
+			3'd5: ff_sdr_read_data[191:160]	<= IO_sdram_dq;
+			3'd6: ff_sdr_read_data[223:192]	<= IO_sdram_dq;
+			3'd7: ff_sdr_read_data[255:224]	<= IO_sdram_dq;
+			endcase
+
+			if( ff_read_word_count_sdram == 3'd7 ) begin
+				ff_read_done_toggle_sdram		<= ~ff_read_done_toggle_sdram;
+				ff_read_word_count_sdram		<= 3'd0;
+				ff_read_capture_active_sdram	<= 1'b0;
+			end
+			else begin
+				ff_read_word_count_sdram		<= ff_read_word_count_sdram + 3'd1;
+			end
 		end
 	end
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_read_done_sync1	<= 1'b0;
-			ff_read_done_sync2	<= 1'b0;
-			ff_bus_rdata		<= 32'd0;
-			ff_bus_rdata_valid	<= 1'b0;
+			ff_read_done_sync1		<= 1'b0;
+			ff_read_done_sync2		<= 1'b0;
+			ff_bus_rdata			<= 32'd0;
+			ff_bus_rdata_valid		<= 1'b0;
+			ff_read_word_index		<= 3'd0;
+			ff_read_burst_active	<= 1'b0;
 		end
 		else begin
 			ff_read_done_sync1	<= ff_read_done_toggle_sdram;
@@ -562,8 +599,27 @@ module ip_sdram #(
 			ff_bus_rdata_valid	<= 1'b0;
 
 			if( w_read_burst_done ) begin
-				ff_bus_rdata		<= ff_sdr_read_word;
-				ff_bus_rdata_valid	<= 1'b1;
+				ff_read_burst_active	<= 1'b1;
+				ff_read_word_index	<= 3'd0;
+			end
+
+			if( ff_read_burst_active ) begin
+				case( ff_read_word_index )
+				3'd0: ff_bus_rdata <= ff_sdr_read_data[ 31:  0];
+				3'd1: ff_bus_rdata <= ff_sdr_read_data[ 63: 32];
+				3'd2: ff_bus_rdata <= ff_sdr_read_data[ 95: 64];
+				3'd3: ff_bus_rdata <= ff_sdr_read_data[127: 96];
+				3'd4: ff_bus_rdata <= ff_sdr_read_data[159:128];
+				3'd5: ff_bus_rdata <= ff_sdr_read_data[191:160];
+				3'd6: ff_bus_rdata <= ff_sdr_read_data[223:192];
+				3'd7: ff_bus_rdata <= ff_sdr_read_data[255:224];
+				endcase
+				ff_bus_rdata_valid <= 1'b1;
+
+				if( ff_read_word_index == 3'd7 ) begin
+					ff_read_burst_active <= 1'b0;
+				end
+				ff_read_word_index <= ff_read_word_index + 3'd1;
 			end
 		end
 	end
@@ -585,3 +641,4 @@ module ip_sdram #(
 	assign bus_rdata			= ff_bus_rdata;
 	assign bus_rdata_valid		= ff_bus_rdata_valid;
 endmodule
+

@@ -15,6 +15,8 @@
         <File path="src/SdramController/ip_sdram_tangnano20k.v" type="file.verilog" enable="1"/>
         <File path="src/SimplePhotoFrame.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>
+        <File path="src/qspi_rom/ip_qspi_rom.v" type="file.verilog" enable="1"/>
+        <File path="src/qspi_rom/qspi.v" type="file.verilog" enable="1"/>
         <File path="src/SimplePhotoFrame.cst" type="file.cst" enable="1"/>
         <File path="src/SimplePhotoFrame.sdc" type="file.sdc" enable="1"/>
     </FileList>

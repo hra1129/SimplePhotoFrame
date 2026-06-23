@@ -56,10 +56,10 @@
 module tb ();
 	localparam		TIMEOUT_COUNT	= 20000;
 	localparam		BURST_LEN		= 8;
-	longint			clk_base		= 64'd1_000_000_000_000 / 64'd85_909_080;	//	ps
-	reg				reset_n;
-	reg				clk;				//	85.90908MHz
-	reg				clk_sdram;			//	85.90908MHz
+	longint			clk_base		= 64'd1_000_000_000_000 / 64'd108_000_000;	//	ps
+	reg				reset;
+	reg				clk;				//	108MHz
+	reg				clk_sdram;			//	108MHz
 	wire			sdram_init_busy;
 	reg		[22:5]	bus_address;
 	reg				bus_valid;
@@ -87,7 +87,7 @@ module tb ();
 	//	DUT
 	// --------------------------------------------------------------------
 	ip_sdram u_sdram_controller (
-		.reset_n			( reset_n			),
+		.reset				( reset				),
 		.clk				( clk				),
 		.clk_sdram			( clk				),
 		.sdram_init_busy	( sdram_init_busy	),
@@ -257,7 +257,7 @@ module tb ();
 	// --------------------------------------------------------------------
 	initial begin
 		error_count = 0;
-		reset_n = 0;
+		reset = 1;
 		clk = 0;
 		clk_sdram = 1;
 		bus_address = 'd0;
@@ -272,7 +272,7 @@ module tb ();
 		@( negedge clk );
 		@( posedge clk );
 
-		reset_n			= 1;
+		reset			= 0;
 		@( posedge clk );
 
 		$display( "Wait initialization of SDRAM" );

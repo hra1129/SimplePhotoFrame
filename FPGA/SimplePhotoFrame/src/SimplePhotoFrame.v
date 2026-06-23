@@ -46,8 +46,8 @@ module simple_photo_frame (
 	wire			clk108m;
 	wire			clk108m_n;
 	reg				ff_reset = 1'b1;
-	wire			bus_io;
-	wire	[7:0]	bus_address;
+	wire	[7:0]	bus_cs;
+	wire	[4:0]	bus_address;
 	wire			bus_valid;
 	wire			bus_ready;
 	wire			bus_write;
@@ -89,7 +89,7 @@ module simple_photo_frame (
 		.reset					( ff_reset				),
 		.clk					( clk108m				),
 		.clk_serial				( clk108m				),
-		.bus_io					( bus_io				),
+		.bus_cs					( bus_cs				),
 		.bus_write				( bus_write				),
 		.bus_valid				( bus_valid				),
 		.bus_ready				( bus_ready				),
@@ -103,9 +103,31 @@ module simple_photo_frame (
 		.spi_miso				( fpga_spi_miso			),
 		.spi_intr				( fpga_spi_intr			)
 	);
+	assign bus_address[7:5] = 3'b000;
 
 	// ---------------------------------------------------------
-	//	表示コントローラ
+	//	Config ROM Controller (I/O E0h-FFh)
+	// ---------------------------------------------------------
+	ip_qspi_rom u_ip_qspi_rom (
+		.reset					( ff_reset				),
+		.clk					( clk108m				),
+		.clk_serial				( clk108m				),
+		.bus_cs					( bus_cs[7]				),
+		.bus_address			( bus_address			),
+		.bus_write				( bus_write				),
+		.bus_valid				( bus_valid				),
+		.bus_ready				( bus_ready				),
+		.bus_wdata				( bus_wdata				),
+		.bus_rdata				( bus_rdata				),
+		.bus_rdata_en			( bus_rdata_en			),
+		.srom0_cs_n				( srom0_cs_n			),
+		.srom1_cs_n				( srom1_cs_n			),
+		.srom_clk				( srom_clk				),
+		.srom_sio				( srom_sio				)
+	);
+
+	// ---------------------------------------------------------
+	//	表示コントローラ (I/O 00h-1Fh)
 	// ---------------------------------------------------------
 	display_controller u_display_controller (
 		.clk					( clk108m				),
@@ -132,6 +154,18 @@ module simple_photo_frame (
 		.sdram_rdata			( sdram_rdata			),
 		.sdram_rdata_valid		( sdram_rdata_valid		)
 	);
+
+	// ---------------------------------------------------------
+	//	描画コントローラ1 (I/O 20h-3Fh)
+	// ---------------------------------------------------------
+
+	// ---------------------------------------------------------
+	//	描画コントローラ2 (I/O 40h-5Fh)
+	// ---------------------------------------------------------
+
+	// ---------------------------------------------------------
+	//	VRAM読み書き (I/O 60h-7Fh)
+	// ---------------------------------------------------------
 
 	// ---------------------------------------------------------
 	//	SDRAMコントローラ

@@ -95,6 +95,7 @@ module spi (
 			ff_spi_cs_n		<= 1'b1;
 			ff_spi_clk		<= 1'b0;
 			ff_spi_mosi		<= 1'b0;
+			ff_spi_clk_d1	<= 1'b0;
 		end
 		else begin
 			//	2-stage FF for metastability mitigation
@@ -104,12 +105,12 @@ module spi (
 			ff_spi_cs_n		<= ff_spi_cs_n_pre;
 			ff_spi_clk		<= ff_spi_clk_pre;
 			ff_spi_mosi		<= ff_spi_mosi_pre;
-			ff_spi_clk_d1	<= ff_spi_clk;	//	1-cycle delayed version of SPI clock for edge detection
+			ff_spi_clk_d1	<= ff_spi_clk_pre;	//	1-cycle delayed version of synchronized SPI clock for edge detection
 		end
 	end
 
-	assign w_spi_clk_falling_edge	=  ff_spi_clk_d1 & ~ff_spi_clk;
-	assign w_spi_clk_rising_edge	= ~ff_spi_clk_d1 &  ff_spi_clk;
+	assign w_spi_clk_falling_edge	=  ff_spi_clk & ~ff_spi_clk_pre;
+	assign w_spi_clk_rising_edge	= ~ff_spi_clk &  ff_spi_clk_pre;
 
 	// ---------------------------------------------------------
 	//	内部からの送信要求を認知する
@@ -189,11 +190,15 @@ module spi (
 		else if( ff_spi_cs_n ) begin
 			ff_spi_data <= 8'd0;
 		end
+		else if( !ff_spi_ready && ff_send && (ff_bit_counter == 4'd0) ) begin
+			// Keep TX byte preloaded until first rising-edge sample in mode0.
+			ff_spi_data <= ff_send_data;
+		end
 		else if( w_spi_start ) begin
 			ff_spi_data <= ff_send_data;
 		end
 		else if( !ff_spi_ready ) begin
-			if( ff_send && w_spi_clk_rising_edge ) begin
+			if( ff_send && w_spi_clk_falling_edge ) begin
 				//	送信モード
 				ff_spi_data <= { ff_spi_data[6:0], 1'b0 };
 			end
@@ -211,7 +216,7 @@ module spi (
 		else if( w_spi_start ) begin
 			ff_bit_counter <= 4'd0;
 		end
-		else if( ff_done_pulse ) begin
+		else if( w_done_pulse ) begin
 			ff_bit_counter <= 4'd0;
 		end
 		else if( !ff_spi_ready && w_spi_clk_rising_edge && !ff_bit_counter[3] ) begin
@@ -220,5 +225,5 @@ module spi (
 	end
 
 	assign w_done_pulse = (ff_bit_counter == 4'd8);
-	assign spi_miso		= ff_spi_data[7];
+	assign spi_miso		= (!ff_spi_ready && ff_send && (ff_bit_counter == 4'd0)) ? ff_send_data[7] : ff_spi_data[7];
 endmodule
