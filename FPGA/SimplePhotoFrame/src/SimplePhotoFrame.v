@@ -168,14 +168,82 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 
 	// ---------------------------------------------------------
+	//	バスアービタ
+	// ---------------------------------------------------------
+	bus_arbiter u_bus_arbiter (
+		.reset					( ff_reset				),
+		.clk					( clk108m				),
+		.bus0_address			( bus0_address			),
+		.bus0_write				( bus0_write			),
+		.bus0_wdata				( bus0_wdata			),
+		.bus0_flash				( bus0_flash			),
+		.bus0_valid				( bus0_valid			),
+		.bus0_ready				( bus0_ready			),
+		.bus0_rdata				( bus0_rdata			),
+		.bus0_rdata_valid		( bus0_rdata_valid		),
+		.bus1_address			( bus1_address			),
+		.bus1_write				( bus1_write			),
+		.bus1_wdata				( bus1_wdata			),
+		.bus1_flash				( bus1_flash			),
+		.bus1_valid				( bus1_valid			),
+		.bus1_ready				( bus1_ready			),
+		.bus1_rdata				( bus1_rdata			),
+		.bus1_rdata_valid		( bus1_rdata_valid		),
+		.bus2_address			( bus2_address			),
+		.bus2_write				( bus2_write			),
+		.bus2_wdata				( bus2_wdata			),
+		.bus2_flash				( bus2_flash			),
+		.bus2_valid				( bus2_valid			),
+		.bus2_ready				( bus2_ready			),
+		.bus2_rdata				( bus2_rdata			),
+		.bus2_rdata_valid		( bus2_rdata_valid		),
+		.bus3_address			( bus3_address			),
+		.bus3_write				( bus3_write			),
+		.bus3_wdata				( bus3_wdata			),
+		.bus3_flash				( bus3_flash			),
+		.bus3_valid				( bus3_valid			),
+		.bus3_ready				( bus3_ready			),
+		.bus3_rdata				( bus3_rdata			),
+		.bus3_rdata_valid		( bus3_rdata_valid		),
+		.bus_address			( bus_address			),
+		.bus_write				( bus_write				),
+		.bus_wdata				( bus_wdata				),
+		.bus_flash				( bus_flash				),
+		.bus_valid				( bus_valid				),
+		.bus_ready				( bus_ready				),
+		.bus_rdata				( bus_rdata				),
+		.bus_rdata_valid		( bus_rdata_valid		)
+	);
+
+	// ---------------------------------------------------------
+	//	キャッシュメモリ
+	// ---------------------------------------------------------
+	cache u_cache (
+		.reset					( ff_reset				),
+		.clk					( clk108m				),
+		.bus_address			( bus_address			),
+		.bus_write				( bus_write				),
+		.bus_wdata				( bus_wdata				),
+		.bus_flash				( bus_flash				),
+		.bus_valid				( bus_valid				),
+		.bus_ready				( bus_ready				),
+		.bus_rdata				( bus_rdata				),
+		.bus_rdata_valid		( bus_rdata_valid		),
+		.sdram_address			( sdram_address			),
+		.sdram_write			( sdram_write			),
+		.sdram_refresh			( sdram_refresh			),
+		.sdram_valid			( sdram_address_valid	),
+		.sdram_ready			( sdram_address_ready	),
+		.sdram_wdata			( sdram_wdata			),
+		.sdram_wdata_mask		( sdram_wdata_mask		),
+		.sdram_wdata_valid		( sdram_wdata_valid		),
+		.sdram_rdata			( sdram_rdata			),
+		.sdram_rdata_valid		( sdram_rdata_valid		)
+	);
+
+	// ---------------------------------------------------------
 	//	SDRAMコントローラ
 	// ---------------------------------------------------------
-	assign sdram_write	= 1'b0;	// 読み出し専用
-	assign sdram_refresh = 1'b0;
-	assign sdram_wdata = 32'd0;
-	assign sdram_wdata_mask = 4'hF;
-	assign sdram_wdata_valid = 1'b0;
-
 	ip_sdram u_sdram_controller (
 		.clk					( clk108m				),
 		.clk_sdram				( clk108m_n				),
