@@ -59,7 +59,8 @@ module display_address_generator (
 	input			reset,
 	input			sdram_init_busy,
 	//	Register interface
-	input	[7:0]	bus_address,
+	input			bus_cs,
+	input	[4:0]	bus_address,
 	input			bus_valid,
 	output			bus_ready,
 	input			bus_write,
@@ -121,11 +122,11 @@ module display_address_generator (
 			ff_ready <= 1'b0;
 			ff_rdata_valid <= 1'b0;
 		end 
-		else if( bus_valid && bus_write && bus_address <= 3'd3 ) begin
+		else if( bus_valid && bus_write && bus_cs && bus_address <= 5'd3 ) begin
 			ff_ready <= 1'b1;
 			ff_rdata_valid <= 1'b0;
 		end 
-		else if( bus_valid && !bus_write && bus_address == 3'd4 ) begin
+		else if( bus_valid && !bus_write && bus_cs && bus_address == 5'd4 ) begin
 			ff_ready <= 1'b0;
 			ff_rdata_valid <= 1'b1;
 		end 
@@ -147,23 +148,23 @@ module display_address_generator (
 	//		5-7   | 未使用
 	// ---------------------------------------------------------
 	always @(posedge clk) begin
-		if (reset) begin
+		if( reset ) begin
 			reg_base_address <= 18'd0;
 			reg_register_address <= 3'd0;
 			reg_display_on <= 1'b0;
 			reg_fill_color <= { 5'd31, 6'd0, 5'd0 };	// 赤
-		end else if (bus_valid && bus_ready && bus_write) begin
-			case (bus_address)
-				3'd0: begin
+		end else if( bus_valid && bus_ready && bus_write ) begin
+			case( bus_address )
+				5'd0: begin
 					reg_base_address[20:5] <= bus_wdata;
 				end
-				3'd1: begin
+				5'd1: begin
 					reg_base_address[22:21] <= bus_wdata[1:0];
 				end
-				3'd2: begin
+				5'd2: begin
 					reg_display_on <= bus_wdata[0];
 				end
-				3'd4: begin
+				5'd4: begin
 					reg_fill_color <= bus_wdata;
 				end
 				default: begin
@@ -177,7 +178,7 @@ module display_address_generator (
 		if( reset ) begin
 			ff_base_address <= 18'd0;
 		end
-		else if( bus_valid && bus_ready && !bus_write && bus_address == 3'd1 ) begin
+		else if( bus_valid && bus_ready && !bus_write && bus_address == 5'd1 ) begin
 			// 必ず、下位→上位の順で更新するルール
 			ff_base_address <= reg_base_address;
 		end

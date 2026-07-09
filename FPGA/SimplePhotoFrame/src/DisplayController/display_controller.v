@@ -59,7 +59,8 @@ module display_controller (
 	input			reset,
 	input			sdram_init_busy,
 	//	Register interface
-	input	[7:0]	bus_address,
+	input			bus_cs,
+	input	[4:0]	bus_address,
 	input			bus_valid,
 	output			bus_ready,
 	input			bus_write,
@@ -93,6 +94,7 @@ module display_controller (
 		.clk					( clk					),
 		.reset					( reset					),
 		.sdram_init_busy		( sdram_init_busy		),
+		.bus_cs					( bus_cs				),
 		.bus_address			( bus_address			),
 		.bus_valid				( bus_valid				),
 		.bus_ready				( bus_ready				),

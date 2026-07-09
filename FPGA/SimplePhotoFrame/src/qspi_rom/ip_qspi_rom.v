@@ -82,6 +82,7 @@ module ip_qspi_rom(
 	reg		[7:0]	ff_burst_count;
 	reg				ff_do_command;
 	reg				ff_finish_command;
+	wire			w_inc_rom_address;
 
 	reg		[2:0]	ff_serial_mode;
 	reg		[7:0]	ff_serial_wdata;
@@ -177,6 +178,9 @@ module ip_qspi_rom(
 			ff_burst_count			<= 8'd0;
 		end
 		else if( !ff_bus_ready ) begin
+			if( w_inc_rom_address ) begin
+				ff_rom_address		<= ff_rom_address + 24'd1;
+			end
 			ff_do_command			<= 1'b0;
 			if( ff_finish_command && (!ff_cs_n || (ff_wait_count == 0)) ) begin
 				ff_bus_ready		<= 1'b1;
@@ -357,6 +361,8 @@ module ip_qspi_rom(
 
 	reg		[4:0]		ff_command_state;
 	reg		[4:0]		ff_next_command_state;
+
+	assign w_inc_rom_address = (ff_command_state == ST_RECEIVE_BYTE) && w_serial_rdata_en && (ff_command_mode != CMD_READ_STATUS);
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -608,7 +614,6 @@ module ip_qspi_rom(
 						end
 						else begin
 							ff_bus_rdata	<= w_serial_rdata;
-							ff_rom_address	<= ff_rom_address + 24'd1;
 						end
 						ff_bus_rdata_en		<= 1'b1;
 						ff_command_state	<= ST_FINISH;

@@ -145,6 +145,7 @@ module ip_sdram #(
 	reg		[255:0]				ff_sdr_read_data;		// 8-word burst read buffer
 	reg		[2:0]				ff_read_word_count_sdram;	// word count in clk_sdram domain
 	reg							ff_read_capture_active_sdram;
+	reg							ff_read_start_pending_sdram;
 	reg							ff_do_command;
 	reg							ff_write;
 	reg		[ 1:0]				ff_bank;
@@ -550,36 +551,42 @@ module ip_sdram #(
 			ff_sdr_read_data				<= 256'd0;
 			ff_read_word_count_sdram		<= 3'd0;
 			ff_read_capture_active_sdram	<= 1'b0;
-		end
-		else if( !ff_read_capture_active_sdram ) begin
-			if( (ff_main_state == c_main_state_finish) && ff_do_command && !ff_write && !ff_do_refresh ) begin
-				// Start capture from the first valid read word.
-				ff_sdr_read_word				<= IO_sdram_dq;
-				ff_sdr_read_data[31:0]			<= IO_sdram_dq;
-				ff_read_word_count_sdram		<= 3'd1;
-				ff_read_capture_active_sdram	<= 1'b1;
-			end
+			ff_read_start_pending_sdram	<= 1'b0;
 		end
 		else begin
-			// Continue capture for remaining burst words regardless of state.
 			ff_sdr_read_word			<= IO_sdram_dq;
-			case( ff_read_word_count_sdram )
-			3'd1: ff_sdr_read_data[ 63: 32]	<= IO_sdram_dq;
-			3'd2: ff_sdr_read_data[ 95: 64]	<= IO_sdram_dq;
-			3'd3: ff_sdr_read_data[127: 96]	<= IO_sdram_dq;
-			3'd4: ff_sdr_read_data[159:128]	<= IO_sdram_dq;
-			3'd5: ff_sdr_read_data[191:160]	<= IO_sdram_dq;
-			3'd6: ff_sdr_read_data[223:192]	<= IO_sdram_dq;
-			3'd7: ff_sdr_read_data[255:224]	<= IO_sdram_dq;
-			endcase
-
-			if( ff_read_word_count_sdram == 3'd7 ) begin
-				ff_read_done_toggle_sdram		<= ~ff_read_done_toggle_sdram;
-				ff_read_word_count_sdram		<= 3'd0;
-				ff_read_capture_active_sdram	<= 1'b0;
+			if( ff_read_start_pending_sdram ) begin
+				// Start capture using the first read word sampled on the previous clk_sdram edge.
+				ff_sdr_read_data[31:0]			<= ff_sdr_read_word;
+				ff_read_word_count_sdram		<= 3'd1;
+				ff_read_capture_active_sdram	<= 1'b1;
+				ff_read_start_pending_sdram	<= 1'b0;
+			end
+			else if( !ff_read_capture_active_sdram ) begin
+				if( (ff_main_state == c_main_state_finish) && ff_do_command && !ff_write && !ff_do_refresh ) begin
+					ff_read_start_pending_sdram	<= 1'b1;
+				end
 			end
 			else begin
-				ff_read_word_count_sdram		<= ff_read_word_count_sdram + 3'd1;
+				// Continue capture for remaining burst words using the delayed sample register.
+				case( ff_read_word_count_sdram )
+				3'd1: ff_sdr_read_data[ 63: 32]	<= ff_sdr_read_word;
+				3'd2: ff_sdr_read_data[ 95: 64]	<= ff_sdr_read_word;
+				3'd3: ff_sdr_read_data[127: 96]	<= ff_sdr_read_word;
+				3'd4: ff_sdr_read_data[159:128]	<= ff_sdr_read_word;
+				3'd5: ff_sdr_read_data[191:160]	<= ff_sdr_read_word;
+				3'd6: ff_sdr_read_data[223:192]	<= ff_sdr_read_word;
+				3'd7: ff_sdr_read_data[255:224]	<= ff_sdr_read_word;
+				endcase
+
+				if( ff_read_word_count_sdram == 3'd7 ) begin
+					ff_read_done_toggle_sdram		<= ~ff_read_done_toggle_sdram;
+					ff_read_word_count_sdram		<= 3'd0;
+					ff_read_capture_active_sdram	<= 1'b0;
+				end
+				else begin
+					ff_read_word_count_sdram		<= ff_read_word_count_sdram + 3'd1;
+				end
 			end
 		end
 	end

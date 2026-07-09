@@ -2,6 +2,22 @@
  "Device" : "GW2AR-18C",
  "Files" : [
   {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/BusArbiter/bus_arbiter.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache_line.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache_tag.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_address_generator.v",
    "Type" : "verilog"
   },
@@ -22,6 +38,14 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/GraphicProcessor1/graphic_processor1.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/GraphicProcessor2/graphic_processor2.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SPI/ip_spi.v",
    "Type" : "verilog"
   },
@@ -35,6 +59,10 @@
   },
   {
    "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/VramAccessor/vram_accessor.v",
    "Type" : "verilog"
   },
   {

@@ -45,26 +45,97 @@ module simple_photo_frame (
 );
 	wire			clk108m;
 	wire			clk108m_n;
-	reg				ff_reset = 1'b1;
-	wire	[7:0]	bus_cs;
-	wire	[4:0]	bus_address;
-	wire			bus_valid;
-	wire			bus_ready;
+	reg				ff_reset_bus = 1'b1;		/* synthesis syn_preserve = 1 */
+	reg				ff_reset_spi = 1'b1;		/* synthesis syn_preserve = 1 */
+	reg				ff_reset_gp1 = 1'b1;		/* synthesis syn_preserve = 1 */
+	reg				ff_reset_gp2 = 1'b1;		/* synthesis syn_preserve = 1 */
+	reg				ff_reset_display = 1'b1;	/* synthesis syn_preserve = 1 */
+	reg				ff_reset_vram = 1'b1;		/* synthesis syn_preserve = 1 */
+	reg				ff_reset_sdram = 1'b1;		/* synthesis syn_preserve = 1 */
+	reg				ff_reset_cache = 1'b1;		/* synthesis syn_preserve = 1 */
+	wire	[7:0]	bus_io_cs;
+	wire	[4:0]	bus_io_address;
+	wire			bus_io_valid;
+	wire			bus_io_ready;
+	wire			bus_io_write;
+	wire	[15:0]	bus_io_wdata;
+	wire	[15:0]	bus_io_rdata;
+	wire			bus_io_rdata_en;
+	wire			bus_qspi_ready;
+	wire	[7:0]	bus_qspi_rdata;
+	wire			bus_qspi_rdata_en;
+	wire			display_bus_ready;
+	wire	[15:0]	display_bus_rdata;
+	wire			display_bus_rdata_valid;
+	wire			gp1_bus_ready;
+	wire	[15:0]	gp1_bus_rdata;
+	wire			gp1_bus_rdata_valid;
+	wire			gp2_bus_ready;
+	wire	[15:0]	gp2_bus_rdata;
+	wire			gp2_bus_rdata_valid;
+	wire			vram_bus_ready;
+	wire	[15:0]	vram_bus_rdata;
+	wire			vram_bus_rdata_valid;
+	wire	[22:1]	bus0_address;
+	wire			bus0_write;
+	wire	[15:0]	bus0_wdata;
+	wire			bus0_flash;
+	wire			bus0_valid;
+	wire			bus0_ready;
+	wire	[15:0]	bus0_rdata;
+	wire			bus0_rdata_valid;
+	wire	[22:1]	bus1_address;
+	wire			bus1_write;
+	wire	[15:0]	bus1_wdata;
+	wire			bus1_flash;
+	wire			bus1_valid;
+	wire			bus1_ready;
+	wire	[15:0]	bus1_rdata;
+	wire			bus1_rdata_valid;
+	wire	[22:1]	bus2_address;
+	wire			bus2_write;
+	wire	[15:0]	bus2_wdata;
+	wire			bus2_flash;
+	wire			bus2_valid;
+	wire			bus2_ready;
+	wire	[15:0]	bus2_rdata;
+	wire			bus2_rdata_valid;
+	wire	[22:1]	bus3_address;
+	wire			bus3_write;
+	wire	[15:0]	bus3_wdata;
+	wire			bus3_flash;
+	wire			bus3_valid;
+	wire			bus3_ready;
+	wire	[15:0]	bus3_rdata;
+	wire			bus3_rdata_valid;
+	wire			sdram_init_busy;
+	wire	[22:1]	bus_address;
 	wire			bus_write;
 	wire	[15:0]	bus_wdata;
+	wire			bus_flash;
+	wire			bus_valid;
+	wire			bus_ready;
 	wire	[15:0]	bus_rdata;
-	wire			bus_rdata_en;
-	wire			sdram_init_busy;
+	wire			bus_rdata_valid;
 	wire	[22:5]	sdram_address;
 	wire			sdram_address_valid;
 	wire			sdram_address_ready;
 	wire	[31:0]	sdram_rdata;
 	wire			sdram_rdata_valid;
+	wire	[22:5]	disp_sdram_address;
+	wire			disp_sdram_address_valid;
+	wire			disp_sdram_address_ready;
+	wire	[31:0]	disp_sdram_rdata;
+	wire			disp_sdram_rdata_valid;
 	wire	[31:0]	sdram_wdata;
 	wire			sdram_write;
 	wire			sdram_refresh;
 	wire			sdram_wdata_valid;
 	wire	[3:0]	sdram_wdata_mask;
+	wire			srom0_cs_n;
+	wire			srom1_cs_n;
+	wire			srom_clk;
+	wire	[3:0]	srom_sio;
 
 	// ---------------------------------------------------------
 	//	クロック生成
@@ -79,47 +150,52 @@ module simple_photo_frame (
 	//	リセット生成
 	// ---------------------------------------------------------
 	always @( posedge clk108m ) begin
-		ff_reset <= 1'b0;
+		ff_reset_spi		<= 1'b0;
+		ff_reset_gp1		<= 1'b0;
+		ff_reset_gp2		<= 1'b0;
+		ff_reset_display	<= 1'b0;
+		ff_reset_vram		<= 1'b0;
+		ff_reset_sdram		<= 1'b0;
+		ff_reset_cache		<= 1'b0;
 	end
 
 	// ---------------------------------------------------------
 	//	SPI Slave Interface
 	// ---------------------------------------------------------
 	ip_spi u_ip_spi (
-		.reset					( ff_reset				),
+		.reset					( ff_reset_spi			),
 		.clk					( clk108m				),
 		.clk_serial				( clk108m				),
-		.bus_cs					( bus_cs				),
-		.bus_write				( bus_write				),
-		.bus_valid				( bus_valid				),
-		.bus_ready				( bus_ready				),
-		.bus_wdata				( bus_wdata				),
-		.bus_address			( bus_address			),
-		.bus_rdata				( bus_rdata				),
-		.bus_rdata_en			( bus_rdata_en			),
+		.bus_cs					( bus_io_cs				),
+		.bus_write				( bus_io_write			),
+		.bus_valid				( bus_io_valid			),
+		.bus_ready				( bus_io_ready			),
+		.bus_wdata				( bus_io_wdata			),
+		.bus_address			( bus_io_address		),
+		.bus_rdata				( bus_io_rdata			),
+		.bus_rdata_en			( bus_io_rdata_en		),
 		.spi_cs_n				( fpga_spi_cs_n			),
 		.spi_clk				( fpga_spi_sck			),
 		.spi_mosi				( fpga_spi_mosi			),
 		.spi_miso				( fpga_spi_miso			),
 		.spi_intr				( fpga_spi_intr			)
 	);
-	assign bus_address[7:5] = 3'b000;
 
 	// ---------------------------------------------------------
 	//	Config ROM Controller (I/O E0h-FFh)
 	// ---------------------------------------------------------
 	ip_qspi_rom u_ip_qspi_rom (
-		.reset					( ff_reset				),
+		.reset					( ff_reset_spi			),
 		.clk					( clk108m				),
 		.clk_serial				( clk108m				),
-		.bus_cs					( bus_cs[7]				),
-		.bus_address			( bus_address			),
-		.bus_write				( bus_write				),
-		.bus_valid				( bus_valid				),
-		.bus_ready				( bus_ready				),
-		.bus_wdata				( bus_wdata				),
-		.bus_rdata				( bus_rdata				),
-		.bus_rdata_en			( bus_rdata_en			),
+		.bus_cs					( bus_io_cs[7]			),
+		.bus_address			( bus_io_address[0]		),
+		.bus_write				( bus_io_write			),
+		.bus_valid				( bus_io_valid			),
+		.bus_ready				( bus_qspi_ready		),
+		.bus_wdata				( bus_io_wdata[7:0]		),
+		.bus_rdata				( bus_qspi_rdata		),
+		.bus_rdata_en			( bus_qspi_rdata_en		),
 		.srom0_cs_n				( srom0_cs_n			),
 		.srom1_cs_n				( srom1_cs_n			),
 		.srom_clk				( srom_clk				),
@@ -131,15 +207,16 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	display_controller u_display_controller (
 		.clk					( clk108m				),
-		.reset					( ff_reset				),
+		.reset					( ff_reset_display		),
 		.sdram_init_busy		( sdram_init_busy		),
-		.bus_address			( bus_address			),
-		.bus_valid				( bus_valid				),
-		.bus_ready				( bus_ready				),
-		.bus_write				( bus_write				),
-		.bus_wdata				( bus_wdata				),
-		.bus_rdata				( bus_rdata				),
-		.bus_rdata_valid		( bus_rdata_en			),
+		.bus_cs					( bus_io_cs[0]			),
+		.bus_address			( bus_io_address		),
+		.bus_valid				( bus_io_valid			),
+		.bus_ready				( display_bus_ready		),
+		.bus_write				( bus_io_write			),
+		.bus_wdata				( bus_io_wdata			),
+		.bus_rdata				( display_bus_rdata		),
+		.bus_rdata_valid		( display_bus_rdata_valid	),
 		.lcd_ck					( lcd_ck				),
 		.lcd_hs					( lcd_hs				),
 		.lcd_vs					( lcd_vs				),
@@ -148,30 +225,93 @@ module simple_photo_frame (
 		.lcd_g					( lcd_g					),
 		.lcd_b					( lcd_b					),
 		.lcd_bl					( lcd_bl				),
-		.sdram_address			( sdram_address			),
-		.sdram_address_valid	( sdram_address_valid	),
-		.sdram_address_ready	( sdram_address_ready	),
-		.sdram_rdata			( sdram_rdata			),
-		.sdram_rdata_valid		( sdram_rdata_valid		)
+		.sdram_address			( disp_sdram_address		),
+		.sdram_address_valid	( disp_sdram_address_valid	),
+		.sdram_address_ready	( disp_sdram_address_ready	),
+		.sdram_rdata			( disp_sdram_rdata		),
+		.sdram_rdata_valid		( disp_sdram_rdata_valid	)
 	);
 
 	// ---------------------------------------------------------
 	//	描画コントローラ1 (I/O 20h-3Fh)
 	// ---------------------------------------------------------
+	graphic_processor1 u_graphic_processor1 (
+		.clk					( clk108m				),
+		.reset					( ff_reset_gp1			),
+		.sdram_init_busy		( sdram_init_busy		),
+		.bus_cs					( bus_io_cs[1]			),
+		.bus_address			( bus_io_address		),
+		.bus_valid				( bus_io_valid			),
+		.bus_ready				( gp1_bus_ready			),
+		.bus_write				( bus_io_write			),
+		.bus_wdata				( bus_io_wdata			),
+		.bus_rdata				( gp1_bus_rdata			),
+		.bus_rdata_valid		( gp1_bus_rdata_valid	),
+		.sdram_address			( bus0_address			),
+		.sdram_write			( bus0_write			),
+		.sdram_wdata			( bus0_wdata			),
+		.sdram_valid			( bus0_valid			),
+		.sdram_flush			( bus0_flush			),
+		.sdram_ready			( bus0_ready			),
+		.sdram_rdata			( bus0_rdata			),
+		.sdram_rdata_valid		( bus0_rdata_valid		)
+	);
 
 	// ---------------------------------------------------------
 	//	描画コントローラ2 (I/O 40h-5Fh)
 	// ---------------------------------------------------------
+	graphic_processor2 u_graphic_processor2 (
+		.clk					( clk108m				),
+		.reset					( ff_reset_gp2			),
+		.sdram_init_busy		( sdram_init_busy		),
+		.bus_cs					( bus_io_cs[2]			),
+		.bus_address			( bus_io_address		),
+		.bus_valid				( bus_io_valid			),
+		.bus_ready				( gp2_bus_ready			),
+		.bus_write				( bus_io_write			),
+		.bus_wdata				( bus_io_wdata			),
+		.bus_rdata				( gp2_bus_rdata			),
+		.bus_rdata_valid		( gp2_bus_rdata_valid	),
+		.sdram_address			( bus1_address			),
+		.sdram_write			( bus1_write			),
+		.sdram_wdata			( bus1_wdata			),
+		.sdram_valid			( bus1_valid			),
+		.sdram_flush			( bus1_flush			),
+		.sdram_ready			( bus1_ready			),
+		.sdram_rdata			( bus1_rdata			),
+		.sdram_rdata_valid		( bus1_rdata_valid		)
+	);
 
 	// ---------------------------------------------------------
-	//	VRAM読み書き (I/O 60h-7Fh)
+	//	VRAM読み書き (I/O C0h-DFh)
 	// ---------------------------------------------------------
+	vram_accessor u_vram_accessor (
+		.clk					( clk108m				),
+		.reset					( ff_reset_vram			),
+		.sdram_init_busy		( sdram_init_busy		),
+		.bus_cs					( bus_io_cs[6]			),
+		.bus_address			( bus_io_address		),
+		.bus_valid				( bus_io_valid			),
+		.bus_ready				( vram_bus_ready		),
+		.bus_write				( bus_io_write			),
+		.bus_wdata				( bus_io_wdata			),
+		.bus_rdata				( vram_bus_rdata		),
+		.bus_rdata_valid		( vram_bus_rdata_valid	),
+		.sdram_address			( bus3_address			),
+		.sdram_write			( bus3_write			),
+		.sdram_wdata			( bus3_wdata			),
+		.sdram_valid			( bus3_valid			),
+		.sdram_flush			( bus3_flash			),
+		.sdram_ready			( bus3_ready			),
+		.sdram_rdata			( bus3_rdata			),
+		.sdram_rdata_valid		( bus3_rdata_valid		)
+	);
 
 	// ---------------------------------------------------------
 	//	バスアービタ
 	// ---------------------------------------------------------
 	bus_arbiter u_bus_arbiter (
-		.reset					( ff_reset				),
+		.reset					( ff_reset_bus			),
 		.clk					( clk108m				),
 		.bus0_address			( bus0_address			),
 		.bus0_write				( bus0_write			),
@@ -219,7 +359,7 @@ module simple_photo_frame (
 	//	キャッシュメモリ
 	// ---------------------------------------------------------
 	cache u_cache (
-		.reset					( ff_reset				),
+		.reset					( ff_reset_cache		),
 		.clk					( clk108m				),
 		.bus_address			( bus_address			),
 		.bus_write				( bus_write				),
@@ -247,7 +387,7 @@ module simple_photo_frame (
 	ip_sdram u_sdram_controller (
 		.clk					( clk108m				),
 		.clk_sdram				( clk108m_n				),
-		.reset					( ff_reset				),
+		.reset					( ff_reset_sdram		),
 		.sdram_init_busy		( sdram_init_busy		),
 		.bus_address			( sdram_address			),
 		.bus_write				( sdram_write			),
@@ -270,6 +410,27 @@ module simple_photo_frame (
 		.O_sdram_ba				( O_sdram_ba			),		// two banks
 		.O_sdram_dqm			( O_sdram_dqm			)		// data mask
 	);
+
+	assign bus_io_ready =
+		(bus_io_cs[0] ? display_bus_ready : 1'b0) |
+		(bus_io_cs[1] ? gp1_bus_ready : 1'b0) |
+		(bus_io_cs[2] ? gp2_bus_ready : 1'b0) |
+		(bus_io_cs[6] ? vram_bus_ready : 1'b0) |
+		(bus_io_cs[7] ? bus_qspi_ready : 1'b0);
+
+	assign bus_io_rdata =
+		(bus_io_cs[0] ? display_bus_rdata : 16'd0) |
+		(bus_io_cs[1] ? gp1_bus_rdata : 16'd0) |
+		(bus_io_cs[2] ? gp2_bus_rdata : 16'd0) |
+		(bus_io_cs[6] ? vram_bus_rdata : 16'd0) |
+		(bus_io_cs[7] ? { 8'd0, bus_qspi_rdata } : 16'd0);
+
+	assign bus_io_rdata_en =
+		(bus_io_cs[0] ? display_bus_rdata_valid : 1'b0) |
+		(bus_io_cs[1] ? gp1_bus_rdata_valid : 1'b0) |
+		(bus_io_cs[2] ? gp2_bus_rdata_valid : 1'b0) |
+		(bus_io_cs[6] ? vram_bus_rdata_valid : 1'b0) |
+		(bus_io_cs[7] ? bus_qspi_rdata_en : 1'b0);
 
 	assign i2s_bclk	= 1'b1;
 	assign i2s_dout	= 1'b1;
