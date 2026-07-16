@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-//	ip_qspi_rom.v
+//	ip_spi_rom.v
 //	Copyright (C)2026 Takayuki Hara (HRA!)
 //	
 //	 Permission is hereby granted, free of charge, to any person obtaining a 
@@ -24,7 +24,7 @@
 //		QSPI serial flash ROM controller
 // -----------------------------------------------------------------------------
 
-module ip_qspi_rom(
+module ip_spi_rom(
 	input			reset,				//	System Reset (Active High)
 	input			clk,				//	System Clock
 	input			clk_serial,			//	Serial Clock (High speed)
@@ -41,24 +41,22 @@ module ip_qspi_rom(
 	output			srom0_cs_n,
 	output			srom1_cs_n,
 	output			srom_clk,
-	inout	[3:0]	srom_sio
+	inout			srom_hold_n,
+	inout			srom_wp_n,
+	inout			srom_do,
+	inout			srom_di
 );
 	localparam	[2:0]	MODE_STD_WRITE				= 3'd0;
 	localparam	[2:0]	MODE_STD_READ				= 3'd1;
-	localparam	[2:0]	MODE_QUAD_WRITE				= 3'd2;
-	localparam	[2:0]	MODE_QUAD_READ				= 3'd3;
-	localparam	[2:0]	MODE_QUAD_DUMMY				= 3'd4;
-	localparam	[2:0]	MODE_QUAD_DUMMY2			= 3'd5;
 
 	localparam	[7:0]	SROM_PAGE_PROGRAM			= 8'h02;
 	localparam	[7:0]	SROM_WRITE_DISABLE			= 8'h04;
 	localparam	[7:0]	SROM_READ_STATUS_1			= 8'h05;
-	localparam	[7:0]	SROM_WRITE_ENABLE			= 8'h06;
 	localparam	[7:0]	SROM_READ_STATUS_2			= 8'h35;
-	localparam	[7:0]	SROM_WRITE_STATUS_2			= 8'h31;
+	localparam	[7:0]	SROM_WRITE_ENABLE			= 8'h06;
+	localparam	[7:0]	SROM_BLOCK_ERASE			= 8'hD8;
 	localparam	[7:0]	SROM_CHIP_ERASE				= 8'h60;
-	localparam	[7:0]	SROM_FAST_READ_QUAD_IO		= 8'hEB;
-	localparam	[7:0]	SROM_STATUS_2_QE			= 8'h02;
+	localparam	[7:0]	SROM_FAST_READ				= 8'h0B;
 
 	localparam	[3:0]	CMD_SET_ADDRESS				= 4'd0;
 	localparam	[3:0]	CMD_SINGLE_READ				= 4'd1;
@@ -68,7 +66,10 @@ module ip_qspi_rom(
 	localparam	[3:0]	CMD_READ_STATUS				= 4'd5;
 	localparam	[3:0]	CMD_SELECT_SROM				= 4'd6;
 	localparam	[3:0]	CMD_ACCESS_END				= 4'd7;
-	localparam	[3:0]	CMD_SET_QUAD_ENABLE			= 4'd8;
+	localparam	[3:0]	CMD_WRITE_ENABLE			= 4'd8;
+	localparam	[3:0]	CMD_BLOCK_ERASE				= 4'd9;
+	localparam	[3:0]	CMD_READ_STATUS_2			= 4'd10;
+	localparam	[3:0]	CMD_NOP						= 4'd15;
 
 	
 	reg				ff_bus_ready;
@@ -77,12 +78,12 @@ module ip_qspi_rom(
 
 	reg		[3:0]	ff_command_mode;
 	reg		[23:0]	ff_rom_address;
+	wire	[23:0]	w_fast_read_address;
 	reg		[1:0]	ff_byte_count;
 	reg		[7:0]	ff_burst_wdata;
 	reg		[7:0]	ff_burst_count;
 	reg				ff_do_command;
 	reg				ff_finish_command;
-	wire			w_inc_rom_address;
 
 	reg		[2:0]	ff_serial_mode;
 	reg		[7:0]	ff_serial_wdata;
@@ -100,6 +101,46 @@ module ip_qspi_rom(
 	localparam [2:0]	CS_WAIT_50NS	= 5;
 	reg		[2:0]		ff_wait_count;
 	reg					ff_wait_count_active;
+
+	// ---------------------------------------------------------
+	//	Inlined QSPI controller state
+	// ---------------------------------------------------------
+	reg		[2:0]	ff_fifo_mode;
+	reg		[7:0]	ff_fifo_wdata;
+	reg				ff_fifo_write;
+	reg				ff_fifo_valid;
+	reg		[2:0]	ff_xfer_mode;
+	reg		[7:0]	ff_xfer_wdata;
+	reg				ff_xfer_write;
+	reg				ff_xfer_valid;
+	reg				ff_xfer_ready;
+	reg		[7:0]	ff_xfer_rdata;
+	reg				ff_xfer_rdata_en;
+	reg				ff_xfer_processing;
+	reg				ff_xfer_qspi_accepted;
+
+	localparam	[4:0]	ST_QSPI_IDLE			= 5'd0;
+	localparam	[4:0]	ST_QSPI_STD_WRITE		= 5'd1;
+	localparam	[4:0]	ST_QSPI_STD_WRITE_CLK	= 5'd2;
+	localparam	[4:0]	ST_QSPI_STD_READ		= 5'd3;
+	localparam	[4:0]	ST_QSPI_STD_READ_CLK	= 5'd4;
+	localparam	[4:0]	ST_QSPI_STD_READ_LOOP	= 5'd5;
+	localparam	[4:0]	ST_QSPI_FINISH			= 5'd6;
+
+	reg					ff_qspi_serial_valid0;
+	reg					ff_qspi_serial_valid1;
+	reg					ff_qspi_processing;
+	reg					ff_qspi_ce;
+	reg		[4:0]	ff_qspi_state;
+	reg		[2:0]	ff_qspi_substate;
+	reg					ff_qspi_clk;
+	reg		[7:0]	ff_qspi_data;
+	reg		[3:0]	ff_qspi_hiz;
+	reg		[3:0]	ff_qspi_sio;
+	reg		[7:0]	ff_qspi_rdata;
+	wire	[3:0]	w_srom_sio;
+
+	assign w_fast_read_address = ff_rom_address - 24'd1;
 
 	// ---------------------------------------------------------
 	//	bus_address
@@ -146,9 +187,15 @@ module ip_qspi_rom(
 	//			0xFF: 未接続
 	//		0x07: access end
 	//			w_serial_idle が 1 になるのを待ってから、ff_cs_n を 1 に戻す。
-	//		0x08: set quad enable
-	//			このモードでは、Quad Enable ビットをセットするコマンド
-	//		0x09-0xFF: reserved
+	//		0x08: write enable
+	//			Serial ROM へ WRITE_ENABLE(06h) のみを発行する。
+	//		0x09: block erase
+	//			Serial ROM へ BLOCK_ERASE(D8h) + 24bit address を発行する。
+	//			address は set address mode で設定した値を使う。
+	//		0x0A: read status register 2
+	//			Serial ROM のステータスレジスタ2を読み出すモード。
+	//			data port から、1byte 読み出すと、その最下位bitが入る。
+	//		0x0B-0xFF: reserved
 	// ---------------------------------------------------------
 	//	SerialROM Status Register
 	//	S0: busy
@@ -160,8 +207,7 @@ module ip_qspi_rom(
 	//	S6: sector protect
 	//	S7: status register protect 0
 	//	S8: status register protect 1
-	//	S9: quad enable
-	//	S10-15: reserved
+	//	S9-15: reserved
 	// ---------------------------------------------------------
 
 	// ---------------------------------------------------------
@@ -169,7 +215,7 @@ module ip_qspi_rom(
 	// ---------------------------------------------------------
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_command_mode			<= 4'd0;
+			ff_command_mode			<= CMD_SET_ADDRESS;
 			ff_srom0_cs_n			<= 1'b1;
 			ff_srom1_cs_n			<= 1'b1;
 			ff_bus_ready			<= 1'b1;
@@ -178,10 +224,10 @@ module ip_qspi_rom(
 			ff_burst_count			<= 8'd0;
 		end
 		else if( !ff_bus_ready ) begin
-			if( w_inc_rom_address ) begin
-				ff_rom_address		<= ff_rom_address + 24'd1;
-			end
 			ff_do_command			<= 1'b0;
+			if( w_serial_rdata_en && (ff_command_mode != CMD_READ_STATUS) && (ff_command_mode != CMD_READ_STATUS_2) ) begin
+				ff_rom_address	<= ff_rom_address + 24'd1;
+			end
 			if( ff_finish_command && (!ff_cs_n || (ff_wait_count == 0)) ) begin
 				ff_bus_ready		<= 1'b1;
 			end
@@ -228,15 +274,24 @@ module ip_qspi_rom(
 						ff_do_command			<= 1'b1;
 					end
 					8'h08: begin
-						//	set quad enable
-						//	このモードでは、Quad Enable ビットをセットするコマンドを発行する。
-						//	Quad Enable ビットは、Status Register 2 のビット 1 である。
-						ff_command_mode			<= CMD_SET_QUAD_ENABLE;
+						//	write enable
+						ff_command_mode			<= CMD_WRITE_ENABLE;
 						ff_bus_ready			<= 1'b0;
 						ff_do_command			<= 1'b1;
 					end
+					8'h09: begin
+						//	block erase
+						ff_command_mode			<= CMD_BLOCK_ERASE;
+						ff_bus_ready			<= 1'b0;
+						ff_do_command			<= 1'b1;
+					end
+					8'h0A: begin
+						//	read status register 2
+						ff_command_mode			<= CMD_READ_STATUS_2;
+					end
 					default: begin
-						//	reserved command, do nothing.
+						//	reserved command: enter NOP mode to avoid stale mode side effects.
+						ff_command_mode	<= CMD_NOP;
 					end
 				endcase
 			end
@@ -246,7 +301,7 @@ module ip_qspi_rom(
 					CMD_SET_ADDRESS: begin
 						case( ff_byte_count )
 							2'd0: begin
-								ff_rom_address[23:16]	<= bus_wdata;
+								ff_rom_address[ 7: 0]	<= bus_wdata;
 								ff_byte_count			<= 2'd1;
 							end
 							2'd1: begin
@@ -254,7 +309,7 @@ module ip_qspi_rom(
 								ff_byte_count			<= 2'd2;
 							end
 							2'd2: begin
-								ff_rom_address[ 7: 0]	<= bus_wdata;
+								ff_rom_address[23:16]	<= bus_wdata;
 								ff_byte_count			<= 2'd0;
 							end
 							default: begin
@@ -325,6 +380,11 @@ module ip_qspi_rom(
 						ff_bus_ready		<= 1'b0;
 						ff_do_command		<= 1'b1;
 					end
+					CMD_READ_STATUS_2: begin
+						//	data port から、1byte 読み出すと、その最下位bitが入る。
+						ff_bus_ready		<= 1'b0;
+						ff_do_command		<= 1'b1;
+					end
 					default: begin
 						//	reserved command, do nothing.
 					end
@@ -356,20 +416,19 @@ module ip_qspi_rom(
 	localparam	[4:0]	ST_READ_ADDR_M	= 5'd13;
 	localparam	[4:0]	ST_READ_ADDR_L	= 5'd14;
 	localparam	[4:0]	ST_READ_DUMMY	= 5'd15;
-	localparam	[4:0]	ST_SET_QE_CMD	= 5'd16;
-	localparam	[4:0]	ST_SET_QE_DATA	= 5'd17;
+	localparam	[4:0]	ST_BLOCK_ERASE_ADDR_H	= 5'd16;
+	localparam	[4:0]	ST_BLOCK_ERASE_ADDR_M	= 5'd17;
+	localparam	[4:0]	ST_BLOCK_ERASE_ADDR_L	= 5'd18;
 
 	reg		[4:0]		ff_command_state;
 	reg		[4:0]		ff_next_command_state;
 
-	assign w_inc_rom_address = (ff_command_state == ST_RECEIVE_BYTE) && w_serial_rdata_en && (ff_command_mode != CMD_READ_STATUS);
-
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_wait_count	<= 0;
+			ff_wait_count	<= 3'd0;
 		end
 		else if( ff_cs_n == 1'b0 ) begin
-			if( ff_command_mode == CMD_BURST_READ || ff_command_mode == CMD_READ_STATUS ) begin
+			if( ff_command_mode == CMD_BURST_READ || ff_command_mode == CMD_READ_STATUS || ff_command_mode == CMD_READ_STATUS_2 ) begin
 				ff_wait_count	<= CS_WAIT_10NS;
 			end
 			else begin
@@ -377,7 +436,7 @@ module ip_qspi_rom(
 			end
 		end
 		else if( ff_wait_count_active && ff_wait_count != 0 ) begin
-			ff_wait_count	<= ff_wait_count - 1;
+			ff_wait_count	<= ff_wait_count - 3'd1;
 		end
 	end
 
@@ -430,7 +489,67 @@ module ip_qspi_rom(
 		end
 		else if( ff_serial_valid ) begin
 			if( w_serial_ready ) begin
-				ff_serial_valid	<= 1'b0;
+				case( ff_command_state )
+					ST_READ_MODE: begin
+						ff_command_state	<= ST_READ_ADDR_H;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= w_fast_read_address[23:16];
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_READ_ADDR_H: begin
+						ff_command_state	<= ST_READ_ADDR_M;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= w_fast_read_address[15:8];
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_READ_ADDR_M: begin
+						ff_command_state	<= ST_READ_ADDR_L;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= w_fast_read_address[7:0];
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_READ_ADDR_L: begin
+						ff_command_state	<= ST_READ_DUMMY;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= 8'h00;
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_READ_DUMMY: begin
+						ff_command_state	<= ST_READ_BYTE;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= 8'd0;
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_BLOCK_ERASE_ADDR_H: begin
+						ff_command_state	<= ST_BLOCK_ERASE_ADDR_M;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= ff_rom_address[23:16];
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_BLOCK_ERASE_ADDR_M: begin
+						ff_command_state	<= ST_BLOCK_ERASE_ADDR_L;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= ff_rom_address[15:8];
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					ST_BLOCK_ERASE_ADDR_L: begin
+						ff_command_state	<= ST_FINISH;
+						ff_serial_mode		<= MODE_STD_WRITE;
+						ff_serial_wdata		<= ff_rom_address[7:0];
+						ff_serial_write		<= 1'b1;
+						ff_serial_valid		<= 1'b1;
+					end
+					default: begin
+						ff_serial_valid	<= 1'b0;
+					end
+				endcase
 			end
 		end
 		else begin
@@ -440,10 +559,10 @@ module ip_qspi_rom(
 						case( ff_command_mode )
 							CMD_SINGLE_READ: begin
 								//	このモードでは、data port からの読み出しのたびに
-								//	Fast Read Quad I/O(EBh) を発行する。
+								//	Fast Read(0Bh) を発行する。
 								ff_command_state		<= ST_READ_MODE;
 								ff_serial_mode			<= MODE_STD_WRITE;
-								ff_serial_wdata 		<= SROM_FAST_READ_QUAD_IO;
+								ff_serial_wdata 		<= SROM_FAST_READ;
 								ff_serial_write 		<= 1'b1;
 								ff_serial_valid 		<= 1'b1;
 								ff_cs_n					<= 1'b0;
@@ -451,11 +570,11 @@ module ip_qspi_rom(
 							CMD_BURST_READ: begin
 								if( ff_cs_n ) begin
 									//	burst read の初回は ff_cs_n = 1 なので、コマンド発行処理を実施。
-									//	このモードでは、0x02 を書いた時点で EBh + address + dummy を発行し、
+									//	このモードでは、0x02 を書いた時点で 0Bh + address + dummy を発行し、
 									//	その後の data port からの読み出しは、1byte 読み出しのみである。
 									ff_command_state		<= ST_READ_MODE;
 									ff_serial_mode			<= MODE_STD_WRITE;	//	通常の SPI モード
-									ff_serial_wdata 		<= SROM_FAST_READ_QUAD_IO;
+									ff_serial_wdata 		<= SROM_FAST_READ;
 									ff_serial_write 		<= 1'b1;
 									ff_serial_valid 		<= 1'b1;
 									ff_cs_n					<= 1'b0;
@@ -463,7 +582,7 @@ module ip_qspi_rom(
 								else begin
 									//	burst read の 2回目以降は、ff_cs_n = 0 のままデータを読み出す。
 									ff_command_state		<= ST_RECEIVE_BYTE;
-									ff_serial_mode			<= MODE_QUAD_READ;
+									ff_serial_mode			<= MODE_STD_READ;
 									ff_serial_wdata 		<= 8'd0;
 									ff_serial_write 		<= 1'b0;
 									ff_serial_valid 		<= 1'b1;
@@ -518,16 +637,43 @@ module ip_qspi_rom(
 									ff_serial_valid 		<= 1'b1;
 								end
 							end
+							CMD_READ_STATUS_2: begin
+								if( ff_cs_n ) begin
+									//	Serial ROM のステータスレジスタ2を読み出すモード。
+									ff_command_state		<= ST_READ_BYTE;
+									ff_serial_mode			<= MODE_STD_WRITE;	//	通常の SPI モード
+									ff_serial_wdata 		<= SROM_READ_STATUS_2;
+									ff_serial_write 		<= 1'b1;
+									ff_serial_valid 		<= 1'b1;
+									ff_cs_n					<= 1'b0;
+								end
+								else begin
+									ff_command_state		<= ST_RECEIVE_BYTE;
+									ff_serial_mode			<= MODE_STD_READ;	//	通常の SPI モード
+									ff_serial_wdata 		<= 8'd0;
+									ff_serial_write 		<= 1'b0;
+									ff_serial_valid 		<= 1'b1;
+								end
+							end
 							CMD_ACCESS_END: begin
 								//	w_serial_idle が 1 になるのを待って、アクセスを終了する。
 								ff_command_state	<= ST_FINISH;
 							end
-							CMD_SET_QUAD_ENABLE: begin
-								//	WREN の後に Status Register-2 を書き換えて QE bit を立てる。
+							CMD_WRITE_ENABLE: begin
+								//	Issue only WRITE ENABLE (06h) and finish.
 								ff_command_state		<= ST_WAIT;
-								ff_next_command_state	<= ST_SET_QE_CMD;
+								ff_next_command_state	<= ST_FINISH;
 								ff_serial_mode			<= MODE_STD_WRITE;
 								ff_serial_wdata 		<= SROM_WRITE_ENABLE;
+								ff_serial_write 		<= 1'b1;
+								ff_serial_valid 		<= 1'b1;
+								ff_cs_n					<= 1'b0;
+							end
+							CMD_BLOCK_ERASE: begin
+								//	Issue BLOCK_ERASE (D8h) + 24bit address.
+								ff_command_state		<= ST_BLOCK_ERASE_ADDR_H;
+								ff_serial_mode			<= MODE_STD_WRITE;
+								ff_serial_wdata 		<= SROM_BLOCK_ERASE;
 								ff_serial_write 		<= 1'b1;
 								ff_serial_valid 		<= 1'b1;
 								ff_cs_n					<= 1'b0;
@@ -540,81 +686,51 @@ module ip_qspi_rom(
 				end
 				ST_READ_MODE: begin
 					ff_command_state	<= ST_READ_ADDR_H;
-					ff_serial_mode		<= MODE_QUAD_WRITE;
-					ff_serial_wdata		<= ff_rom_address[23:16];
+					ff_serial_mode		<= MODE_STD_WRITE;
+					ff_serial_wdata		<= w_fast_read_address[23:16];
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
 				ST_READ_ADDR_H: begin
 					ff_command_state	<= ST_READ_ADDR_M;
-					ff_serial_mode		<= MODE_QUAD_WRITE;
-					ff_serial_wdata		<= ff_rom_address[15:8];
+					ff_serial_mode		<= MODE_STD_WRITE;
+					ff_serial_wdata		<= w_fast_read_address[15:8];
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
 				ST_READ_ADDR_M: begin
 					ff_command_state	<= ST_READ_ADDR_L;
-					ff_serial_mode		<= MODE_QUAD_WRITE;
-					if( ff_command_mode == CMD_BURST_READ ) begin
-						ff_serial_wdata	<= 8'h00;
-					end
-					else begin
-						ff_serial_wdata	<= ff_rom_address[7:0];
-					end
+					ff_serial_mode		<= MODE_STD_WRITE;
+					ff_serial_wdata		<= w_fast_read_address[7:0];
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
 				ST_READ_ADDR_L: begin
 					ff_command_state	<= ST_READ_DUMMY;
-					ff_serial_mode		<= MODE_QUAD_WRITE;
+					ff_serial_mode		<= MODE_STD_WRITE;
 					ff_serial_wdata		<= 8'h00;
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
 				ST_READ_DUMMY: begin
 					ff_command_state	<= ST_READ_BYTE;
-					ff_serial_mode		<= MODE_QUAD_DUMMY2;
+					ff_serial_mode		<= MODE_STD_WRITE;
 					ff_serial_wdata		<= 8'd0;
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
-				ST_SET_QE_CMD: begin
-					if( ff_wait_count == 0 ) begin
-						ff_command_state	<= ST_SET_QE_DATA;
-						ff_serial_mode		<= MODE_STD_WRITE;
-						ff_serial_wdata		<= SROM_WRITE_STATUS_2;
-						ff_serial_write		<= 1'b1;
-						ff_serial_valid		<= 1'b1;
-						ff_cs_n				<= 1'b0;
-					end
-				end
-				ST_SET_QE_DATA: begin
-					ff_command_state	<= ST_FINISH;
-					ff_serial_mode		<= MODE_STD_WRITE;
-					ff_serial_wdata		<= SROM_STATUS_2_QE;
-					ff_serial_write		<= 1'b1;
-					ff_serial_valid		<= 1'b1;
-				end
 				ST_READ_BYTE: begin
-					ff_command_state	<= ST_RECEIVE_BYTE;
-					if( ff_command_mode == CMD_READ_STATUS ) begin
-						ff_serial_mode	<= MODE_STD_READ;	//	通常の SPI モード
+					if( w_serial_idle ) begin
+						ff_command_state	<= ST_RECEIVE_BYTE;
+						ff_serial_mode		<= MODE_STD_READ;
+						ff_serial_wdata 	<= 8'd0;
+						ff_serial_write 	<= 1'b0;
+						ff_serial_valid 	<= 1'b1;
 					end
-					else begin
-						ff_serial_mode	<= MODE_QUAD_READ;
-					end
-					ff_serial_wdata 	<= 8'd0;
-					ff_serial_write 	<= 1'b0;
-					ff_serial_valid 	<= 1'b1;
 				end
 				ST_RECEIVE_BYTE: begin
 					if( w_serial_rdata_en ) begin
-						if( ff_command_mode == CMD_READ_STATUS ) begin
-							ff_bus_rdata	<= { 7'b0, w_serial_rdata[0] };
-						end
-						else begin
-							ff_bus_rdata	<= w_serial_rdata;
-						end
+						ff_bus_rdata		<= w_serial_rdata;
 						ff_bus_rdata_en		<= 1'b1;
 						ff_command_state	<= ST_FINISH;
 					end
@@ -677,7 +793,7 @@ module ip_qspi_rom(
 				ST_FINISH: begin
 					if( w_serial_idle ) begin
 						ff_command_state	<= ST_IDLE;
-						if( ff_command_mode == CMD_BURST_WRITE || ff_command_mode == CMD_BURST_READ || ff_command_mode == CMD_READ_STATUS ) begin
+						if( ff_command_mode == CMD_BURST_WRITE || ff_command_mode == CMD_BURST_READ || ff_command_mode == CMD_READ_STATUS || ff_command_mode == CMD_READ_STATUS_2 ) begin
 							//	これらのコマンドは、data port からのアクセスが続くので、ff_cs_n はアクティブのままにする。
 						end
 						else begin
@@ -695,23 +811,258 @@ module ip_qspi_rom(
 	end
 
 	// ---------------------------------------------------------
-	//	QSPI Controller
+	//	QSPI communication request queue
 	// ---------------------------------------------------------
-	qspi u_qspi (
-		.reset				( reset					),
-		.clk				( clk					),
-		.clk_serial			( clk_serial			),
-		.serial_mode		( ff_serial_mode		),
-		.serial_wdata		( ff_serial_wdata		),
-		.serial_write		( ff_serial_write		),
-		.serial_valid		( ff_serial_valid		),
-		.serial_ready		( w_serial_ready		),
-		.serial_rdata		( w_serial_rdata		),
-		.serial_rdata_en	( w_serial_rdata_en		),
-		.serial_idle		( w_serial_idle			),
-		.qspi_clk			( srom_clk				),
-		.qspi_sio			( srom_sio				)
-	);
+	always @(posedge clk) begin
+		if( reset ) begin
+			ff_fifo_mode	<= 3'd0;
+			ff_fifo_wdata	<= 8'd0;
+			ff_fifo_write	<= 1'b0;
+			ff_fifo_valid	<= 1'b0;
+		end
+		else if( !ff_fifo_valid ) begin
+			if( ff_serial_valid ) begin
+				ff_fifo_mode	<= ff_serial_mode;
+				ff_fifo_wdata	<= ff_serial_wdata;
+				ff_fifo_write	<= ff_serial_write;
+				ff_fifo_valid	<= 1'b1;
+			end
+		end
+		else begin
+			if( !ff_xfer_valid && ff_xfer_ready ) begin
+				ff_fifo_valid <= 1'b0;
+			end
+		end
+	end
+
+	always @(posedge clk) begin
+		if( reset ) begin
+			ff_xfer_mode	<= 3'd0;
+			ff_xfer_wdata	<= 8'd0;
+			ff_xfer_write	<= 1'b0;
+			ff_xfer_valid	<= 1'b0;
+		end
+		else if( !ff_xfer_valid ) begin
+			if( ff_fifo_valid && ff_xfer_ready ) begin
+				ff_xfer_mode	<= ff_fifo_mode;
+				ff_xfer_wdata	<= ff_fifo_wdata;
+				ff_xfer_write	<= ff_fifo_write;
+				ff_xfer_valid	<= 1'b1;
+			end
+		end
+		else begin
+			if( ff_xfer_qspi_accepted ) begin
+				ff_xfer_valid <= 1'b0;
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_xfer_ready <= 1'b1;
+		end
+		else if( ff_xfer_ready ) begin
+			if( ff_fifo_valid ) begin
+				ff_xfer_ready <= 1'b0;
+			end
+		end
+		else begin
+			if( !ff_xfer_valid && !ff_xfer_qspi_accepted ) begin
+				ff_xfer_ready <= 1'b1;
+			end
+		end
+	end
+
+	always @(posedge clk) begin
+		if( reset ) begin
+			ff_xfer_processing		<= 1'b0;
+			ff_xfer_qspi_accepted	<= 1'b0;
+		end
+		else begin
+			ff_xfer_processing		<= ff_qspi_processing;
+			ff_xfer_qspi_accepted	<= ff_xfer_processing;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_xfer_rdata		<= 8'd0;
+			ff_xfer_rdata_en	<= 1'b0;
+		end
+		else if( !ff_xfer_processing && ff_xfer_qspi_accepted ) begin
+			ff_xfer_rdata		<= ff_qspi_rdata;
+			ff_xfer_rdata_en	<= ~ff_xfer_write;
+		end
+		else begin
+			ff_xfer_rdata_en	<= 1'b0;
+		end
+	end
+
+	assign w_serial_ready	= !ff_fifo_valid;
+	assign w_serial_rdata	= ff_xfer_rdata;
+	assign w_serial_rdata_en= ff_xfer_rdata_en;
+
+	// ---------------------------------------------------------
+	//	Request clock domain crossing
+	// ---------------------------------------------------------
+	always @( posedge clk_serial ) begin
+		if( reset ) begin
+			ff_qspi_serial_valid0 <= 1'b0;
+			ff_qspi_serial_valid1 <= 1'b0;
+		end
+		else begin
+			ff_qspi_serial_valid0 <= ff_xfer_valid;
+			ff_qspi_serial_valid1 <= ff_qspi_serial_valid0;
+		end
+	end
+
+	always @( posedge clk_serial ) begin
+		if( reset ) begin
+			ff_qspi_processing <= 1'b0;
+		end
+		else if( !ff_qspi_processing ) begin
+			if( ff_qspi_serial_valid1 ) begin
+				ff_qspi_processing <= 1'b1;
+			end
+		end
+		else begin
+			if( ff_qspi_state == ST_QSPI_FINISH ) begin
+				ff_qspi_processing <= 1'b0;
+			end
+		end
+	end
+
+	//	Advance QSPI transfer states every other clk_serial edge.
+	//	This makes srom_clk frequency one quarter of clk_serial while keeping
+	//	the existing high/low state sequencing unchanged.
+	always @( posedge clk_serial ) begin
+		if( reset ) begin
+			ff_qspi_ce <= 1'b0;
+		end
+		else if( ff_qspi_processing ) begin
+			ff_qspi_ce <= ~ff_qspi_ce;
+		end
+		else begin
+			ff_qspi_ce <= 1'b0;
+		end
+	end
+
+	// ---------------------------------------------------------
+	//	QSPI transfer state machine
+	// ---------------------------------------------------------
+	always @( posedge clk_serial ) begin
+		if( reset ) begin
+			ff_qspi_state		<= ST_QSPI_IDLE;
+			ff_qspi_substate	<= 3'd0;
+			ff_qspi_clk			<= 1'b0;
+			ff_qspi_data		<= 8'd0;
+			ff_qspi_hiz			<= 4'b1111;
+			ff_qspi_sio			<= 4'b0000;
+		end
+		else if( ff_qspi_processing ) begin
+			if( ff_qspi_ce ) begin
+				case( ff_qspi_state )
+				ST_QSPI_IDLE: begin
+					case( ff_xfer_mode )
+						MODE_STD_WRITE: begin
+							ff_qspi_state		<= ST_QSPI_STD_WRITE;
+							ff_qspi_clk			<= 1'b0;
+							ff_qspi_data		<= ff_xfer_wdata;
+							ff_qspi_substate	<= 3'd7;
+						end
+						MODE_STD_READ: begin
+							ff_qspi_state		<= ST_QSPI_STD_READ;
+							ff_qspi_clk			<= 1'b0;
+							ff_qspi_substate	<= 3'd7;
+						end
+						default: begin
+							ff_qspi_state	<= ST_QSPI_FINISH;
+							ff_qspi_clk		<= 1'b0;
+						end
+					endcase
+				end
+				ST_QSPI_STD_WRITE: begin
+					ff_qspi_clk		<= 1'b0;
+					ff_qspi_sio[0]	<= ff_qspi_data[ff_qspi_substate];
+					ff_qspi_sio[2]	<= 1'b1;
+					ff_qspi_sio[3]	<= 1'b1;
+					ff_qspi_hiz		<= 4'b0010;
+					ff_qspi_state	<= ST_QSPI_STD_WRITE_CLK;
+				end
+				ST_QSPI_STD_WRITE_CLK: begin
+					ff_qspi_clk		<= 1'b1;
+					if( ff_qspi_substate != 3'd0 ) begin
+						ff_qspi_substate	<= ff_qspi_substate - 3'd1;
+						ff_qspi_state		<= ST_QSPI_STD_WRITE;
+					end
+					else begin
+						ff_qspi_state		<= ST_QSPI_FINISH;
+					end
+				end
+				ST_QSPI_STD_READ: begin
+					ff_qspi_clk		<= 1'b0;
+					ff_qspi_sio[2]	<= 1'b1;
+					ff_qspi_sio[3]	<= 1'b1;
+					ff_qspi_hiz		<= 4'b0011;
+					ff_qspi_state	<= ST_QSPI_STD_READ_CLK;
+				end
+				ST_QSPI_STD_READ_CLK: begin
+					ff_qspi_clk		<= 1'b1;
+					ff_qspi_state	<= ST_QSPI_STD_READ_LOOP;
+				end
+				ST_QSPI_STD_READ_LOOP: begin
+					ff_qspi_clk		<= 1'b0;
+					ff_qspi_data[ff_qspi_substate] <= w_srom_sio[1];
+					ff_qspi_sio[2]	<= 1'b1;
+					ff_qspi_sio[3]	<= 1'b1;
+					ff_qspi_hiz		<= 4'b0011;
+					if( ff_qspi_substate != 3'd0 ) begin
+						ff_qspi_substate	<= ff_qspi_substate - 3'd1;
+						ff_qspi_state		<= ST_QSPI_STD_READ_CLK;
+					end
+					else begin
+						ff_qspi_state	<= ST_QSPI_FINISH;
+					end
+				end
+				ST_QSPI_FINISH: begin
+					ff_qspi_clk		<= 1'b0;
+					ff_qspi_sio		<= 4'b0000;
+					ff_qspi_hiz		<= 4'b1111;
+					ff_qspi_state	<= ST_QSPI_IDLE;
+				end
+				default: begin
+				end
+				endcase
+			end
+		end
+		else begin
+			ff_qspi_state		<= ST_QSPI_IDLE;
+			ff_qspi_substate	<= 3'd0;
+			ff_qspi_clk			<= 1'b0;
+		end
+	end
+
+	always @( posedge clk_serial ) begin
+		if( reset ) begin
+			ff_qspi_rdata	<= 8'd0;
+		end
+		else if( ff_qspi_processing ) begin
+			if( ff_qspi_state == ST_QSPI_FINISH ) begin
+				ff_qspi_rdata	<= ff_qspi_data;
+			end
+		end
+	end
+
+	assign w_srom_sio[3]	= 1'b1;
+	assign w_srom_sio[2]	= 1'b1;
+	assign w_srom_sio[1]	= srom_do;
+	assign w_srom_sio[0]	= srom_di;
+	assign srom_clk			= ff_qspi_clk;
+	assign srom_di			= ff_qspi_hiz[0] ? 1'bz : ff_qspi_sio[0];
+	assign srom_do			= 1'bz;
+	assign srom_wp_n		= 1'b1;
+	assign srom_hold_n		= 1'b1;
+	assign w_serial_idle	= ff_xfer_ready & !ff_fifo_valid;
 
 	assign srom0_cs_n = ff_srom0_cs_n | ff_wait_count_active;
 	assign srom1_cs_n = ff_srom1_cs_n | ff_wait_count_active;

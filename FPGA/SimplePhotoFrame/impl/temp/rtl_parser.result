@@ -9,7 +9,7 @@
   "SubInsts" : [
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 143,
+    "InstLine" : 138,
     "InstName" : "u_rpll",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/gowin_rpll/gowin_rpll.v",
     "ModuleLine" : 11,
@@ -17,7 +17,7 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 165,
+    "InstLine" : 161,
     "InstName" : "u_ip_spi",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SPI/ip_spi.v",
     "ModuleLine" : 34,
@@ -35,25 +35,15 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 187,
-    "InstName" : "u_ip_qspi_rom",
-    "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/qspi_rom/ip_qspi_rom.v",
+    "InstLine" : 183,
+    "InstName" : "u_ip_spi_rom",
+    "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/spi_rom/ip_spi_rom.v",
     "ModuleLine" : 27,
-    "ModuleName" : "ip_qspi_rom",
-    "SubInsts" : [
-     {
-      "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/qspi_rom/ip_qspi_rom.v",
-      "InstLine" : 700,
-      "InstName" : "u_qspi",
-      "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/qspi_rom/qspi.v",
-      "ModuleLine" : 27,
-      "ModuleName" : "qspi"
-     }
-    ]
+    "ModuleName" : "ip_spi_rom"
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 208,
+    "InstLine" : 207,
     "InstName" : "u_display_controller",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_controller.v",
     "ModuleLine" : 57,
@@ -77,7 +67,7 @@
       "SubInsts" : [
        {
         "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_preload_buffer.v",
-        "InstLine" : 246,
+        "InstLine" : 247,
         "InstName" : "u_sram0",
         "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_single_port_ram.v",
         "ModuleLine" : 57,
@@ -85,7 +75,7 @@
        },
        {
         "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_preload_buffer.v",
-        "InstLine" : 254,
+        "InstLine" : 255,
         "InstName" : "u_sram1",
         "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_single_port_ram.v",
         "ModuleLine" : 57,
@@ -96,16 +86,16 @@
      {
       "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_controller.v",
       "InstLine" : 127,
-      "InstName" : "display_timming_generator",
-      "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_timming_generator.v",
+      "InstName" : "display_timing_generator",
+      "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_timing_generator.v",
       "ModuleLine" : 57,
-      "ModuleName" : "display_timming_generator"
+      "ModuleName" : "display_timing_generator"
      }
     ]
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 238,
+    "InstLine" : 240,
     "InstName" : "u_graphic_processor1",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/GraphicProcessor1/graphic_processor1.v",
     "ModuleLine" : 57,
@@ -113,7 +103,7 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 263,
+    "InstLine" : 265,
     "InstName" : "u_graphic_processor2",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/GraphicProcessor2/graphic_processor2.v",
     "ModuleLine" : 57,
@@ -121,7 +111,7 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 288,
+    "InstLine" : 290,
     "InstName" : "u_vram_accessor",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/VramAccessor/vram_accessor.v",
     "ModuleLine" : 57,
@@ -129,7 +119,7 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 313,
+    "InstLine" : 315,
     "InstName" : "u_bus_arbiter",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/BusArbiter/bus_arbiter.v",
     "ModuleLine" : 34,
@@ -137,7 +127,7 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 361,
+    "InstLine" : 363,
     "InstName" : "u_cache",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache.v",
     "ModuleLine" : 34,
@@ -195,7 +185,7 @@
    },
    {
     "InstFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
-    "InstLine" : 387,
+    "InstLine" : 389,
     "InstName" : "u_sdram_controller",
     "ModuleFile" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SdramController/ip_sdram_tangnano20k.v",
     "ModuleLine" : 57,

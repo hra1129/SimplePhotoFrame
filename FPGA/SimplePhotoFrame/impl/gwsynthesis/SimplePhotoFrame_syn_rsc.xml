@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="simple_photo_frame" Register="14" Lut="17" T_Register="2368(14)" T_Alu="54(0)" T_Lut="2605(17)" T_Bsram="30(0)">
+<Module name="simple_photo_frame" Register="16" Lut="17" T_Register="2912(16)" T_Alu="823(0)" T_Lut="5202(17)" T_PADD18="1(0)" T_MULT9X9="1(0)" T_MULT18X18="2(0)" T_MULTALU36X18="1(0)" T_MULTADDALU18X18="2(0)" T_Bsram="30(0)">
  <SubModule name="u_rpll"/>
- <SubModule name="u_ip_spi" Register="53" Lut="90" T_Register="87(53)" T_Lut="130(90)">
-  <SubModule name="u_spi" Register="34" Lut="40" T_Register="34(34)" T_Lut="40(40)"/>
+ <SubModule name="u_ip_spi" Register="53" Lut="91" T_Register="87(53)" T_Lut="130(91)">
+  <SubModule name="u_spi" Register="34" Lut="39" T_Register="34(34)" T_Lut="39(39)"/>
  </SubModule>
- <SubModule name="u_ip_qspi_rom" Register="76" Lut="271" T_Register="148(76)" T_Lut="370(271)">
-  <SubModule name="u_qspi" Register="72" Lut="99" T_Register="72(72)" T_Lut="99(99)"/>
- </SubModule>
- <SubModule name="u_display_controller" T_Register="188(0)" T_Alu="11(0)" T_Lut="292(0)" T_Bsram="4(0)">
-  <SubModule name="display_address_generator" Register="22" Lut="53" T_Register="22(22)" T_Lut="53(53)"/>
-  <SubModule name="display_preload_buffer" Register="143" Alu="11" Lut="173" T_Register="143(143)" T_Alu="11(11)" T_Lut="173(173)" T_Bsram="4(0)">
+ <SubModule name="u_ip_spi_rom" Register="135" Lut="390" T_Register="135(135)" T_Lut="390(390)"/>
+ <SubModule name="u_display_controller" T_Register="247(0)" T_Alu="47(0)" T_Lut="329(0)" T_MULT9X9="1(0)" T_Bsram="4(0)">
+  <SubModule name="display_address_generator" Register="76" Alu="36" Lut="79" MULT9X9="1" T_Register="76(76)" T_Alu="36(36)" T_Lut="79(79)" T_MULT9X9="1(1)"/>
+  <SubModule name="display_preload_buffer" Register="148" Alu="11" Lut="181" T_Register="148(148)" T_Alu="11(11)" T_Lut="181(181)" T_Bsram="4(0)">
    <SubModule name="u_sram0" Bsram="2" T_Bsram="2(2)"/>
    <SubModule name="u_sram1" Bsram="2" T_Bsram="2(2)"/>
   </SubModule>
-  <SubModule name="display_timming_generator" Register="23" Lut="66" T_Register="23(23)" T_Lut="66(66)"/>
+  <SubModule name="display_timing_generator" Register="23" Lut="69" T_Register="23(23)" T_Lut="69(69)"/>
  </SubModule>
- <SubModule name="u_graphic_processor1" Register="227" Lut="351" T_Register="227(227)" T_Lut="351(351)"/>
- <SubModule name="u_graphic_processor2" Register="226" Lut="305" T_Register="226(226)" T_Lut="305(305)"/>
- <SubModule name="u_vram_accessor" Register="40" Lut="24" T_Register="40(40)" T_Lut="24(24)"/>
- <SubModule name="u_cache" Register="732" Alu="43" Lut="659" T_Register="732(732)" T_Alu="43(43)" T_Lut="667(659)" T_Bsram="26(0)">
+ <SubModule name="u_graphic_processor1" Register="382" Alu="80" Lut="614" MULTADDALU18X18="1" T_Register="382(382)" T_Alu="80(80)" T_Lut="614(614)" T_MULTADDALU18X18="1(1)"/>
+ <SubModule name="u_graphic_processor2" Register="433" Alu="613" Lut="2193" PADD18="1" MULT18X18="2" MULTALU36X18="1" MULTADDALU18X18="1" T_Register="433(433)" T_Alu="613(613)" T_Lut="2193(2193)" T_PADD18="1(1)" T_MULT18X18="2(2)" T_MULTALU36X18="1(1)" T_MULTADDALU18X18="1(1)"/>
+ <SubModule name="u_vram_accessor" Register="81" Lut="142" T_Register="81(81)" T_Lut="142(142)"/>
+ <SubModule name="u_bus_arbiter" Register="6" Lut="118" T_Register="6(6)" T_Lut="118(118)"/>
+ <SubModule name="u_cache" Register="819" Alu="83" Lut="772" T_Register="819(819)" T_Alu="83(83)" T_Lut="780(772)" T_Bsram="26(0)">
   <SubModule name="u_cache_line0" Lut="1" Bsram="5" T_Lut="1(1)" T_Bsram="5(5)"/>
   <SubModule name="u_cache_line1" Lut="2" Bsram="5" T_Lut="2(2)" T_Bsram="5(5)"/>
   <SubModule name="u_cache_tag_way0" Lut="1" Bsram="4" T_Lut="1(1)" T_Bsram="4(4)"/>
@@ -26,5 +25,5 @@
   <SubModule name="u_cache_tag_way2" Lut="1" Bsram="4" T_Lut="1(1)" T_Bsram="4(4)"/>
   <SubModule name="u_cache_tag_way3" Lut="2" Bsram="4" T_Lut="2(2)" T_Bsram="4(4)"/>
  </SubModule>
- <SubModule name="u_sdram_controller" Register="706" Lut="449" T_Register="706(706)" T_Lut="449(449)"/>
+ <SubModule name="u_sdram_controller" Register="706" Lut="489" T_Register="706(706)" T_Lut="489(489)"/>
 </Module>

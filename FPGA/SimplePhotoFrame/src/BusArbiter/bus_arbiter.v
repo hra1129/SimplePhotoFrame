@@ -35,50 +35,50 @@ module bus_arbiter (
 	input				reset,
 	input				clk,					//	System Clock
 	//	Bus0 Interface from Controller (Access unit is 16bits)
-	input	[22:1]		bus0_address,
-	input				bus0_write,
-	input	[15:0]		bus0_wdata,
-	input				bus0_flash,
-	input				bus0_valid,
-	output				bus0_ready,
-	output	[15:0]		bus0_rdata,
-	output				bus0_rdata_valid,
+	input	[22:1]		sdram0_address,
+	input				sdram0_write,
+	input	[15:0]		sdram0_wdata,
+	input				sdram0_flush,
+	input				sdram0_valid,
+	output				sdram0_ready,
+	output	[15:0]		sdram0_rdata,
+	output				sdram0_rdata_valid,
 	//	Bus1 Interface from Controller (Access unit is 16bits)
-	input	[22:1]		bus1_address,
-	input				bus1_write,
-	input	[15:0]		bus1_wdata,
-	input				bus1_flash,
-	input				bus1_valid,
-	output				bus1_ready,
-	output	[15:0]		bus1_rdata,
-	output				bus1_rdata_valid,
+	input	[22:1]		sdram1_address,
+	input				sdram1_write,
+	input	[15:0]		sdram1_wdata,
+	input				sdram1_flush,
+	input				sdram1_valid,
+	output				sdram1_ready,
+	output	[15:0]		sdram1_rdata,
+	output				sdram1_rdata_valid,
 	//	Bus2 Interface from Controller (Access unit is 16bits)
-	input	[22:1]		bus2_address,
-	input				bus2_write,
-	input	[15:0]		bus2_wdata,
-	input				bus2_flash,
-	input				bus2_valid,
-	output				bus2_ready,
-	output	[15:0]		bus2_rdata,
-	output				bus2_rdata_valid,
+	input	[22:1]		sdram2_address,
+	input				sdram2_write,
+	input	[15:0]		sdram2_wdata,
+	input				sdram2_flush,
+	input				sdram2_valid,
+	output				sdram2_ready,
+	output	[15:0]		sdram2_rdata,
+	output				sdram2_rdata_valid,
 	//	Bus3 Interface from Controller (Access unit is 16bits)
-	input	[22:1]		bus3_address,
-	input				bus3_write,
-	input	[15:0]		bus3_wdata,
-	input				bus3_flash,
-	input				bus3_valid,
-	output				bus3_ready,
-	output	[15:0]		bus3_rdata,
-	output				bus3_rdata_valid,
+	input	[22:1]		sdram3_address,
+	input				sdram3_write,
+	input	[15:0]		sdram3_wdata,
+	input				sdram3_flush,
+	input				sdram3_valid,
+	output				sdram3_ready,
+	output	[15:0]		sdram3_rdata,
+	output				sdram3_rdata_valid,
 	//	Bus Interface to SDRAM (Access unit is 32bits/8words)
-	output	[22:1]		bus_address,
-	output				bus_write,
-	output	[15:0]		bus_wdata,
-	output				bus_flash,
-	output				bus_valid,
-	input				bus_ready,
-	input	[15:0]		bus_rdata,
-	input				bus_rdata_valid
+	output	[22:1]		sdram_address,
+	output				sdram_write,
+	output	[15:0]		sdram_wdata,
+	output				sdram_flush,
+	output				sdram_valid,
+	input				sdram_ready,
+	input	[15:0]		sdram_rdata,
+	input				sdram_rdata_valid
 );
 	reg		[1:0]		ff_priority;
 	reg		[1:0]		ff_read_bus;
@@ -119,59 +119,59 @@ module bus_arbiter (
 
 	function [22:1] func_select_address(
 		input [1:0]		bus,
-		input [22:1]	bus0_address,
-		input [22:1]	bus1_address,
-		input [22:1]	bus2_address,
-		input [22:1]	bus3_address
+		input [22:1]	sdram0_address,
+		input [22:1]	sdram1_address,
+		input [22:1]	sdram2_address,
+		input [22:1]	sdram3_address
 	);
 		case( bus )
-			2'd0:		func_select_address = bus0_address;
-			2'd1:		func_select_address = bus1_address;
-			2'd2:		func_select_address = bus2_address;
-			default:	func_select_address = bus3_address;
+			2'd0:		func_select_address = sdram0_address;
+			2'd1:		func_select_address = sdram1_address;
+			2'd2:		func_select_address = sdram2_address;
+			default:	func_select_address = sdram3_address;
 		endcase
 	endfunction
 
 	function [15:0] func_select_wdata(
 		input [1:0]		bus,
-		input [15:0]	bus0_wdata,
-		input [15:0]	bus1_wdata,
-		input [15:0]	bus2_wdata,
-		input [15:0]	bus3_wdata
+		input [15:0]	sdram0_wdata,
+		input [15:0]	sdram1_wdata,
+		input [15:0]	sdram2_wdata,
+		input [15:0]	sdram3_wdata
 	);
 		case( bus )
-			2'd0:		func_select_wdata = bus0_wdata;
-			2'd1:		func_select_wdata = bus1_wdata;
-			2'd2:		func_select_wdata = bus2_wdata;
-			default:	func_select_wdata = bus3_wdata;
+			2'd0:		func_select_wdata = sdram0_wdata;
+			2'd1:		func_select_wdata = sdram1_wdata;
+			2'd2:		func_select_wdata = sdram2_wdata;
+			default:	func_select_wdata = sdram3_wdata;
 		endcase
 	endfunction
 
 	function func_select_1bit(
 		input [1:0]		bus,
-		input			bus0_write,
-		input			bus1_write,
-		input			bus2_write,
-		input			bus3_write
+		input			sdram0_sig,
+		input			sdram1_sig,
+		input			sdram2_sig,
+		input			sdram3_sig
 	);
 		case( bus )
-			2'd0:		func_select_1bit = bus0_write;
-			2'd1:		func_select_1bit = bus1_write;
-			2'd2:		func_select_1bit = bus2_write;
-			default:	func_select_1bit = bus3_write;
+			2'd0:		func_select_1bit = sdram0_sig;
+			2'd1:		func_select_1bit = sdram1_sig;
+			2'd2:		func_select_1bit = sdram2_sig;
+			default:	func_select_1bit = sdram3_sig;
 		endcase
 	endfunction
 
-	assign w_active					= (bus0_valid | bus1_valid | bus2_valid | bus3_valid) & ff_ready;
-	assign w_valid					= { bus3_valid, bus2_valid, bus1_valid, bus0_valid };
+	assign w_active					= (sdram0_valid | sdram1_valid | sdram2_valid | sdram3_valid) & ff_ready;
+	assign w_valid					= { sdram3_valid, sdram2_valid, sdram1_valid, sdram0_valid };
 	assign w_priority_valid			= func_rotate_priority( w_valid, ff_priority );
 	assign w_selected_valid 		= func_select_valid( w_priority_valid );
 	assign w_selected_bus			= w_selected_valid + ff_priority;
 
-	assign w_selected_bus_address	= func_select_address( w_selected_bus, bus0_address, bus1_address, bus2_address, bus3_address );
-	assign w_selected_bus_wdata		= func_select_wdata( w_selected_bus, bus0_wdata, bus1_wdata, bus2_wdata, bus3_wdata );
-	assign w_selected_bus_write		= func_select_1bit( w_selected_bus, bus0_write, bus1_write, bus2_write, bus3_write );
-	assign w_selected_bus_flash		= func_select_1bit( w_selected_bus, bus0_flash, bus1_flash, bus2_flash, bus3_flash );
+	assign w_selected_bus_address	= func_select_address( w_selected_bus, sdram0_address, sdram1_address, sdram2_address, sdram3_address );
+	assign w_selected_bus_wdata		= func_select_wdata( w_selected_bus, sdram0_wdata, sdram1_wdata, sdram2_wdata, sdram3_wdata );
+	assign w_selected_bus_write		= func_select_1bit( w_selected_bus, sdram0_write, sdram1_write, sdram2_write, sdram3_write );
+	assign w_selected_bus_flash		= func_select_1bit( w_selected_bus, sdram0_flush, sdram1_flush, sdram2_flush, sdram3_flush );
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -189,18 +189,18 @@ module bus_arbiter (
 			ff_read_stall	<= 1'b0;
 		end
 		else if( !ff_ready ) begin
-			if( bus_ready && !ff_read_stall ) begin
+			if( sdram_ready && !ff_read_stall ) begin
 				//	readによる待機時間ではなく、かつ後段から busy が来ていない場合は次のサイクルで ready にする
 				ff_ready		<= 1'b1;
 			end
-			else if( bus_rdata_valid ) begin
-				//	bus_rdata_valid が来たら read による待機時間を終える
-				ff_ready		<= bus_ready;
+			else if( sdram_rdata_valid ) begin
+				//	sdram_rdata_valid が来たら read による待機時間を終える
+				ff_ready		<= sdram_ready;
 				ff_read_stall	<= 1'b0;
 			end
 		end
 		else if( w_active ) begin
-			if( !bus_ready || !w_selected_bus_write ) begin
+			if( !sdram_ready || !w_selected_bus_write ) begin
 				//	後段から busy が来ているか、あるいは read要求だった場合は次のサイクルで busy にする
 				ff_ready		<= 1'b0;
 				ff_read_stall	<= ~w_selected_bus_write;
@@ -211,24 +211,24 @@ module bus_arbiter (
 		end
 	end
 
-	assign bus0_rdata		= (ff_read_bus == 2'd0) ? bus_rdata : 16'd0;
-	assign bus1_rdata		= (ff_read_bus == 2'd1) ? bus_rdata : 16'd0;
-	assign bus2_rdata		= (ff_read_bus == 2'd2) ? bus_rdata : 16'd0;
-	assign bus3_rdata		= (ff_read_bus == 2'd3) ? bus_rdata : 16'd0;
+	assign sdram0_rdata		= (ff_read_bus == 2'd0) ? sdram_rdata : 16'd0;
+	assign sdram1_rdata		= (ff_read_bus == 2'd1) ? sdram_rdata : 16'd0;
+	assign sdram2_rdata		= (ff_read_bus == 2'd2) ? sdram_rdata : 16'd0;
+	assign sdram3_rdata		= (ff_read_bus == 2'd3) ? sdram_rdata : 16'd0;
 
-	assign bus0_rdata_valid	= (ff_read_bus == 2'd0) ? bus_rdata_valid : 1'b0;
-	assign bus1_rdata_valid	= (ff_read_bus == 2'd1) ? bus_rdata_valid : 1'b0;
-	assign bus2_rdata_valid	= (ff_read_bus == 2'd2) ? bus_rdata_valid : 1'b0;
-	assign bus3_rdata_valid	= (ff_read_bus == 2'd3) ? bus_rdata_valid : 1'b0;
+	assign sdram0_rdata_valid	= (ff_read_bus == 2'd0) ? sdram_rdata_valid : 1'b0;
+	assign sdram1_rdata_valid	= (ff_read_bus == 2'd1) ? sdram_rdata_valid : 1'b0;
+	assign sdram2_rdata_valid	= (ff_read_bus == 2'd2) ? sdram_rdata_valid : 1'b0;
+	assign sdram3_rdata_valid	= (ff_read_bus == 2'd3) ? sdram_rdata_valid : 1'b0;
 
-	assign bus0_ready		= (w_selected_bus == 2'd0) ? ff_ready : 1'b0;
-	assign bus1_ready		= (w_selected_bus == 2'd1) ? ff_ready : 1'b0;
-	assign bus2_ready		= (w_selected_bus == 2'd2) ? ff_ready : 1'b0;
-	assign bus3_ready		= (w_selected_bus == 2'd3) ? ff_ready : 1'b0;
+	assign sdram0_ready		= (w_selected_bus == 2'd0) ? ff_ready : 1'b0;
+	assign sdram1_ready		= (w_selected_bus == 2'd1) ? ff_ready : 1'b0;
+	assign sdram2_ready		= (w_selected_bus == 2'd2) ? ff_ready : 1'b0;
+	assign sdram3_ready		= (w_selected_bus == 2'd3) ? ff_ready : 1'b0;
 
-	assign bus_address		= w_selected_bus_address;
-	assign bus_write		= w_selected_bus_write;
-	assign bus_wdata		= w_selected_bus_wdata;
-	assign bus_flash		= w_selected_bus_flash;
-	assign bus_valid		= w_active;
+	assign sdram_address		= w_selected_bus_address;
+	assign sdram_write		= w_selected_bus_write;
+	assign sdram_wdata		= w_selected_bus_wdata;
+	assign sdram_flush		= w_selected_bus_flash;
+	assign sdram_valid		= w_active;
 endmodule

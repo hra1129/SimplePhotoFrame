@@ -35,14 +35,14 @@ module cache (
 	input				reset,
 	input				clk,					//	System Clock
 	//	Bus Interface from Controller (Access unit is 16bits)
-	input	[22:1]		bus_address,
-	input				bus_write,
-	input	[15:0]		bus_wdata,
-	input				bus_flash,
-	input				bus_valid,
-	output				bus_ready,
-	output	[15:0]		bus_rdata,
-	output				bus_rdata_valid,
+	input	[22:1]		cache_address,
+	input				cache_write,
+	input	[15:0]		cache_wdata,
+	input				cache_flush,
+	input				cache_valid,
+	output				cache_ready,
+	output	[15:0]		cache_rdata,
+	output				cache_rdata_valid,
 	//	Bus Interface to SDRAM (Access unit is 32bits/8words)
 	output	[22:5]		sdram_address,
 	output				sdram_write,
@@ -533,16 +533,16 @@ module cache (
 				if( ff_refresh_pending ) begin
 					ff_state <= c_state_refresh_req;
 				end
-				else if( bus_valid ) begin
-					ff_req_address <= bus_address;
-					ff_req_write <= bus_write;
-					ff_req_flash <= bus_flash;
-					ff_req_wdata <= bus_wdata;
-					ff_hash <= bus_address[11:5];
-					ff_key <= bus_address[22:12];
-					ff_word_index <= bus_address[4:2];
-					ff_half_select <= bus_address[1];
-					if( bus_flash ) begin
+				else if( cache_valid ) begin
+					ff_req_address <= cache_address;
+					ff_req_write <= cache_write;
+					ff_req_flash <= cache_flush;
+					ff_req_wdata <= cache_wdata;
+					ff_hash <= cache_address[11:5];
+					ff_key <= cache_address[22:12];
+					ff_word_index <= cache_address[4:2];
+					ff_half_select <= cache_address[1];
+					if( cache_flush ) begin
 						ff_flush_hash <= 7'd0;
 						ff_flush_way <= 2'd0;
 						ff_state <= c_state_flush_tag_req;
@@ -1002,9 +1002,9 @@ module cache (
 		end
 	end
 
-	assign bus_ready			= (ff_state == c_state_idle) && !ff_refresh_pending;
-	assign bus_rdata			= ff_bus_rdata;
-	assign bus_rdata_valid		= ff_bus_rdata_valid;
+	assign cache_ready			= (ff_state == c_state_idle) && !ff_refresh_pending;
+	assign cache_rdata			= ff_bus_rdata;
+	assign cache_rdata_valid	= ff_bus_rdata_valid;
 
 	assign sdram_address		= ff_sdram_address;
 	assign sdram_write			= ff_sdram_write;

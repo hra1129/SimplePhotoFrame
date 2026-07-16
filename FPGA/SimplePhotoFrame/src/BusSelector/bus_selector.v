@@ -1,5 +1,5 @@
 //
-// display_controller.v
+// bus_selector.v
 //
 //	Copyright (C) 2026 Takayuki Hara
 //
@@ -54,28 +54,21 @@
 //
 //-----------------------------------------------------------------------------
 
-module display_controller (
+module bus_selector (
 	input			clk,
 	input			reset,
-	input			sdram_init_busy,
-	//	Register interface
-	input			bus_cs,
-	input	[4:0]	bus_address,
-	input			bus_valid,
-	output			bus_ready,
-	input			bus_write,
-	input	[15:0]	bus_wdata,
-	output	[15:0]	bus_rdata,
-	output			bus_rdata_valid,
-	// LCD interface
-	output			lcd_ck,
-	output			lcd_hs,
-	output			lcd_vs,
-	output			lcd_de,
-	output	[4:0]	lcd_r,
-	output	[5:0]	lcd_g,
-	output	[4:0]	lcd_b,
-	output			lcd_bl,
+	// SDRAM interface for Display controller (input)
+	input	[22:5]	sdram_display_address,
+	input			sdram_display_address_valid,
+	output			sdram_display_address_ready,
+	output	[31:0]	sdram_display_rdata,
+	output			sdram_display_rdata_valid,
+	// SDRAM interface for Cache memory (input)
+	input	[22:5]	sdram_cache_address,
+	input			sdram_cache_address_valid,
+	output			sdram_cache_address_ready,
+	output	[31:0]	sdram_cache_rdata,
+	output			sdram_cache_rdata_valid,
 	// SDRAM interface
 	output	[22:5]	sdram_address,
 	output			sdram_address_valid,
@@ -83,60 +76,5 @@ module display_controller (
 	input	[31:0]	sdram_rdata,
 	input			sdram_rdata_valid
 );
-	wire			fifo_full;
-	wire	[31:0]	fifo_wdata;
-	wire			fifo_valid;
-	wire			p_valid;
-	wire			p_ready;
-	wire	[15:0]	p_data;
 
-	display_address_generator display_address_generator (
-		.clk					( clk					),
-		.reset					( reset					),
-		.sdram_init_busy		( sdram_init_busy		),
-		.bus_cs					( bus_cs				),
-		.bus_address			( bus_address			),
-		.bus_valid				( bus_valid				),
-		.bus_ready				( bus_ready				),
-		.bus_write				( bus_write				),
-		.bus_wdata				( bus_wdata				),
-		.bus_rdata				( bus_rdata				),
-		.bus_rdata_valid		( bus_rdata_valid		),
-		.fifo_full				( fifo_full				),
-		.fifo_wdata				( fifo_wdata			),
-		.fifo_valid				( fifo_valid			),
-		.sdram_address			( sdram_address			),
-		.sdram_address_valid	( sdram_address_valid	),
-		.sdram_address_ready	( sdram_address_ready	),
-		.sdram_rdata			( sdram_rdata			),
-		.sdram_rdata_valid		( sdram_rdata_valid		)
-	);
-
-	display_preload_buffer display_preload_buffer (
-		.clk					( clk					),
-		.reset					( reset					),
-		.in_data				( fifo_wdata			),
-		.in_valid				( fifo_valid			),
-		.in_ready				( 						),
-		.in_nearly_full			( fifo_full				),
-		.out_data				( p_data				),
-		.out_valid				( p_valid				),
-		.out_ready				( p_ready				)
-	);
-
-	display_timing_generator display_timing_generator (
-		.clk					( clk					),
-		.reset					( reset					),
-		.p_data					( p_data				),
-		.p_valid				( p_valid				),
-		.p_ready				( p_ready				),
-		.lcd_ck					( lcd_ck				),
-		.lcd_hs					( lcd_hs				),
-		.lcd_vs					( lcd_vs				),
-		.lcd_de					( lcd_de				),
-		.lcd_r					( lcd_r					),
-		.lcd_g					( lcd_g					),
-		.lcd_b					( lcd_b					),
-		.lcd_bl					( lcd_bl				)
-	);
 endmodule

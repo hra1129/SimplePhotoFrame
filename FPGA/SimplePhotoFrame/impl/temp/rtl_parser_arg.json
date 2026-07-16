@@ -34,7 +34,7 @@
    "Type" : "verilog"
   },
   {
-   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_timming_generator.v",
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_timing_generator.v",
    "Type" : "verilog"
   },
   {
@@ -70,11 +70,7 @@
    "Type" : "verilog"
   },
   {
-   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/qspi_rom/ip_qspi_rom.v",
-   "Type" : "verilog"
-  },
-  {
-   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/qspi_rom/qspi.v",
+   "Path" : "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/spi_rom/ip_spi_rom.v",
    "Type" : "verilog"
   }
  ],

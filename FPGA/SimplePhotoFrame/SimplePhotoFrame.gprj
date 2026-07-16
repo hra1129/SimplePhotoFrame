@@ -13,7 +13,7 @@
         <File path="src/DisplayController/display_controller.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_preload_buffer.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_single_port_ram.v" type="file.verilog" enable="1"/>
-        <File path="src/DisplayController/display_timming_generator.v" type="file.verilog" enable="1"/>
+        <File path="src/DisplayController/display_timing_generator.v" type="file.verilog" enable="1"/>
         <File path="src/GraphicProcessor1/graphic_processor1.v" type="file.verilog" enable="1"/>
         <File path="src/GraphicProcessor2/graphic_processor2.v" type="file.verilog" enable="1"/>
         <File path="src/SPI/ip_spi.v" type="file.verilog" enable="1"/>
@@ -22,8 +22,7 @@
         <File path="src/SimplePhotoFrame.v" type="file.verilog" enable="1"/>
         <File path="src/VramAccessor/vram_accessor.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>
-        <File path="src/qspi_rom/ip_qspi_rom.v" type="file.verilog" enable="1"/>
-        <File path="src/qspi_rom/qspi.v" type="file.verilog" enable="1"/>
+        <File path="src/spi_rom/ip_spi_rom.v" type="file.verilog" enable="1"/>
         <File path="src/SimplePhotoFrame.cst" type="file.cst" enable="1"/>
         <File path="src/SimplePhotoFrame.sdc" type="file.sdc" enable="1"/>
     </FileList>

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-//	Test of display_timming_generator.v
+//	Test of display_timing_generator.v
 //	Copyright (C)2026 Takayuki Hara (HRA!)
 //
 //	本ソフトウェアおよび本ソフトウェアに基づいて作成された派生物は、以下の条件を
@@ -76,7 +76,7 @@ module tb ();
 	// -----------------------------------------------------------------------
 	// DUT
 	// -----------------------------------------------------------------------
-	display_timming_generator u_dut (
+	display_timing_generator u_dut (
 		.clk		( clk		),
 		.reset		( reset		),
 		.lcd_ck		( lcd_ck	),

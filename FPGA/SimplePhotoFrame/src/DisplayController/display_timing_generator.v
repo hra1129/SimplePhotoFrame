@@ -1,5 +1,5 @@
 //
-// display_timming_generator.v
+// display_timing_generator.v
 //
 //	Copyright (C) 2026 Takayuki Hara
 //
@@ -54,7 +54,7 @@
 //
 //-----------------------------------------------------------------------------
 
-module display_timming_generator (
+module display_timing_generator (
 	input			clk,
 	input			reset,
 	// Pixel input (valid/ready handshake, RGB565 format)
