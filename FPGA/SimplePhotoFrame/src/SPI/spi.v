@@ -46,6 +46,7 @@ module spi (
 	input	[7:0]	spi_wdata,
 	output	[7:0]	spi_rdata,
 	output			spi_rdata_en,
+	output			spi_tx_load_en,
 	//	SPI
 	input			spi_cs_n,
 	input			spi_clk,
@@ -59,7 +60,6 @@ module spi (
 	reg				ff_spi_cs_n;
 	reg				ff_spi_clk;
 	reg				ff_spi_mosi;
-	reg				ff_spi_clk_d1;
 
 	//	送信用の FF
 	reg				ff_send;
@@ -72,6 +72,14 @@ module spi (
 	wire			w_spi_start;
 	wire			w_spi_shift;
 	reg		[7:0]	ff_spi_data;
+	reg		[7:0]	ff_spi_data_c1;
+
+	//	TX load event CDC (clk_serial -> clk)
+	reg				ff_tx_load_toggle_serial;
+	reg				ff_tx_load_toggle_pre;
+	reg				ff_tx_load_toggle;
+	reg				ff_tx_load_toggle_d1;
+	wire			w_spi_tx_load_event;
 
 	//	SPIタイミング信号
 	wire			w_spi_clk_falling_edge;
@@ -87,7 +95,7 @@ module spi (
 
 	// ---------------------------------------------------------
 	//	外部信号を FF 受け
-	always @( posedge clk_serial or negedge reset_n ) begin
+	always @( posedge clk_serial ) begin
 		if( !reset_n ) begin
 			ff_spi_cs_n_pre	<= 1'b1;
 			ff_spi_clk_pre	<= 1'b0;
@@ -95,7 +103,6 @@ module spi (
 			ff_spi_cs_n		<= 1'b1;
 			ff_spi_clk		<= 1'b0;
 			ff_spi_mosi		<= 1'b0;
-			ff_spi_clk_d1	<= 1'b0;
 		end
 		else begin
 			//	2-stage FF for metastability mitigation
@@ -105,7 +112,6 @@ module spi (
 			ff_spi_cs_n		<= ff_spi_cs_n_pre;
 			ff_spi_clk		<= ff_spi_clk_pre;
 			ff_spi_mosi		<= ff_spi_mosi_pre;
-			ff_spi_clk_d1	<= ff_spi_clk_pre;	//	1-cycle delayed version of synchronized SPI clock for edge detection
 		end
 	end
 
@@ -114,7 +120,7 @@ module spi (
 
 	// ---------------------------------------------------------
 	//	内部からの送信要求を認知する
-	always @( posedge clk or negedge reset_n ) begin
+	always @( posedge clk ) begin
 		if( !reset_n ) begin
 			ff_send			<= 1'b0;
 			ff_send_data	<= 8'd0;
@@ -138,11 +144,37 @@ module spi (
 		end
 	end
 
-	assign spi_ready	= ff_spi_ready;
-	assign spi_rdata	= ff_spi_data;
-	assign spi_rdata_en = w_byte_finished & ~ff_send;
+	assign spi_ready		= ff_spi_ready;
+	assign spi_rdata		= ff_spi_data_c1;
+	assign spi_rdata_en		= w_byte_finished & ~ff_send;
 
-	always @( posedge clk or negedge reset_n ) begin
+	assign w_spi_tx_load_event = w_spi_start & ff_send;
+
+	always @( posedge clk_serial ) begin
+		if( !reset_n ) begin
+			ff_tx_load_toggle_serial <= 1'b0;
+		end
+		else if( w_spi_tx_load_event ) begin
+			ff_tx_load_toggle_serial <= ~ff_tx_load_toggle_serial;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( !reset_n ) begin
+			ff_tx_load_toggle_pre	<= 1'b0;
+			ff_tx_load_toggle		<= 1'b0;
+			ff_tx_load_toggle_d1	<= 1'b0;
+		end
+		else begin
+			ff_tx_load_toggle_pre	<= ff_tx_load_toggle_serial;
+			ff_tx_load_toggle		<= ff_tx_load_toggle_pre;
+			ff_tx_load_toggle_d1	<= ff_tx_load_toggle;
+		end
+	end
+
+	assign spi_tx_load_en	= ff_tx_load_toggle ^ ff_tx_load_toggle_d1;
+
+	always @( posedge clk ) begin
 		if( !reset_n ) begin
 			ff_done_pulse_pre	<= 1'b0;
 			ff_done_pulse		<= 1'b0;
@@ -164,7 +196,7 @@ module spi (
 
 	// ---------------------------------------------------------
 	//	spi_valid のタイミング（開始タイミング）を生成する
-	always @( posedge clk_serial or negedge reset_n ) begin
+	always @( posedge clk_serial ) begin
 		if( !reset_n ) begin
 			ff_spi_start_pre	<= 1'b0;
 			ff_spi_start		<= 1'b0;
@@ -183,40 +215,39 @@ module spi (
 	//	通信用のシフトレジスタ
 	assign w_spi_shift = (ff_send && w_spi_clk_falling_edge) || (!ff_send && w_spi_clk_rising_edge);
 
-	always @( posedge clk_serial or negedge reset_n ) begin
+	always @( posedge clk_serial ) begin
 		if( !reset_n ) begin
 			ff_spi_data <= 8'd0;
+			ff_spi_data_c1 <= 8'd0;
 		end
 		else if( ff_spi_cs_n ) begin
 			ff_spi_data <= 8'd0;
-		end
-		else if( !ff_spi_ready && ff_send && (ff_bit_counter == 4'd0) ) begin
-			// Keep TX byte preloaded until first rising-edge sample in mode0.
-			ff_spi_data <= ff_send_data;
+			ff_spi_data_c1 <= 8'd0;
 		end
 		else if( w_spi_start ) begin
 			ff_spi_data <= ff_send_data;
 		end
 		else if( !ff_spi_ready ) begin
-			if( ff_send && w_spi_clk_falling_edge ) begin
+			if( ff_send && w_spi_clk_rising_edge ) begin
 				//	送信モード
 				ff_spi_data <= { ff_spi_data[6:0], 1'b0 };
 			end
 			else if( !ff_send && w_spi_clk_rising_edge ) begin
 				//	受信モード
 				ff_spi_data <= { ff_spi_data[6:0], ff_spi_mosi };
+				ff_spi_data_c1 <= { ff_spi_data_c1[6:0], ff_spi_mosi };
 			end
 		end
 	end
 
-	always @( posedge clk_serial or negedge reset_n ) begin
+	always @( posedge clk_serial ) begin
 		if( !reset_n ) begin
 			ff_bit_counter <= 4'd0;
 		end
 		else if( w_spi_start ) begin
 			ff_bit_counter <= 4'd0;
 		end
-		else if( w_done_pulse ) begin
+		else if( ff_done_pulse ) begin
 			ff_bit_counter <= 4'd0;
 		end
 		else if( !ff_spi_ready && w_spi_clk_rising_edge && !ff_bit_counter[3] ) begin
@@ -225,5 +256,5 @@ module spi (
 	end
 
 	assign w_done_pulse = (ff_bit_counter == 4'd8);
-	assign spi_miso		= (!ff_spi_ready && ff_send && (ff_bit_counter == 4'd0)) ? ff_send_data[7] : ff_spi_data[7];
+	assign spi_miso		= ff_spi_data[7];
 endmodule

@@ -104,11 +104,11 @@ module display_address_generator (
 	wire			w_fill_burst_step;
 	wire			w_valid;
 
-	assign w_can_request = ~fifo_full;
-	assign w_fill_burst_active = (ff_fill_burst_remain != 3'd0);
-	assign w_fill_burst_start = w_can_request && ~ff_display_on && ~w_fill_burst_active;
-	assign w_fill_burst_step = w_can_request && ~ff_display_on && w_fill_burst_active;
-	assign w_valid = w_can_request && (ff_display_on ? sdram_address_ready : ~w_fill_burst_active);
+	assign w_can_request		= ~fifo_full;
+	assign w_fill_burst_active	= (ff_fill_burst_remain != 3'd0);
+	assign w_fill_burst_start	= w_can_request && ~ff_display_on && ~w_fill_burst_active;
+	assign w_fill_burst_step	= w_can_request && ~ff_display_on && w_fill_burst_active;
+	assign w_valid				= w_can_request && (ff_display_on ? sdram_address_ready : ~w_fill_burst_active);
 
 	// ---------------------------------------------------------
 	//	Access ready/busy logic
@@ -271,7 +271,6 @@ module display_address_generator (
 	assign sdram_address		= ff_sdram_address;
 	assign sdram_address_valid	= ff_display_on & w_can_request;
 
-	//assign fifo_wdata			= ff_display_on ? sdram_rdata : { reg_fill_color, reg_fill_color };
-	assign fifo_wdata			= ff_display_on ? sdram_rdata : { ff_v_counter[4:0], ff_h_counter, ff_v_counter[8:5], 1'b0, ff_v_counter[4:0], ff_h_counter, ff_v_counter[8:5], 1'b0 };
+	assign fifo_wdata			= ff_display_on ? sdram_rdata : { reg_fill_color, reg_fill_color };
 	assign fifo_valid			= (ff_display_on && sdram_rdata_valid) || w_fill_burst_start || w_fill_burst_step;
 endmodule

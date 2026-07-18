@@ -9,4 +9,7 @@ create_clock -name clk27m -period 37.03704 -waveform {0 18.518} [get_ports {clk2
 
 # PLL 出力クロック
 create_generated_clock -name clk108m   -source [get_ports {clk27m}] -master_clock clk27m -multiply_by 4 -divide_by 1 [get_nets {clk108m}]
+create_generated_clock -name clk216m   -source [get_ports {clk27m}] -master_clock clk27m -multiply_by 8 -divide_by 1 [get_nets {clk216m}]
 
+# 非同期クロックグループ宣言 → clk1とclk2間の全パスをタイミング除外
+set_clock_groups -asynchronous -group [get_clocks {clk216m}] -group [get_clocks {clk108m}]

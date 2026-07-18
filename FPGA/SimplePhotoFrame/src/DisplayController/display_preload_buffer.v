@@ -71,7 +71,8 @@ module display_preload_buffer (
 	//	書き込みポインタ / 読み出しポインタ
 	//	bit[10:1]: SRAM アドレス, bit[0]: SRAM0/1 選択
 	// -------------------------------------------------------------------------
-	reg		[10:0]	ff_wr_ptr;					// {wrap, addr[9:0]}　偶奇で SRAM0/1 を選択
+	reg		[10:0]	ff_wr_ptr;					/* synthesis syn_preserve = 1 */	// {wrap, addr[9:0]}　偶奇で SRAM0/1 を選択
+	reg		[10:0]	ff_wr_ptr_c1;				/* synthesis syn_preserve = 1 */
 	reg		[10:0]	ff_rd_ptr;					// 同上
 
 	// wr_ptr は SRAM0/1 を交互にカウント → 合計インデックス
@@ -134,18 +135,20 @@ module display_preload_buffer (
 	//	SRAM 書き込み制御
 	// -------------------------------------------------------------------------
 	wire			w_wr_en			= in_valid & w_in_ready;
-	wire			w_wr_sram_sel	= ff_wr_ptr[0];		// 0: SRAM0, 1: SRAM1
-	wire	[9:0]	w_wr_addr		= ff_wr_ptr[10:1];
+	wire			w_wr_sram_sel	= ff_wr_ptr_c1[0];		// 0: SRAM0, 1: SRAM1
+	wire	[9:0]	w_wr_addr		= ff_wr_ptr_c1[10:1];
 
 	wire			w_sram0_we		= w_wr_en & ~w_wr_sram_sel;
 	wire			w_sram1_we		= w_wr_en &  w_wr_sram_sel;
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_wr_ptr <= 11'd0;
+			ff_wr_ptr			<= 11'd0;
+			ff_wr_ptr_c1		<= 11'd0;
 		end
 		else if( w_wr_en ) begin
-			ff_wr_ptr <= w_wr_ptr_next;
+			ff_wr_ptr			<= w_wr_ptr_next;
+			ff_wr_ptr_c1		<= w_wr_ptr_next;
 		end
 	end
 
@@ -166,11 +169,6 @@ module display_preload_buffer (
 	reg		[31:0]	ff_word1_data;
 	reg				ff_word1_valid;
 
-	reg		[31:0]	ff_word0_data_n;
-	reg				ff_word0_valid_n;
-	reg		[31:0]	ff_word1_data_n;
-	reg				ff_word1_valid_n;
-
 	// 32bit word を 16bit x2 に分割するステージ (下位→上位)
 	reg		[31:0]	ff_split_word;
 	reg		[1:0]	ff_split_rem;		// 0:none, 2:lower+upper, 1:upper only
@@ -180,11 +178,6 @@ module display_preload_buffer (
 	reg				ff_out0_valid;
 	reg		[15:0]	ff_out1_data;
 	reg				ff_out1_valid;
-
-	reg		[15:0]	ff_out0_data_n;
-	reg				ff_out0_valid_n;
-	reg		[15:0]	ff_out1_data_n;
-	reg				ff_out1_valid_n;
 
 	wire			w_rd_sram_sel	= ff_rd_ptr[0];
 	wire	[9:0]	w_rd_addr		= ff_rd_ptr[10:1];
@@ -272,37 +265,6 @@ module display_preload_buffer (
 	wire			w_take_new_word	= (ff_split_rem == 2'd0) & ff_word0_valid;
 	wire			w_word_pop		= w_take_new_word;
 
-	always @* begin
-		ff_word0_data_n	= ff_word0_data;
-		ff_word0_valid_n	= ff_word0_valid;
-		ff_word1_data_n	= ff_word1_data;
-		ff_word1_valid_n	= ff_word1_valid;
-
-		// pop を先に適用
-		if( w_word_pop ) begin
-			if( ff_word1_valid ) begin
-				ff_word0_data_n	= ff_word1_data;
-				ff_word0_valid_n	= 1'b1;
-				ff_word1_valid_n	= 1'b0;
-			end
-			else begin
-				ff_word0_valid_n	= 1'b0;
-			end
-		end
-
-		// push を後に適用
-		if( w_word_push ) begin
-			if( ~ff_word0_valid_n ) begin
-				ff_word0_data_n	= w_sram_dout;
-				ff_word0_valid_n	= 1'b1;
-			end
-			else if( ~ff_word1_valid_n ) begin
-				ff_word1_data_n	= w_sram_dout;
-				ff_word1_valid_n	= 1'b1;
-			end
-		end
-	end
-
 	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_word0_data	<= 32'd0;
@@ -311,10 +273,37 @@ module display_preload_buffer (
 			ff_word1_valid	<= 1'b0;
 		end
 		else begin
-			ff_word0_data	<= ff_word0_data_n;
-			ff_word0_valid	<= ff_word0_valid_n;
-			ff_word1_data	<= ff_word1_data_n;
-			ff_word1_valid	<= ff_word1_valid_n;
+			// pop を先に適用し、同サイクル push があれば反映する
+			if( w_word_pop ) begin
+				if( ff_word1_valid ) begin
+					ff_word0_data	<= ff_word1_data;
+					ff_word0_valid	<= 1'b1;
+					ff_word1_valid	<= 1'b0;
+					if( w_word_push ) begin
+						ff_word1_data	<= w_sram_dout;
+						ff_word1_valid	<= 1'b1;
+					end
+				end
+				else begin
+					if( w_word_push ) begin
+						ff_word0_data	<= w_sram_dout;
+						ff_word0_valid	<= 1'b1;
+					end
+					else begin
+						ff_word0_valid	<= 1'b0;
+					end
+				end
+			end
+			else if( w_word_push ) begin
+				if( ~ff_word0_valid ) begin
+					ff_word0_data	<= w_sram_dout;
+					ff_word0_valid	<= 1'b1;
+				end
+				else if( ~ff_word1_valid ) begin
+					ff_word1_data	<= w_sram_dout;
+					ff_word1_valid	<= 1'b1;
+				end
+			end
 		end
 	end
 
@@ -332,37 +321,6 @@ module display_preload_buffer (
 	wire			w_out_pop		= out_ready & ff_out0_valid;
 	wire			w_out_can_push	= ~ff_out1_valid | w_out_pop;
 	wire			w_out_push		= w_split_can_emit & w_out_can_push;
-
-	always @* begin
-		ff_out0_data_n	= ff_out0_data;
-		ff_out0_valid_n	= ff_out0_valid;
-		ff_out1_data_n	= ff_out1_data;
-		ff_out1_valid_n	= ff_out1_valid;
-
-		// pop を先に適用
-		if( w_out_pop ) begin
-			if( ff_out1_valid ) begin
-				ff_out0_data_n	= ff_out1_data;
-				ff_out0_valid_n	= 1'b1;
-				ff_out1_valid_n	= 1'b0;
-			end
-			else begin
-				ff_out0_valid_n	= 1'b0;
-			end
-		end
-
-		// push を後に適用
-		if( w_out_push ) begin
-			if( ~ff_out0_valid_n ) begin
-				ff_out0_data_n	= w_split_emit_data;
-				ff_out0_valid_n	= 1'b1;
-			end
-			else if( ~ff_out1_valid_n ) begin
-				ff_out1_data_n	= w_split_emit_data;
-				ff_out1_valid_n	= 1'b1;
-			end
-		end
-	end
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -394,10 +352,37 @@ module display_preload_buffer (
 				end
 			end
 
-			ff_out0_data	<= ff_out0_data_n;
-			ff_out0_valid	<= ff_out0_valid_n;
-			ff_out1_data	<= ff_out1_data_n;
-			ff_out1_valid	<= ff_out1_valid_n;
+			// pop を先に適用し、同サイクル push があれば反映する
+			if( w_out_pop ) begin
+				if( ff_out1_valid ) begin
+					ff_out0_data	<= ff_out1_data;
+					ff_out0_valid	<= 1'b1;
+					ff_out1_valid	<= 1'b0;
+					if( w_out_push ) begin
+						ff_out1_data	<= w_split_emit_data;
+						ff_out1_valid	<= 1'b1;
+					end
+				end
+				else begin
+					if( w_out_push ) begin
+						ff_out0_data	<= w_split_emit_data;
+						ff_out0_valid	<= 1'b1;
+					end
+					else begin
+						ff_out0_valid	<= 1'b0;
+					end
+				end
+			end
+			else if( w_out_push ) begin
+				if( ~ff_out0_valid ) begin
+					ff_out0_data	<= w_split_emit_data;
+					ff_out0_valid	<= 1'b1;
+				end
+				else if( ~ff_out1_valid ) begin
+					ff_out1_data	<= w_split_emit_data;
+					ff_out1_valid	<= 1'b1;
+				end
+			end
 		end
 	end
 

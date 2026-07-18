@@ -207,6 +207,54 @@ pico_status_led_ws2812_pio_h/fast:
 	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2_common/pico_status_led/CMakeFiles/pico_status_led_ws2812_pio_h.dir/build.make pico-sdk/src/rp2_common/pico_status_led/CMakeFiles/pico_status_led_ws2812_pio_h.dir/build
 .PHONY : pico_status_led_ws2812_pio_h/fast
 
+display_controller.o: display_controller.c.o
+.PHONY : display_controller.o
+
+# target to build an object file
+display_controller.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/display_controller.c.o
+.PHONY : display_controller.c.o
+
+display_controller.i: display_controller.c.i
+.PHONY : display_controller.i
+
+# target to preprocess a source file
+display_controller.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/display_controller.c.i
+.PHONY : display_controller.c.i
+
+display_controller.s: display_controller.c.s
+.PHONY : display_controller.s
+
+# target to generate assembly for a file
+display_controller.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/display_controller.c.s
+.PHONY : display_controller.c.s
+
+fpga_io.o: fpga_io.c.o
+.PHONY : fpga_io.o
+
+# target to build an object file
+fpga_io.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/fpga_io.c.o
+.PHONY : fpga_io.c.o
+
+fpga_io.i: fpga_io.c.i
+.PHONY : fpga_io.i
+
+# target to preprocess a source file
+fpga_io.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/fpga_io.c.i
+.PHONY : fpga_io.c.i
+
+fpga_io.s: fpga_io.c.s
+.PHONY : fpga_io.s
+
+# target to generate assembly for a file
+fpga_io.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/fpga_io.c.s
+.PHONY : fpga_io.c.s
+
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.o
 
@@ -2102,6 +2150,12 @@ help:
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
 	@echo "... simple_photo_frame"
+	@echo "... display_controller.o"
+	@echo "... display_controller.i"
+	@echo "... display_controller.s"
+	@echo "... fpga_io.o"
+	@echo "... fpga_io.i"
+	@echo "... fpga_io.s"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.o"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.i"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.s"

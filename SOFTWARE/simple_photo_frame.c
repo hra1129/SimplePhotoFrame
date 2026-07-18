@@ -22,18 +22,28 @@
 // -----------------------------------------------------------------------------
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "pico/stdlib.h"
 #include "sdcard.h"
+#include "display_controller.h"
 
 int main() {
+	int r, g, b;
+
 	stdio_init_all();
+	fpga_io_init();
 	sleep_ms(2000);
 
 	while (1) {
-		if( sdcard_init_and_mount() ) {
-			break;
-		}
-		printf("SD card mount failed.\n");
+//		if( sdcard_init_and_mount() ) {
+//			break;
+//		}
+//		printf("SD card mount failed.\n");
+		r = rand() & 31;
+		g = rand() & 63;
+		b = rand() & 31;
+		printf( "Fill color: R=%d, G=%d, B=%d\n", r, g, b );
+		display_set_fill_color( DISPLAY_RGB( r, g, b ) );
 		sleep_ms(1000);
 	}
 
