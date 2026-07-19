@@ -1,6 +1,7 @@
 GowinSynthesis start
 Running parser ...
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\BusArbiter\bus_arbiter.v'
+Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\BusSelector\bus_selector.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_line.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_tag.v'
@@ -23,9 +24,8 @@ Undeclared symbol 'w_sdram_rdata', assumed default net type 'wire'("C:\Users\hra
 Undeclared symbol 'w_sdram_rdata_valid', assumed default net type 'wire'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.v":439)
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\VramAccessor\vram_accessor.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\gowin_rpll\gowin_rpll.v'
-Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\spi_rom\ip_spi_rom.v'
-Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\BusSelector\bus_selector.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\gowin_rpll2\gowin_rpll2.v'
+Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\spi_rom\ip_spi_rom.v'
 Compiling module 'simple_photo_frame'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.v":6)
 Compiling module 'Gowin_rPLL'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\gowin_rpll\gowin_rpll.v":11)
 Compiling module 'Gowin_rPLL2'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\gowin_rpll2\gowin_rpll2.v":11)

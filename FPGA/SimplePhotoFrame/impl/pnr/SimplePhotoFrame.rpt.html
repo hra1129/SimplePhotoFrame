@@ -83,7 +83,7 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Created Time</td>
-<td>Sat Jul 18 18:44:25 2026
+<td>Sat Jul 18 23:08:43 2026
 </td>
 </tr>
 <tr>
@@ -97,24 +97,24 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <tr>
 <td class="label">Place & Route Process</td>
 <td>Running placement:
-   Placement Phase 0: CPU time = 0h 0m 0.529s, Elapsed time = 0h 0m 0.529s
-   Placement Phase 1: CPU time = 0h 0m 0.266s, Elapsed time = 0h 0m 0.266s
-   Placement Phase 2: CPU time = 0h 0m 0.909s, Elapsed time = 0h 0m 0.909s
+   Placement Phase 0: CPU time = 0h 0m 0.561s, Elapsed time = 0h 0m 0.561s
+   Placement Phase 1: CPU time = 0h 0m 0.293s, Elapsed time = 0h 0m 0.293s
+   Placement Phase 2: CPU time = 0h 0m 0.927s, Elapsed time = 0h 0m 0.927s
    Placement Phase 3: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s
    Total Placement: CPU time = 0h 0m 3s, Elapsed time = 0h 0m 3s
 Running routing:
    Routing Phase 0: CPU time = 0h 0m 0.004s, Elapsed time = 0h 0m 0.004s
-   Routing Phase 1: CPU time = 0h 0m 0.175s, Elapsed time = 0h 0m 0.175s
-   Routing Phase 2: CPU time = 0h 0m 6s, Elapsed time = 0h 0m 6s
+   Routing Phase 1: CPU time = 0h 0m 0.208s, Elapsed time = 0h 0m 0.208s
+   Routing Phase 2: CPU time = 0h 0m 9s, Elapsed time = 0h 0m 9s
    Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
-   Total Routing: CPU time = 0h 0m 6s, Elapsed time = 0h 0m 6s
+   Total Routing: CPU time = 0h 0m 9s, Elapsed time = 0h 0m 9s
 Generate output files:
    CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
 </td>
 </tr>
 <tr>
 <td class="label">Total Time and Memory Usage</td>
-<td>CPU time = 0h 0m 11s, Elapsed time = 0h 0m 11s, Peak memory usage = 686MB</td>
+<td>CPU time = 0h 0m 14s, Elapsed time = 0h 0m 14s, Peak memory usage = 502MB</td>
 </tr>
 </table>
 <br/>
@@ -129,12 +129,12 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">Logic</td>
-<td>4055/20736</td>
+<td>4071/20736</td>
 <td>20%</td>
 </tr>
 <tr>
 <td class="label">&nbsp &nbsp --LUT,ALU,ROM16</td>
-<td>4055(3529 LUT, 526 ALU, 0 ROM16)</td>
+<td>4071(3545 LUT, 526 ALU, 0 ROM16)</td>
 <td>-</td>
 </tr>
 <tr>
@@ -169,7 +169,7 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">CLS</td>
-<td>3169/10368</td>
+<td>3119/10368</td>
 <td>31%</td>
 </tr>
 <tr>
@@ -256,8 +256,8 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">PRIMARY</td>
-<td>4/8</td>
-<td>50%</td>
+<td>5/8</td>
+<td>63%</td>
 </tr>
 <tr>
 <td class="label">LW</td>
@@ -296,15 +296,25 @@ Generate output files:
 <tr>
 <td class="label">O_sdram_clk_d</td>
 <td>PRIMARY</td>
-<td> TR TL</td>
+<td> TR TL BL</td>
 </tr>
 <tr>
 <td class="label">clk216m</td>
 <td>PRIMARY</td>
-<td> TR TL</td>
+<td> TR TL BR</td>
+</tr>
+<tr>
+<td class="label">u_graphic_processor2/n3979_4</td>
+<td>PRIMARY</td>
+<td> TR BR</td>
 </tr>
 <tr>
 <td class="label">ff_reset_cache</td>
+<td>LW</td>
+<td> -</td>
+</tr>
+<tr>
+<td class="label">ff_reset_vram</td>
 <td>LW</td>
 <td> -</td>
 </tr>
@@ -334,12 +344,7 @@ Generate output files:
 <td> -</td>
 </tr>
 <tr>
-<td class="label">u_graphic_processor1/n5190_3</td>
-<td>LW</td>
-<td> -</td>
-</tr>
-<tr>
-<td class="label">u_graphic_processor2/n3979_4</td>
+<td class="label">u_graphic_processor1/n2570_4</td>
 <td>LW</td>
 <td> -</td>
 </tr>

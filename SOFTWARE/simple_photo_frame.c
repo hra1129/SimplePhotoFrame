@@ -39,11 +39,19 @@ int main() {
 //			break;
 //		}
 //		printf("SD card mount failed.\n");
+		display_enable( false );
 		r = rand() & 31;
 		g = rand() & 63;
 		b = rand() & 31;
 		printf( "Fill color: R=%d, G=%d, B=%d\n", r, g, b );
 		display_set_fill_color( DISPLAY_RGB( r, g, b ) );
+		sleep_ms(1000);
+		printf( "VRAM Image\n" );
+		display_enable( true );
+		r = rand() & 31;
+		g = rand() & 63;
+		b = rand() & 31;
+		graphic1_fill_rectangle( rand() % 800, rand() % 480, rand() % 100, rand() % 100, DISPLAY_RGB( r, g, b ), C_ROP_PUT );
 		sleep_ms(1000);
 	}
 

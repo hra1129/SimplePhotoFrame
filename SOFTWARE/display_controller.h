@@ -28,6 +28,17 @@
 
 #define DISPLAY_RGB( r, g, b ) (((b) & 0x1F) | (((g) & 0x1F) << 5) | (((r) & 0x1F) << 11))
 
+#define C_ROP_PUT  0x0000
+#define C_ROP_OR   0x0001
+#define C_ROP_AND  0x0002
+#define C_ROP_XOR  0x0003
+#define C_ROP_ADD  0x0004
+#define C_ROP_SUB  0x0005
+#define C_ROP_MIX  0x0006
+#define C_ROP_MIN  0x0007
+#define C_ROP_MAX  0x0008
+
+
 // -----------------------------------------------------------------------------
 //	display_enable
 //	input:
@@ -49,5 +60,20 @@ void display_enable( bool enable );
 //		bitmap非表示の場合に表示される色を指定する
 // -----------------------------------------------------------------------------
 void display_set_fill_color( uint16_t color );
+
+// -----------------------------------------------------------------------------
+//	graphic1_fill_rectangle
+//	input:
+//		sx, sy: top-left coordinates
+//		width, height: dimensions of the rectangle
+//		color: 16bit RGB color value
+//		rop: raster operation code
+//	output:
+//		none
+//	description:
+//		指定された矩形を指定された色で塗りつぶす
+// -----------------------------------------------------------------------------
+void graphic1_fill_rectangle( int sx, int sy, int width, int height, uint16_t color, uint16_t rop );
+
 
 #endif

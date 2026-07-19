@@ -447,7 +447,7 @@ module graphic_processor2 (
 				5'h06: reg_dwidth <= bus_wdata;
 				5'h07: reg_dheight <= bus_wdata;
 				5'h08: reg_rop <= bus_wdata;
-				5'h0A: reg_vram_address[15:1] <= bus_wdata[14:0];
+				5'h0A: reg_vram_address[15:1] <= bus_wdata[15:1];
 				5'h0B: reg_vram_address[22:16] <= bus_wdata[6:0];
 				default: begin
 					// do nothing
@@ -467,7 +467,7 @@ module graphic_processor2 (
 				5'h07:		ff_bus_rdata <= reg_dheight;
 				5'h08:		ff_bus_rdata <= reg_rop;
 				5'h09:		ff_bus_rdata <= { 15'd0, ff_busy };
-				5'h0A:		ff_bus_rdata <= { 1'b0, reg_vram_address[15:1] };
+				5'h0A:		ff_bus_rdata <= { reg_vram_address[15:1], 1'b0 };
 				5'h0B:		ff_bus_rdata <= { 9'd0, reg_vram_address[22:16] };
 				default:	ff_bus_rdata <= 16'd0;
 				endcase

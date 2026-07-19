@@ -50,3 +50,26 @@ void display_set_fill_color( uint16_t color ) {
 
 	fpga_outport( IO_DISPLAY | 0x04, color );
 }
+
+// -----------------------------------------------------------------------------
+//	graphic1_fill_rectangle
+//	input:
+//		sx, sy: top-left coordinates
+//		width, height: dimensions of the rectangle
+//		color: 16bit RGB color value
+//		rop: raster operation code
+//	output:
+//		none
+//	description:
+//		指定された矩形を指定された色で塗りつぶす
+// -----------------------------------------------------------------------------
+void graphic1_fill_rectangle( int sx, int sy, int width, int height, uint16_t color, uint16_t rop ) {
+
+	fpga_outport( IO_GRAPHIC1 | 0, sx );
+	fpga_outport( IO_GRAPHIC1 | 1, sy );
+	fpga_outport( IO_GRAPHIC1 | 2, width );
+	fpga_outport( IO_GRAPHIC1 | 3, height );
+	fpga_outport( IO_GRAPHIC1 | 4, color );
+	fpga_outport( IO_GRAPHIC1 | 5, rop );
+	fpga_outport( IO_GRAPHIC1 | 6, 1 );			// start operation
+}
