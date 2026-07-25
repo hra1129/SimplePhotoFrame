@@ -21,7 +21,7 @@
 //	in the Software.
 // -----------------------------------------------------------------------------
 //	Description:
-//		QSPI serial flash ROM controller
+//		SPI serial flash ROM controller
 // -----------------------------------------------------------------------------
 
 module ip_spi_rom(
@@ -37,7 +37,7 @@ module ip_spi_rom(
 	input	[7:0]	bus_wdata,
 	output	[7:0]	bus_rdata,
 	output			bus_rdata_en,
-	//	QSPI interface
+	//	SPI interface
 	output			srom0_cs_n,
 	output			srom1_cs_n,
 	output			srom_clk,
@@ -78,7 +78,6 @@ module ip_spi_rom(
 
 	reg		[3:0]	ff_command_mode;
 	reg		[23:0]	ff_rom_address;
-	wire	[23:0]	w_fast_read_address;
 	reg		[1:0]	ff_byte_count;
 	reg		[7:0]	ff_burst_wdata;
 	reg		[7:0]	ff_burst_count;
@@ -103,7 +102,7 @@ module ip_spi_rom(
 	reg					ff_wait_count_active;
 
 	// ---------------------------------------------------------
-	//	Inlined QSPI controller state
+	//	Inlined SPI controller state
 	// ---------------------------------------------------------
 	reg		[2:0]	ff_fifo_mode;
 	reg		[7:0]	ff_fifo_wdata;
@@ -117,30 +116,28 @@ module ip_spi_rom(
 	reg		[7:0]	ff_xfer_rdata;
 	reg				ff_xfer_rdata_en;
 	reg				ff_xfer_processing;
-	reg				ff_xfer_qspi_accepted;
+	reg				ff_xfer_spi_accepted;
 
-	localparam	[4:0]	ST_QSPI_IDLE			= 5'd0;
-	localparam	[4:0]	ST_QSPI_STD_WRITE		= 5'd1;
-	localparam	[4:0]	ST_QSPI_STD_WRITE_CLK	= 5'd2;
-	localparam	[4:0]	ST_QSPI_STD_READ		= 5'd3;
-	localparam	[4:0]	ST_QSPI_STD_READ_CLK	= 5'd4;
-	localparam	[4:0]	ST_QSPI_STD_READ_LOOP	= 5'd5;
-	localparam	[4:0]	ST_QSPI_FINISH			= 5'd6;
+	localparam	[4:0]	ST_SPI_IDLE			= 5'd0;
+	localparam	[4:0]	ST_SPI_STD_WRITE		= 5'd1;
+	localparam	[4:0]	ST_SPI_STD_WRITE_CLK	= 5'd2;
+	localparam	[4:0]	ST_SPI_STD_READ		= 5'd3;
+	localparam	[4:0]	ST_SPI_STD_READ_CLK	= 5'd4;
+	localparam	[4:0]	ST_SPI_STD_READ_LOOP	= 5'd5;
+	localparam	[4:0]	ST_SPI_FINISH			= 5'd6;
 
-	reg					ff_qspi_serial_valid0;
-	reg					ff_qspi_serial_valid1;
-	reg					ff_qspi_processing;
-	reg					ff_qspi_ce;
-	reg		[4:0]	ff_qspi_state;
-	reg		[2:0]	ff_qspi_substate;
-	reg					ff_qspi_clk;
-	reg		[7:0]	ff_qspi_data;
-	reg		[3:0]	ff_qspi_hiz;
-	reg		[3:0]	ff_qspi_sio;
-	reg		[7:0]	ff_qspi_rdata;
+	reg				ff_spi_serial_valid0;
+	reg				ff_spi_serial_valid1;
+	reg				ff_spi_processing;
+	reg				ff_spi_ce;
+	reg		[4:0]	ff_spi_state;
+	reg		[2:0]	ff_spi_substate;
+	reg				ff_spi_clk;
+	reg		[7:0]	ff_spi_data;
+	reg		[3:0]	ff_spi_hiz;
+	reg		[3:0]	ff_spi_sio;
+	reg		[7:0]	ff_spi_rdata;
 	wire	[3:0]	w_srom_sio;
-
-	assign w_fast_read_address = ff_rom_address - 24'd1;
 
 	// ---------------------------------------------------------
 	//	bus_address
@@ -225,7 +222,7 @@ module ip_spi_rom(
 		end
 		else if( !ff_bus_ready ) begin
 			ff_do_command			<= 1'b0;
-			if( w_serial_rdata_en && (ff_command_mode != CMD_READ_STATUS) && (ff_command_mode != CMD_READ_STATUS_2) ) begin
+			if( ff_finish_command && ((ff_command_mode == CMD_SINGLE_READ) || (ff_command_mode == CMD_BURST_READ) || (ff_command_mode == CMD_BURST_WRITE)) ) begin
 				ff_rom_address	<= ff_rom_address + 24'd1;
 			end
 			if( ff_finish_command && (!ff_cs_n || (ff_wait_count == 0)) ) begin
@@ -400,22 +397,22 @@ module ip_spi_rom(
 	// ---------------------------------------------------------
 	//	コマンド実行ステートマシン
 	// ---------------------------------------------------------
-	localparam	[4:0]	ST_IDLE			= 5'd0;
-	localparam	[4:0]	ST_READ_BYTE	= 5'd1;
-	localparam	[4:0]	ST_RECEIVE_BYTE	= 5'd2;
-	localparam	[4:0]	ST_WAIT			= 5'd3;
-	localparam	[4:0]	ST_WRITE_MODE	= 5'd4;
-	localparam	[4:0]	ST_WRITE_ADDR_H	= 5'd5;
-	localparam	[4:0]	ST_WRITE_ADDR_M	= 5'd6;
-	localparam	[4:0]	ST_WRITE_ADDR_L	= 5'd7;
-	localparam	[4:0]	ST_WRITE_BYTE	= 5'd8;
-	localparam	[4:0]	ST_ERASE		= 5'd9;
-	localparam	[4:0]	ST_FINISH		= 5'd10;
-	localparam	[4:0]	ST_READ_MODE	= 5'd11;
-	localparam	[4:0]	ST_READ_ADDR_H	= 5'd12;
-	localparam	[4:0]	ST_READ_ADDR_M	= 5'd13;
-	localparam	[4:0]	ST_READ_ADDR_L	= 5'd14;
-	localparam	[4:0]	ST_READ_DUMMY	= 5'd15;
+	localparam	[4:0]	ST_IDLE					= 5'd0;
+	localparam	[4:0]	ST_READ_BYTE			= 5'd1;
+	localparam	[4:0]	ST_RECEIVE_BYTE			= 5'd2;
+	localparam	[4:0]	ST_WAIT					= 5'd3;
+	localparam	[4:0]	ST_WRITE_MODE			= 5'd4;
+	localparam	[4:0]	ST_WRITE_ADDR_H			= 5'd5;
+	localparam	[4:0]	ST_WRITE_ADDR_M			= 5'd6;
+	localparam	[4:0]	ST_WRITE_ADDR_L			= 5'd7;
+	localparam	[4:0]	ST_WRITE_BYTE			= 5'd8;
+	localparam	[4:0]	ST_ERASE				= 5'd9;
+	localparam	[4:0]	ST_FINISH				= 5'd10;
+	localparam	[4:0]	ST_READ_MODE			= 5'd11;
+	localparam	[4:0]	ST_READ_ADDR_H			= 5'd12;
+	localparam	[4:0]	ST_READ_ADDR_M			= 5'd13;
+	localparam	[4:0]	ST_READ_ADDR_L			= 5'd14;
+	localparam	[4:0]	ST_READ_DUMMY			= 5'd15;
 	localparam	[4:0]	ST_BLOCK_ERASE_ADDR_H	= 5'd16;
 	localparam	[4:0]	ST_BLOCK_ERASE_ADDR_M	= 5'd17;
 	localparam	[4:0]	ST_BLOCK_ERASE_ADDR_L	= 5'd18;
@@ -425,7 +422,7 @@ module ip_spi_rom(
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_wait_count	<= 3'd0;
+			ff_wait_count	<= 0;
 		end
 		else if( ff_cs_n == 1'b0 ) begin
 			if( ff_command_mode == CMD_BURST_READ || ff_command_mode == CMD_READ_STATUS || ff_command_mode == CMD_READ_STATUS_2 ) begin
@@ -436,7 +433,7 @@ module ip_spi_rom(
 			end
 		end
 		else if( ff_wait_count_active && ff_wait_count != 0 ) begin
-			ff_wait_count	<= ff_wait_count - 3'd1;
+			ff_wait_count	<= ff_wait_count - 1;
 		end
 	end
 
@@ -493,21 +490,21 @@ module ip_spi_rom(
 					ST_READ_MODE: begin
 						ff_command_state	<= ST_READ_ADDR_H;
 						ff_serial_mode		<= MODE_STD_WRITE;
-						ff_serial_wdata		<= w_fast_read_address[23:16];
+						ff_serial_wdata		<= ff_rom_address[23:16];
 						ff_serial_write		<= 1'b1;
 						ff_serial_valid		<= 1'b1;
 					end
 					ST_READ_ADDR_H: begin
 						ff_command_state	<= ST_READ_ADDR_M;
 						ff_serial_mode		<= MODE_STD_WRITE;
-						ff_serial_wdata		<= w_fast_read_address[15:8];
+						ff_serial_wdata		<= ff_rom_address[15:8];
 						ff_serial_write		<= 1'b1;
 						ff_serial_valid		<= 1'b1;
 					end
 					ST_READ_ADDR_M: begin
 						ff_command_state	<= ST_READ_ADDR_L;
 						ff_serial_mode		<= MODE_STD_WRITE;
-						ff_serial_wdata		<= w_fast_read_address[7:0];
+						ff_serial_wdata		<= ff_rom_address[7:0];
 						ff_serial_write		<= 1'b1;
 						ff_serial_valid		<= 1'b1;
 					end
@@ -519,11 +516,11 @@ module ip_spi_rom(
 						ff_serial_valid		<= 1'b1;
 					end
 					ST_READ_DUMMY: begin
+						//	DUMMY(1byte) は ST_READ_ADDR_L で既に投入済み。
+						//	ここで追加送信すると 2byte 分のダミークロックになってしまうため、
+						//	次は READ 開始待ち状態へ遷移するだけにする。
 						ff_command_state	<= ST_READ_BYTE;
-						ff_serial_mode		<= MODE_STD_WRITE;
-						ff_serial_wdata		<= 8'd0;
-						ff_serial_write		<= 1'b1;
-						ff_serial_valid		<= 1'b1;
+						ff_serial_valid		<= 1'b0;
 					end
 					ST_BLOCK_ERASE_ADDR_H: begin
 						ff_command_state	<= ST_BLOCK_ERASE_ADDR_M;
@@ -687,21 +684,21 @@ module ip_spi_rom(
 				ST_READ_MODE: begin
 					ff_command_state	<= ST_READ_ADDR_H;
 					ff_serial_mode		<= MODE_STD_WRITE;
-					ff_serial_wdata		<= w_fast_read_address[23:16];
+					ff_serial_wdata		<= ff_rom_address[23:16];
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
 				ST_READ_ADDR_H: begin
 					ff_command_state	<= ST_READ_ADDR_M;
 					ff_serial_mode		<= MODE_STD_WRITE;
-					ff_serial_wdata		<= w_fast_read_address[15:8];
+					ff_serial_wdata		<= ff_rom_address[15:8];
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
 				ST_READ_ADDR_M: begin
 					ff_command_state	<= ST_READ_ADDR_L;
 					ff_serial_mode		<= MODE_STD_WRITE;
-					ff_serial_wdata		<= w_fast_read_address[7:0];
+					ff_serial_wdata		<= ff_rom_address[7:0];
 					ff_serial_write		<= 1'b1;
 					ff_serial_valid		<= 1'b1;
 				end
@@ -811,7 +808,7 @@ module ip_spi_rom(
 	end
 
 	// ---------------------------------------------------------
-	//	QSPI communication request queue
+	//	SPI communication request queue
 	// ---------------------------------------------------------
 	always @(posedge clk) begin
 		if( reset ) begin
@@ -851,7 +848,7 @@ module ip_spi_rom(
 			end
 		end
 		else begin
-			if( ff_xfer_qspi_accepted ) begin
+			if( ff_xfer_spi_accepted ) begin
 				ff_xfer_valid <= 1'b0;
 			end
 		end
@@ -867,7 +864,7 @@ module ip_spi_rom(
 			end
 		end
 		else begin
-			if( !ff_xfer_valid && !ff_xfer_qspi_accepted ) begin
+			if( !ff_xfer_valid && !ff_xfer_spi_accepted ) begin
 				ff_xfer_ready <= 1'b1;
 			end
 		end
@@ -876,11 +873,11 @@ module ip_spi_rom(
 	always @(posedge clk) begin
 		if( reset ) begin
 			ff_xfer_processing		<= 1'b0;
-			ff_xfer_qspi_accepted	<= 1'b0;
+			ff_xfer_spi_accepted	<= 1'b0;
 		end
 		else begin
-			ff_xfer_processing		<= ff_qspi_processing;
-			ff_xfer_qspi_accepted	<= ff_xfer_processing;
+			ff_xfer_processing		<= ff_spi_processing;
+			ff_xfer_spi_accepted	<= ff_xfer_processing;
 		end
 	end
 
@@ -889,8 +886,8 @@ module ip_spi_rom(
 			ff_xfer_rdata		<= 8'd0;
 			ff_xfer_rdata_en	<= 1'b0;
 		end
-		else if( !ff_xfer_processing && ff_xfer_qspi_accepted ) begin
-			ff_xfer_rdata		<= ff_qspi_rdata;
+		else if( !ff_xfer_processing && ff_xfer_spi_accepted ) begin
+			ff_xfer_rdata		<= ff_spi_rdata;
 			ff_xfer_rdata_en	<= ~ff_xfer_write;
 		end
 		else begin
@@ -907,128 +904,128 @@ module ip_spi_rom(
 	// ---------------------------------------------------------
 	always @( posedge clk_serial ) begin
 		if( reset ) begin
-			ff_qspi_serial_valid0 <= 1'b0;
-			ff_qspi_serial_valid1 <= 1'b0;
+			ff_spi_serial_valid0 <= 1'b0;
+			ff_spi_serial_valid1 <= 1'b0;
 		end
 		else begin
-			ff_qspi_serial_valid0 <= ff_xfer_valid;
-			ff_qspi_serial_valid1 <= ff_qspi_serial_valid0;
+			ff_spi_serial_valid0 <= ff_xfer_valid;
+			ff_spi_serial_valid1 <= ff_spi_serial_valid0;
 		end
 	end
 
 	always @( posedge clk_serial ) begin
 		if( reset ) begin
-			ff_qspi_processing <= 1'b0;
+			ff_spi_processing <= 1'b0;
 		end
-		else if( !ff_qspi_processing ) begin
-			if( ff_qspi_serial_valid1 ) begin
-				ff_qspi_processing <= 1'b1;
+		else if( !ff_spi_processing ) begin
+			if( ff_spi_serial_valid1 ) begin
+				ff_spi_processing <= 1'b1;
 			end
 		end
 		else begin
-			if( ff_qspi_state == ST_QSPI_FINISH ) begin
-				ff_qspi_processing <= 1'b0;
+			if( ff_spi_state == ST_SPI_FINISH ) begin
+				ff_spi_processing <= 1'b0;
 			end
 		end
 	end
 
-	//	Advance QSPI transfer states every other clk_serial edge.
+	//	Advance SPI transfer states every other clk_serial edge.
 	//	This makes srom_clk frequency one quarter of clk_serial while keeping
 	//	the existing high/low state sequencing unchanged.
 	always @( posedge clk_serial ) begin
 		if( reset ) begin
-			ff_qspi_ce <= 1'b0;
+			ff_spi_ce <= 1'b0;
 		end
-		else if( ff_qspi_processing ) begin
-			ff_qspi_ce <= ~ff_qspi_ce;
+		else if( ff_spi_processing ) begin
+			ff_spi_ce <= ~ff_spi_ce;
 		end
 		else begin
-			ff_qspi_ce <= 1'b0;
+			ff_spi_ce <= 1'b0;
 		end
 	end
 
 	// ---------------------------------------------------------
-	//	QSPI transfer state machine
+	//	SPI transfer state machine
 	// ---------------------------------------------------------
 	always @( posedge clk_serial ) begin
 		if( reset ) begin
-			ff_qspi_state		<= ST_QSPI_IDLE;
-			ff_qspi_substate	<= 3'd0;
-			ff_qspi_clk			<= 1'b0;
-			ff_qspi_data		<= 8'd0;
-			ff_qspi_hiz			<= 4'b1111;
-			ff_qspi_sio			<= 4'b0000;
+			ff_spi_state		<= ST_SPI_IDLE;
+			ff_spi_substate		<= 3'd0;
+			ff_spi_clk			<= 1'b0;
+			ff_spi_data			<= 8'd0;
+			ff_spi_hiz			<= 4'b1111;
+			ff_spi_sio			<= 4'b0000;
 		end
-		else if( ff_qspi_processing ) begin
-			if( ff_qspi_ce ) begin
-				case( ff_qspi_state )
-				ST_QSPI_IDLE: begin
+		else if( ff_spi_processing ) begin
+			if( ff_spi_ce ) begin
+				case( ff_spi_state )
+				ST_SPI_IDLE: begin
 					case( ff_xfer_mode )
 						MODE_STD_WRITE: begin
-							ff_qspi_state		<= ST_QSPI_STD_WRITE;
-							ff_qspi_clk			<= 1'b0;
-							ff_qspi_data		<= ff_xfer_wdata;
-							ff_qspi_substate	<= 3'd7;
+							ff_spi_state	<= ST_SPI_STD_WRITE;
+							ff_spi_clk		<= 1'b0;
+							ff_spi_data		<= ff_xfer_wdata;
+							ff_spi_substate	<= 3'd7;
 						end
 						MODE_STD_READ: begin
-							ff_qspi_state		<= ST_QSPI_STD_READ;
-							ff_qspi_clk			<= 1'b0;
-							ff_qspi_substate	<= 3'd7;
+							ff_spi_state	<= ST_SPI_STD_READ;
+							ff_spi_clk		<= 1'b0;
+							ff_spi_substate	<= 3'd7;
 						end
 						default: begin
-							ff_qspi_state	<= ST_QSPI_FINISH;
-							ff_qspi_clk		<= 1'b0;
+							ff_spi_state	<= ST_SPI_FINISH;
+							ff_spi_clk		<= 1'b0;
 						end
 					endcase
 				end
-				ST_QSPI_STD_WRITE: begin
-					ff_qspi_clk		<= 1'b0;
-					ff_qspi_sio[0]	<= ff_qspi_data[ff_qspi_substate];
-					ff_qspi_sio[2]	<= 1'b1;
-					ff_qspi_sio[3]	<= 1'b1;
-					ff_qspi_hiz		<= 4'b0010;
-					ff_qspi_state	<= ST_QSPI_STD_WRITE_CLK;
+				ST_SPI_STD_WRITE: begin
+					ff_spi_clk		<= 1'b0;
+					ff_spi_sio[0]	<= ff_spi_data[ff_spi_substate];
+					ff_spi_sio[2]	<= 1'b1;
+					ff_spi_sio[3]	<= 1'b1;
+					ff_spi_hiz		<= 4'b0010;
+					ff_spi_state	<= ST_SPI_STD_WRITE_CLK;
 				end
-				ST_QSPI_STD_WRITE_CLK: begin
-					ff_qspi_clk		<= 1'b1;
-					if( ff_qspi_substate != 3'd0 ) begin
-						ff_qspi_substate	<= ff_qspi_substate - 3'd1;
-						ff_qspi_state		<= ST_QSPI_STD_WRITE;
+				ST_SPI_STD_WRITE_CLK: begin
+					ff_spi_clk		<= 1'b1;
+					if( ff_spi_substate != 3'd0 ) begin
+						ff_spi_substate	<= ff_spi_substate - 3'd1;
+						ff_spi_state	<= ST_SPI_STD_WRITE;
 					end
 					else begin
-						ff_qspi_state		<= ST_QSPI_FINISH;
+						ff_spi_state	<= ST_SPI_FINISH;
 					end
 				end
-				ST_QSPI_STD_READ: begin
-					ff_qspi_clk		<= 1'b0;
-					ff_qspi_sio[2]	<= 1'b1;
-					ff_qspi_sio[3]	<= 1'b1;
-					ff_qspi_hiz		<= 4'b0011;
-					ff_qspi_state	<= ST_QSPI_STD_READ_CLK;
+				ST_SPI_STD_READ: begin
+					ff_spi_clk		<= 1'b0;
+					ff_spi_sio[2]	<= 1'b1;
+					ff_spi_sio[3]	<= 1'b1;
+					ff_spi_hiz		<= 4'b0011;
+					ff_spi_state	<= ST_SPI_STD_READ_CLK;
 				end
-				ST_QSPI_STD_READ_CLK: begin
-					ff_qspi_clk		<= 1'b1;
-					ff_qspi_state	<= ST_QSPI_STD_READ_LOOP;
+				ST_SPI_STD_READ_CLK: begin
+					ff_spi_clk		<= 1'b1;
+					ff_spi_state	<= ST_SPI_STD_READ_LOOP;
 				end
-				ST_QSPI_STD_READ_LOOP: begin
-					ff_qspi_clk		<= 1'b0;
-					ff_qspi_data[ff_qspi_substate] <= w_srom_sio[1];
-					ff_qspi_sio[2]	<= 1'b1;
-					ff_qspi_sio[3]	<= 1'b1;
-					ff_qspi_hiz		<= 4'b0011;
-					if( ff_qspi_substate != 3'd0 ) begin
-						ff_qspi_substate	<= ff_qspi_substate - 3'd1;
-						ff_qspi_state		<= ST_QSPI_STD_READ_CLK;
+				ST_SPI_STD_READ_LOOP: begin
+					ff_spi_clk		<= 1'b0;
+					ff_spi_data[ff_spi_substate] <= w_srom_sio[1];
+					ff_spi_sio[2]	<= 1'b1;
+					ff_spi_sio[3]	<= 1'b1;
+					ff_spi_hiz		<= 4'b0011;
+					if( ff_spi_substate != 3'd0 ) begin
+						ff_spi_substate	<= ff_spi_substate - 3'd1;
+						ff_spi_state	<= ST_SPI_STD_READ_CLK;
 					end
 					else begin
-						ff_qspi_state	<= ST_QSPI_FINISH;
+						ff_spi_state	<= ST_SPI_FINISH;
 					end
 				end
-				ST_QSPI_FINISH: begin
-					ff_qspi_clk		<= 1'b0;
-					ff_qspi_sio		<= 4'b0000;
-					ff_qspi_hiz		<= 4'b1111;
-					ff_qspi_state	<= ST_QSPI_IDLE;
+				ST_SPI_FINISH: begin
+					ff_spi_clk		<= 1'b0;
+					ff_spi_sio		<= 4'b0000;
+					ff_spi_hiz		<= 4'b1111;
+					ff_spi_state	<= ST_SPI_IDLE;
 				end
 				default: begin
 				end
@@ -1036,19 +1033,19 @@ module ip_spi_rom(
 			end
 		end
 		else begin
-			ff_qspi_state		<= ST_QSPI_IDLE;
-			ff_qspi_substate	<= 3'd0;
-			ff_qspi_clk			<= 1'b0;
+			ff_spi_state		<= ST_SPI_IDLE;
+			ff_spi_substate		<= 3'd0;
+			ff_spi_clk			<= 1'b0;
 		end
 	end
 
 	always @( posedge clk_serial ) begin
 		if( reset ) begin
-			ff_qspi_rdata	<= 8'd0;
+			ff_spi_rdata	<= 8'd0;
 		end
-		else if( ff_qspi_processing ) begin
-			if( ff_qspi_state == ST_QSPI_FINISH ) begin
-				ff_qspi_rdata	<= ff_qspi_data;
+		else if( ff_spi_processing ) begin
+			if( ff_spi_state == ST_SPI_FINISH ) begin
+				ff_spi_rdata	<= ff_spi_data;
 			end
 		end
 	end
@@ -1057,8 +1054,8 @@ module ip_spi_rom(
 	assign w_srom_sio[2]	= 1'b1;
 	assign w_srom_sio[1]	= srom_do;
 	assign w_srom_sio[0]	= srom_di;
-	assign srom_clk			= ff_qspi_clk;
-	assign srom_di			= ff_qspi_hiz[0] ? 1'bz : ff_qspi_sio[0];
+	assign srom_clk			= ff_spi_clk;
+	assign srom_di			= ff_spi_hiz[0] ? 1'bz : ff_spi_sio[0];
 	assign srom_do			= 1'bz;
 	assign srom_wp_n		= 1'b1;
 	assign srom_hold_n		= 1'b1;
