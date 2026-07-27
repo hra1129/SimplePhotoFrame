@@ -26,9 +26,10 @@
 #include "pico/stdlib.h"
 #include "sdcard.h"
 #include "display_controller.h"
+#include "vram_accessor.h"
 
 int main() {
-	int r, g, b;
+	int r, g, b, x, y;
 
 	stdio_init_all();
 	fpga_io_init();
@@ -52,6 +53,17 @@ int main() {
 		g = rand() & 63;
 		b = rand() & 31;
 		graphic1_fill_rectangle( rand() % 800, rand() % 480, rand() % 100, rand() % 100, DISPLAY_RGB( r, g, b ), C_ROP_PUT );
+		sleep_ms(1000);
+
+		for( y = 0; y < 480; y++ ) {
+			for( x = 0; x < 800; x++ ) {
+				printf( "(%d,%d)\n", x, y );
+				r = rand() & 31;
+				g = rand() & 63;
+				b = rand() & 31;
+				vram_write( (y * 800) + x, DISPLAY_RGB( r, g, b ) );
+			}
+		}
 		sleep_ms(1000);
 	}
 

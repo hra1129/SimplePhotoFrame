@@ -2,6 +2,11 @@
 
 module tb;
 	localparam integer CLK27M_HALF_PERIOD_NS = 19;
+	localparam [7:0] IO_DISPLAY = (0 << 5);
+	localparam [7:0] IO_VRAM = (6 << 5);
+	localparam [7:0] IO_VRAM_ADDRESS_L = 8'h00;
+	localparam [7:0] IO_VRAM_ADDRESS_H = 8'h01;
+	localparam [7:0] IO_VRAM_DATA = 8'h02;
 
 	reg			clk27m;
 	reg			fpga_spi_cs_n;
@@ -125,6 +130,40 @@ module tb;
 		end
 	endtask
 
+	task automatic spi_write16;
+		input [7:0] address;
+		input [15:0] data;
+		begin
+			fpga_spi_cs_n = 1'b1;
+			fpga_spi_sck = 1'b0;
+			#100;
+			fpga_spi_cs_n = 1'b0;
+			#100;
+			spi_send_byte(8'h01);
+			spi_send_byte(address);
+			spi_send_byte(data[7:0]);
+			spi_send_byte(data[15:8]);
+			#100;
+			fpga_spi_cs_n = 1'b1;
+			#100;
+		end
+	endtask
+
+	task automatic display_enable(
+		input bit enable
+	);
+		spi_write16(IO_DISPLAY | 8'h02, enable ? 16'h0001 : 16'h0000);
+	endtask
+
+	task automatic vram_write(
+		input [31:0] address,
+		input [15:0] data
+	);
+		spi_write16(IO_VRAM | IO_VRAM_ADDRESS_L, address[15:0]);
+		spi_write16(IO_VRAM | IO_VRAM_ADDRESS_H, {9'h000, address[22:16]});
+		spi_write16(IO_VRAM | IO_VRAM_DATA, data);
+	endtask
+
 	initial begin
 		clk27m = 1'b0;
 		fpga_spi_cs_n = 1'b1;
@@ -171,7 +210,16 @@ module tb;
 	end
 
 	initial begin
-		repeat( 1000 * 525 * 10 ) @( posedge clk27m );
+		repeat( 100 ) @( posedge clk27m );
+
+		//	Display Controller enable
+		display_enable( 1'b1 );
+
+		//	random write
+		vram_write( 0, 16'hABCD );
+		vram_write( 1, 16'hBCDE );
+		vram_write( 2, 16'hDEF0 );
+		vram_write( 3, 16'hEF01 );
 
 		$display("[TB][TIMEOUT] Simulation timeout");
 		$stop;

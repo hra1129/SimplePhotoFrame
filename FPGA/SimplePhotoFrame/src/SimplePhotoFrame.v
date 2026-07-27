@@ -142,9 +142,14 @@ module simple_photo_frame (
 	wire	[3:0]	w_sdram_cache_wdata_mask;
 	wire			w_sdram_write;
 	wire			w_sdram_refresh;
+	wire	[22:5]	w_sdram_address;
+	wire			w_sdram_address_valid;
+	wire			w_sdram_address_ready;
 	wire			w_sdram_wdata_valid;
 	wire	[3:0]	w_sdram_wdata_mask;
 	wire	[31:0]	w_sdram_wdata;
+	wire	[31:0]	w_sdram_rdata;
+	wire			w_sdram_rdata_valid;
 	wire			w_srom0_cs_n;
 	wire			w_srom1_cs_n;
 	wire			w_srom_clk;

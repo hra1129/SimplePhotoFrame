@@ -24,5 +24,18 @@ module Gowin_rPLL (
 
 	assign clkout	= r_clkout;
 	assign clkoutp	= r_clkoutp;
-	assign lock		= 1'b1;
+endmodule
+
+module Gowin_rPLL2 (
+	output			clkout,
+	input			clkin
+);
+	reg		r_clkout	= 1'b0;
+
+	//	132.00000MHz
+	always #(1_000_000_000.0 / 216_000_000.0 / 2.0) begin
+		r_clkout	= ~r_clkout;
+	end
+
+	assign clkout	= r_clkout;
 endmodule

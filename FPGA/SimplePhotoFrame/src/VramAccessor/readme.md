@@ -16,7 +16,7 @@ VRAM (SDRAM) への読み書きを行うモジュール
 # レジスタ
 |アドレス|名前|読み書き|説明|
 |---|---|---|---|
-|0x00|VRAM_ADDRESS_L|RW|VRAM アドレス[15:1] |
+|0x00|VRAM_ADDRESS_L|RW|VRAM アドレス[15:1], 16bitデータのうち 上位15bit のみ有効。最下位 1bit は read すると 0 |
 |0x01|VRAM_ADDRESS_H|RW|VRAM アドレス[22:16] |
 |0x02|VRAM_DATA|RW|VRAM データ|
 |0x03|FLUSH|W|1を書き込むと、書き込みデータをフラッシュする|

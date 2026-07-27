@@ -2135,6 +2135,30 @@ simple_photo_frame.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.s
 .PHONY : simple_photo_frame.c.s
 
+vram_accessor.o: vram_accessor.c.o
+.PHONY : vram_accessor.o
+
+# target to build an object file
+vram_accessor.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/vram_accessor.c.o
+.PHONY : vram_accessor.c.o
+
+vram_accessor.i: vram_accessor.c.i
+.PHONY : vram_accessor.i
+
+# target to preprocess a source file
+vram_accessor.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/vram_accessor.c.i
+.PHONY : vram_accessor.c.i
+
+vram_accessor.s: vram_accessor.c.s
+.PHONY : vram_accessor.s
+
+# target to generate assembly for a file
+vram_accessor.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/vram_accessor.c.s
+.PHONY : vram_accessor.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2391,6 +2415,9 @@ help:
 	@echo "... simple_photo_frame.o"
 	@echo "... simple_photo_frame.i"
 	@echo "... simple_photo_frame.s"
+	@echo "... vram_accessor.o"
+	@echo "... vram_accessor.i"
+	@echo "... vram_accessor.s"
 .PHONY : help
 
 
