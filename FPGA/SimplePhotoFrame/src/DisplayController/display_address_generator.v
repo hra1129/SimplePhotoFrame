@@ -81,13 +81,13 @@ module display_address_generator (
 	localparam		IMG_WIDTH	= 800 / 16;	//	ピクセル数/バーストリードワード数
 	localparam		IMG_HEIGHT	= 480;
 	localparam		BURST_WORDS	= 8;
-	localparam	[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_MAX = IMG_WIDTH - 1;
-	localparam	[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_ONE = {{($clog2(IMG_WIDTH)-1){1'b0}}, 1'b1};
-	localparam	[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_MAX = IMG_HEIGHT - 1;
-	localparam	[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_ONE = {{($clog2(IMG_HEIGHT)-1){1'b0}}, 1'b1};
-	reg		[$clog2(IMG_WIDTH)-1:0]		ff_h_counter;
-	reg		[$clog2(IMG_HEIGHT)-1:0]	ff_v_counter;
-	reg		[2:0]					ff_fill_burst_remain;
+	localparam		[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_MAX = IMG_WIDTH - 1;
+	localparam		[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_ONE = {{($clog2(IMG_WIDTH)-1){1'b0}}, 1'b1};
+	localparam		[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_MAX = IMG_HEIGHT - 1;
+	localparam		[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_ONE = {{($clog2(IMG_HEIGHT)-1){1'b0}}, 1'b1};
+	reg				[$clog2(IMG_WIDTH)-1:0]		ff_h_counter;
+	reg				[$clog2(IMG_HEIGHT)-1:0]	ff_v_counter;
+	reg				[2:0]						ff_fill_burst_remain;
 
 	reg				ff_ready;
 	reg				ff_rdata_valid;
@@ -122,6 +122,11 @@ module display_address_generator (
 			ff_ready <= 1'b0;
 			ff_rdata_valid <= 1'b0;
 		end 
+		else if( !bus_cs ) begin
+			//	バスアクセスがない場合は、常に ready を返す
+			ff_ready <= 1'b1;
+			ff_rdata_valid <= 1'b0;
+		end
 		else if( bus_valid && bus_write && bus_cs && bus_address <= 5'd3 ) begin
 			ff_ready <= 1'b1;
 			ff_rdata_valid <= 1'b0;
@@ -153,7 +158,7 @@ module display_address_generator (
 			reg_register_address <= 3'd0;
 			reg_display_on <= 1'b0;
 			reg_fill_color <= { 5'd31, 6'd0, 5'd0 };	// 赤
-		end else if( bus_valid && bus_ready && bus_write ) begin
+		end else if( bus_cs && bus_valid && bus_ready && bus_write ) begin
 			case( bus_address )
 				5'd0: begin
 					reg_base_address[20:5] <= bus_wdata;
@@ -178,7 +183,7 @@ module display_address_generator (
 		if( reset ) begin
 			ff_base_address <= 18'd0;
 		end
-		else if( bus_valid && bus_ready && !bus_write && bus_address == 5'd1 ) begin
+		else if( bus_cs && bus_valid && bus_ready && !bus_write && bus_address == 5'd1 ) begin
 			// 必ず、下位→上位の順で更新するルール
 			ff_base_address <= reg_base_address;
 		end

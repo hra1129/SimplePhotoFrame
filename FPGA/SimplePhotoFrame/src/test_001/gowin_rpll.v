@@ -17,7 +17,7 @@ module Gowin_rPLL (
 	reg		r_clkoutp	= 1'b1;
 
 	//	132.00000MHz
-	always #(1_000_000_000.0 / 132_000_000.0 / 2.0) begin
+	always #(1_000_000_000.0 / 108_000_000.0 / 2.0) begin
 		r_clkout	= ~r_clkout;
 		r_clkoutp	= ~r_clkoutp;
 	end

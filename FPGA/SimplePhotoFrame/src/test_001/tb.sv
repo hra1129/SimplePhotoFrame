@@ -2,6 +2,7 @@
 
 module tb;
 	localparam integer CLK27M_HALF_PERIOD_NS = 19;
+	localparam real SCLK_HALF_NS = 15.625;   // 32MHz
 	localparam [7:0] IO_DISPLAY = (0 << 5);
 	localparam [7:0] IO_VRAM = (6 << 5);
 	localparam [7:0] IO_VRAM_ADDRESS_L = 8'h00;
@@ -82,16 +83,16 @@ module tb;
 	//	SDRAM model
 	// --------------------------------------------------------------------
 	mt48lc2m32b2 u_sdram (
-		.Dq				( IO_sdram_dq		),
-		.Addr			( O_sdram_addr		),
-		.Ba				( O_sdram_ba		),
-		.Clk			( O_sdram_clk		),
-		.Cke			( O_sdram_cke		),
-		.Cs_n			( O_sdram_cs_n		),
-		.Ras_n			( O_sdram_ras_n		),
-		.Cas_n			( O_sdram_cas_n		),
-		.We_n			( O_sdram_wen_n		),
-		.Dqm			( O_sdram_dqm		)
+		.Dq					( IO_sdram_dq		),
+		.Addr				( O_sdram_addr		),
+		.Ba					( O_sdram_ba		),
+		.Clk				( O_sdram_clk		),
+		.Cke				( O_sdram_cke		),
+		.Cs_n				( O_sdram_cs_n		),
+		.Ras_n				( O_sdram_ras_n		),
+		.Cas_n				( O_sdram_cas_n		),
+		.We_n				( O_sdram_wen_n		),
+		.Dqm				( O_sdram_dqm		)
 	);
 
 	always #(CLK27M_HALF_PERIOD_NS) begin
@@ -104,39 +105,79 @@ module tb;
 		begin
 			for( i = 7; i >= 0; i = i - 1 ) begin
 				fpga_spi_mosi = data[i];
-				#20;
+				#(SCLK_HALF_NS);
 				fpga_spi_sck = 1'b1;
-				#20;
+				#(SCLK_HALF_NS);
 				fpga_spi_sck = 1'b0;
 			end
+			#80;
 		end
 	endtask
 
-	task automatic spi_write8;
-		input [7:0] address;
-		input [7:0] data;
+	task automatic spi_transfer_byte;
+		input [7:0] tx_data;
+		output [7:0] rx_data;
+		input bit wait_for_intr;
+		integer i;
+		integer wait_count;
 		begin
-			fpga_spi_cs_n = 1'b1;
-			fpga_spi_sck = 1'b0;
-			#100;
-			fpga_spi_cs_n = 1'b0;
-			#100;
-			spi_send_byte(8'h01);
-			spi_send_byte(address);
-			spi_send_byte(data);
-			#100;
-			fpga_spi_cs_n = 1'b1;
-			#100;
+			rx_data = 8'h00;
+			if( wait_for_intr ) begin
+				wait_count = 0;
+				while( fpga_spi_intr !== 1'b1 ) begin
+					if( wait_count > 10000 ) begin
+						$display("[TB][ERROR] fpga_spi_intr wait timeout");
+						$stop;
+					end
+					@( posedge clk27m );
+					wait_count = wait_count + 1;
+				end
+			end
+			for( i = 7; i >= 0; i = i - 1 ) begin
+				fpga_spi_mosi = tx_data[i];
+				#(SCLK_HALF_NS);
+				fpga_spi_sck = 1'b1;
+				#(SCLK_HALF_NS * 0.5);
+				rx_data[i] = fpga_spi_miso;
+				#(SCLK_HALF_NS * 0.5);
+				fpga_spi_sck = 1'b0;
+			end
+			#80;
 		end
 	endtask
 
 	task automatic spi_write16;
 		input [7:0] address;
 		input [15:0] data;
+		reg [7:0] status;
+		reg [7:0] dummy_rx;
+		reg [7:0] dummy_rx2;
+		integer busy_retry;
 		begin
 			fpga_spi_cs_n = 1'b1;
 			fpga_spi_sck = 1'b0;
 			#100;
+
+			busy_retry = 0;
+			while( 1 ) begin
+				fpga_spi_cs_n = 1'b0;
+				#100;
+				spi_transfer_byte(8'h03, dummy_rx, 1'b0);
+				spi_transfer_byte(address, dummy_rx2, 1'b0);
+				spi_transfer_byte(8'h00, status, 1'b1);
+				fpga_spi_cs_n = 1'b1;
+				#100;
+				if( status[0] ) begin
+					//	ready
+					break;
+				end
+				busy_retry = busy_retry + 1;
+				if( busy_retry > 1000 ) begin
+					$display("[TB][ERROR] busy wait timeout");
+					$stop;
+				end
+			end
+
 			fpga_spi_cs_n = 1'b0;
 			#100;
 			spi_send_byte(8'h01);
@@ -172,11 +213,6 @@ module tb;
 		button = 2'b11;
 
 		#2000;
-
-		// SPIの最低限トラフィックを流して、DUT内部のバス経路を動作させる
-		spi_write8(8'h00, 8'h00);
-		spi_write8(8'h01, 8'h01);
-		spi_write8(8'h02, 8'h02);
 
 		repeat( 1000 * 525 * 3 ) @( posedge clk27m );
 

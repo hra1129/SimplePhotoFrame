@@ -51,22 +51,30 @@ module ip_spi (
 	output			spi_miso,
 	output			spi_intr
 );
-	localparam		ST_IDLE			= 3'd0;
-	localparam		ST_COMMAND		= 3'd1;
-	localparam		ST_ADDRESS		= 3'd2;
-	localparam		ST_WDATA_L		= 3'd3;
-	localparam		ST_WDATA_H		= 3'd4;
-	localparam		ST_DO			= 3'd5;
-	localparam		ST_SEND			= 3'd6;
-	localparam		ST_READ_DATA	= 3'd7;
+	// -------------------------------------------------
+	// COMMAND:
+	//   01h, io#, data_l, data_h .................... I/O write
+	//   02h, io#, dummy_l, dummy_h .................. I/O read (return data_l, data_h)
+	//   03h, io#, busy .............................. I/O status read (return bus_ready for selected I/O)
+	localparam		CMD_IO_WRITE	= 8'h01;
+	localparam		CMD_IO_READ		= 8'h02;
+	localparam		CMD_IO_STATUS	= 8'h03;
+
+	localparam		ST_IDLE			= 4'd0;
+	localparam		ST_COMMAND		= 4'd1;		//	受けたコマンドから分岐する
+	localparam		ST_ADDRESS		= 4'd2;		//	アドレス(1byte)受信
+	localparam		ST_WDATA_L		= 4'd3;		//	データ(下位1byte)受信
+	localparam		ST_WDATA_H		= 4'd4;		//	データ(上位1byte)受信
+	localparam		ST_BUS_READ		= 4'd5;		//	バスからの読み出し応答待ち
+	localparam		ST_RDATA_L		= 4'd6;		//	データ(下位1byte)送信
+	localparam		ST_RDATA_H		= 4'd7;		//	データ(上位1byte)送信
 	reg				ff_spi_cs_n_pre;
 	reg				ff_spi_cs_n;
-	reg		[2:0]	ff_state;
+	reg		[3:0]	ff_state;
 	reg		[7:0]	ff_spi_wdata;
 	reg				ff_spi_write;
 	reg				ff_spi_valid;
 	reg				ff_spi_intr;
-	reg				ff_spi_tx_load_en_d1;
 	wire			spi_ready;
 	wire	[7:0]	spi_rdata;
 	wire			spi_rdata_en;
@@ -78,7 +86,8 @@ module ip_spi (
 	reg		[7:0]	ff_bus_cs;
 	reg				ff_bus_write;
 	reg				ff_bus_valid;
-	reg				ff_spi_send_started;
+	reg				ff_status_read;
+	wire			w_bus_ready;
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -91,6 +100,8 @@ module ip_spi (
 		end
 	end
 
+	assign w_bus_ready	= (ff_bus_cs == 8'd0) ? 1'b1: bus_ready;
+
 	// ---------------------------------------------------------
 	// 	SPI interrupt control
 	// 	TX data が実際に SPI シフタへロードされたタイミングで立てる。
@@ -99,15 +110,12 @@ module ip_spi (
 	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_spi_intr				<= 1'b0;
-			ff_spi_tx_load_en_d1	<= 1'b0;
 		end
 		else if( ff_spi_cs_n ) begin
 			ff_spi_intr				<= 1'b0;
-			ff_spi_tx_load_en_d1	<= 1'b0;
 		end
 		else begin
-			ff_spi_tx_load_en_d1	<= spi_tx_load_en;
-			if( ff_spi_tx_load_en_d1 ) begin
+			if( spi_tx_load_en ) begin
 				ff_spi_intr	<= 1'b1;
 			end
 			else if( ff_spi_intr && spi_clk ) begin
@@ -137,118 +145,66 @@ module ip_spi (
 	// ---------------------------------------------------------
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_state		<= ST_IDLE;
-			ff_bus_address	<= 5'd0;
-			ff_bus_wdata	<= 16'd0;
-			ff_bus_rdata	<= 16'd0;
-			ff_send_data_h	<= 1'b0;
-			ff_bus_cs		<= 8'd0;
-			ff_bus_write	<= 1'b0;
-			ff_bus_valid	<= 1'b0;
-			ff_spi_wdata	<= 8'd0;
-			ff_spi_write	<= 1'b0;
-			ff_spi_valid	<= 1'b0;
-			ff_spi_send_started <= 1'b0;
-		end
-		else if( ff_state == ST_SEND ) begin
-			if( !ff_spi_send_started ) begin
-				// request accepted when valid and ready are high together
-				if( ff_spi_valid && spi_ready ) begin
-					ff_spi_valid			<= 1'b0;
-					ff_spi_send_started	<= 1'b1;
-				end
-			end
-			else begin
-				// byte finished when ready rises high again
-				if( spi_ready ) begin
-					ff_spi_send_started <= 1'b0;
-					if( !ff_send_data_h ) begin
-						ff_send_data_h	<= 1'b1;
-						ff_spi_wdata	<= ff_bus_rdata[15:8];
-						ff_spi_valid	<= 1'b1;
-						ff_spi_write	<= 1'b1;
-					end
-					else begin
-						ff_send_data_h	<= 1'b0;
-						if( ff_spi_cs_n ) begin
-							ff_state <= ST_IDLE;
-						end
-						else begin
-							ff_state		<= ST_COMMAND;
-							ff_spi_valid	<= 1'b1;
-							ff_spi_write	<= 1'b0;
-						end
-					end
-				end
-			end
-		end
-		else if( ff_state == ST_DO ) begin
-			if( ff_bus_write ) begin
-				if( bus_ready ) begin
-					ff_bus_valid	<= 1'b0;
-					if( ff_spi_cs_n ) begin
-						ff_state <= ST_IDLE;
-					end
-					else begin
-						ff_state		<= ST_COMMAND;
-						ff_spi_valid	<= 1'b1;
-						ff_spi_write	<= 1'b0;
-					end
-				end
-			end
-			else begin
-				if( bus_rdata_en ) begin
-					ff_bus_valid	<= 1'b0;
-					ff_state		<= ST_READ_DATA;
-				end
-			end
-		end
-		else if( ff_state == ST_READ_DATA ) begin
-			ff_state		<= ST_SEND;
-			ff_bus_rdata	<= bus_rdata;
-			ff_spi_wdata	<= bus_rdata[7:0];
-			ff_send_data_h	<= 1'b0;
-			ff_spi_valid	<= 1'b1;
-			ff_spi_write	<= 1'b1;
-			ff_spi_send_started <= 1'b0;
+			ff_state				<= ST_IDLE;
+			ff_bus_address			<= 5'd0;
+			ff_bus_wdata			<= 16'd0;
+			ff_bus_rdata			<= 16'd0;
+			ff_send_data_h			<= 1'b0;
+			ff_bus_cs				<= 8'd0;
+			ff_bus_write			<= 1'b0;
+			ff_bus_valid			<= 1'b0;
+			ff_spi_wdata			<= 8'd0;
+			ff_spi_write			<= 1'b0;
+			ff_spi_valid			<= 1'b0;
+			ff_status_read			<= 1'b0;
 		end
 		else if( ff_spi_cs_n ) begin
-			ff_state		<= ST_IDLE;
-			ff_send_data_h	<= 1'b0;
-			ff_spi_valid	<= 1'b0;
-			ff_bus_valid	<= 1'b0;
-			ff_spi_send_started <= 1'b0;
+			//	CS_N = H になったら、リセット
+			ff_state				<= ST_IDLE;
+			ff_send_data_h			<= 1'b0;
+			ff_spi_valid			<= 1'b0;
+			ff_bus_valid			<= 1'b0;
+		end
+		else if( ff_bus_valid ) begin
+			if( w_bus_ready ) begin
+				ff_bus_valid		<= 1'b0;
+			end
 		end
 		else if( ff_spi_valid ) begin
 			if( spi_ready ) begin
-				ff_spi_valid	<= 1'b0;
+				ff_spi_valid		<= 1'b0;
 			end
 		end
 		else begin
 			case( ff_state )
 			ST_IDLE: begin
-				ff_state		<= ST_COMMAND;
-				ff_spi_valid	<= 1'b1;
-				ff_spi_write	<= 1'b0;
-				ff_spi_send_started <= 1'b0;
+				ff_state			<= ST_COMMAND;
+				ff_spi_valid		<= 1'b1;
+				ff_spi_write		<= 1'b0;
 			end
-			// -------------------------------------------------
-			// COMMAND:
-			//   01h, io#, data_l, data_h .................... I/O write
-			//   02h, io#, dummy_l, dummy_h .................. I/O read (return data_l, data_h)
 			ST_COMMAND: begin
 				if( spi_rdata_en ) begin
 					case( spi_rdata )
-					8'h01: begin
+					CMD_IO_WRITE: begin
 						//	I/O write
 						ff_state		<= ST_ADDRESS;
+						ff_status_read	<= 1'b0;
 						ff_bus_write	<= 1'b1;
 						ff_spi_valid	<= 1'b1;
 						ff_spi_write	<= 1'b0;
 					end
-					8'h02: begin
+					CMD_IO_READ: begin
 						//	I/O read
 						ff_state		<= ST_ADDRESS;
+						ff_status_read	<= 1'b0;
+						ff_bus_write	<= 1'b0;
+						ff_spi_valid	<= 1'b1;
+						ff_spi_write	<= 1'b0;
+					end
+					CMD_IO_STATUS: begin
+						//	I/O status read
+						ff_state		<= ST_ADDRESS;
+						ff_status_read	<= 1'b1;
 						ff_bus_write	<= 1'b0;
 						ff_spi_valid	<= 1'b1;
 						ff_spi_write	<= 1'b0;
@@ -266,32 +222,71 @@ module ip_spi (
 				if( spi_rdata_en ) begin
 					ff_bus_address			<= spi_rdata[4:0];
 					ff_bus_cs				<= func_bus_decoder( spi_rdata[7:5] );
-					if( ff_bus_write ) begin
-						ff_state			<= ST_WDATA_L;
-						ff_spi_valid		<= 1'b1;
-						ff_spi_write		<= 1'b0;
+					if( ff_status_read ) begin
+						//	I/O status read
+						ff_state				<= ST_RDATA_H;
+						ff_bus_rdata			<= { 7'd0, w_bus_ready, 8'd0 };
+					end
+					else if( ff_bus_write ) begin
+						//	I/O write
+						ff_state				<= ST_WDATA_L;
+						ff_spi_valid			<= 1'b1;
+						ff_spi_write			<= 1'b0;
 					end
 					else begin
-						ff_state			<= ST_DO;
-						ff_bus_valid		<= 1'b1;
+						//	I/O read
+						ff_state				<= ST_BUS_READ;
+						ff_bus_valid			<= 1'b1;
+						ff_bus_write			<= 1'b0;
 					end
 				end
 			end
+
+			// -------------------------------------------------
+			//	I/O write
+			// -------------------------------------------------
 			ST_WDATA_L: begin
 				if( spi_rdata_en ) begin
 					ff_bus_wdata[7:0]	<= spi_rdata;
-					ff_state		<= ST_WDATA_H;
-					ff_spi_valid	<= 1'b1;
-					ff_spi_write	<= 1'b0;
+					ff_state			<= ST_WDATA_H;
+					ff_spi_valid		<= 1'b1;
+					ff_spi_write		<= 1'b0;
 				end
 			end
 			ST_WDATA_H: begin
 				if( spi_rdata_en ) begin
 					ff_bus_wdata[15:8]	<= spi_rdata;
-					ff_state		<= ST_DO;
-					ff_bus_valid	<= 1'b1;
+					ff_state			<= ST_IDLE;
+					ff_bus_valid		<= 1'b1;
 				end
 			end
+
+			// -------------------------------------------------
+			//	I/O read and I/O status read
+			// -------------------------------------------------
+			ST_BUS_READ: begin
+				if( bus_rdata_en ) begin
+					//	バスからの応答が来た
+					ff_state			<= ST_RDATA_L;
+					ff_bus_rdata		<= bus_rdata;
+				end
+			end
+			ST_RDATA_L: begin
+				ff_state			<= ST_RDATA_H;
+				ff_spi_wdata		<= ff_bus_rdata[7:0];
+				ff_spi_valid		<= 1'b1;
+				ff_spi_write		<= 1'b1;
+			end
+			ST_RDATA_H: begin
+				ff_state			<= ST_IDLE;
+				ff_spi_wdata		<= ff_bus_rdata[15:8];
+				ff_spi_valid		<= 1'b1;
+				ff_spi_write		<= 1'b1;
+			end
+
+			// -------------------------------------------------
+			//	Others
+			// -------------------------------------------------
 			default: begin
 				// unknown state
 				ff_state <= ST_COMMAND;

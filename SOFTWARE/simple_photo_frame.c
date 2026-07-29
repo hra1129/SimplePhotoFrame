@@ -49,21 +49,22 @@ int main() {
 		sleep_ms(1000);
 		printf( "VRAM Image\n" );
 		display_enable( true );
-		r = rand() & 31;
-		g = rand() & 63;
-		b = rand() & 31;
-		graphic1_fill_rectangle( rand() % 800, rand() % 480, rand() % 100, rand() % 100, DISPLAY_RGB( r, g, b ), C_ROP_PUT );
-		sleep_ms(1000);
+//		r = rand() & 31;
+//		g = rand() & 63;
+//		b = rand() & 31;
+//		graphic1_fill_rectangle( rand() % 800, rand() % 480, rand() % 100, rand() % 100, DISPLAY_RGB( r, g, b ), C_ROP_PUT );
+//		sleep_ms(1000);
 
+		printf( "Draw image begin\n" );
 		for( y = 0; y < 480; y++ ) {
 			for( x = 0; x < 800; x++ ) {
-				printf( "(%d,%d)\n", x, y );
-				r = rand() & 31;
-				g = rand() & 63;
-				b = rand() & 31;
+				r = x & 31;
+				g = x & 63;
+				b = y & 31;
 				vram_write( (y * 800) + x, DISPLAY_RGB( r, g, b ) );
 			}
 		}
+		printf( "Draw image end\n" );
 		sleep_ms(1000);
 	}
 

@@ -16,6 +16,7 @@ module tb;
 	wire			bus_write;
 	wire			bus_valid;
 	reg				bus_ready;
+	reg				bus_ready_override;
 	wire	[15:0]	bus_wdata;
 	wire	[4:0]	bus_address;
 	reg		[15:0]	bus_rdata;
@@ -88,6 +89,7 @@ module tb;
 	always @(posedge clk) begin
 		if (reset) begin
 			bus_ready <= 1'b0;
+			bus_ready_override <= 1'b0;
 			bus_rdata <= 16'h0000;
 			bus_rdata_en <= 1'b0;
 			obs_write_seen <= 1'b0;
@@ -98,7 +100,7 @@ module tb;
 			obs_bus_wdata <= 16'h0000;
 		end
 		else begin
-			bus_ready <= bus_valid;
+			bus_ready <= bus_valid ? 1'b1 : bus_ready_override;
 			bus_rdata_en <= bus_valid & ~bus_write;
 
 			if (bus_valid && bus_write) begin
@@ -131,8 +133,22 @@ module tb;
 	task automatic spi_transfer_byte;
 		input [7:0] tx_data;
 		output [7:0] rx_data;
+		input bit wait_for_intr;
 		integer bit_i;
+		integer wait_count;
 		begin
+			rx_data = 8'h00;
+			if (wait_for_intr) begin
+				wait_count = 0;
+				while (spi_intr !== 1'b1) begin
+					if (wait_count > 10000) begin
+						$display("[TB][ERROR] spi_intr wait timeout");
+						$stop;
+					end
+					@(posedge clk);
+					wait_count = wait_count + 1;
+				end
+			end
 			for (bit_i = 7; bit_i >= 0; bit_i = bit_i - 1) begin
 				spi_mosi = tx_data[bit_i];
 				#(SCLK_HALF_NS);
@@ -153,10 +169,10 @@ module tb;
 		begin
 			spi_cs_n = 1'b0;
 			#(CS_SETUP_NS);
-			spi_transfer_byte(8'h01, dummy);
-			spi_transfer_byte(io_addr, dummy);
-			spi_transfer_byte(wr_data[7:0], dummy);
-			spi_transfer_byte(wr_data[15:8], dummy);
+			spi_transfer_byte(8'h01, dummy, 1'b0);
+			spi_transfer_byte(io_addr, dummy, 1'b0);
+			spi_transfer_byte(wr_data[7:0], dummy, 1'b0);
+			spi_transfer_byte(wr_data[15:8], dummy, 1'b0);
 			#(CS_HOLD_NS);
 			spi_cs_n = 1'b1;
 			#(CS_IDLE_NS);
@@ -173,10 +189,10 @@ module tb;
 		begin
 			spi_cs_n = 1'b0;
 			#(CS_SETUP_NS);
-			spi_transfer_byte(8'h02, rx0);
-			spi_transfer_byte(io_addr, rx1);
-			spi_transfer_byte(8'h00, rx2);
-			spi_transfer_byte(8'h00, rx3);
+			spi_transfer_byte(8'h02, rx0, 1'b0);
+			spi_transfer_byte(io_addr, rx1, 1'b0);
+			spi_transfer_byte(8'h00, rx2, 1'b1);
+			spi_transfer_byte(8'h00, rx3, 1'b1);
 			rd_data = {rx3, rx2};
 			#(CS_HOLD_NS);
 			spi_cs_n = 1'b1;
@@ -184,7 +200,26 @@ module tb;
 		end
 	endtask
 
+	task automatic spi_status_read;
+		output [7:0] response;
+		reg [7:0] rx0;
+		reg [7:0] rx1;
+		reg [7:0] rx2;
+		begin
+			spi_cs_n = 1'b0;
+			#(CS_SETUP_NS);
+			spi_transfer_byte(8'h03, rx0, 1'b0);
+			spi_transfer_byte(8'h00, rx1, 1'b0);
+			spi_transfer_byte(8'h00, rx2, 1'b1);
+			response = rx2;
+			#(CS_HOLD_NS);
+			spi_cs_n = 1'b1;
+			#(CS_IDLE_NS);
+		end
+	endtask
+
 	reg [15:0] rd_data;
+	reg [7:0] busy_resp;
 	integer k;
 	integer addr_i;
 	integer wait_i;
@@ -286,6 +321,24 @@ module tb;
 			end
 		end
 		$display("[TB] I/O Read 00h-FFh check passed");
+
+// Status read test: command 03h returns bit0 = bus_ready.
+	test_number = 3;
+	$display("[TB][TEST %0d] Status read command 03h returns bit0 of bus_ready", test_number);
+	bus_ready_override = 1'b1;
+	spi_status_read(busy_resp);
+	if (busy_resp !== 8'h01) begin
+		$display("[TB][ERROR] status read response mismatch got=%02h exp=%02h", busy_resp, 8'h01);
+		$stop;
+	end
+
+	bus_ready_override = 1'b0;
+	spi_status_read(busy_resp);
+	if (busy_resp !== 8'h00) begin
+		$display("[TB][ERROR] status read response mismatch got=%02h exp=%02h", busy_resp, 8'h00);
+		$stop;
+	end
+	$display("[TB] Status read 03h passed");
 
 		repeat (200) @(posedge clk);
 		$display("[TB] finish");
