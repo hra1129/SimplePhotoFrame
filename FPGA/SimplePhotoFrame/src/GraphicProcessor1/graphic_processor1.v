@@ -241,6 +241,7 @@ module graphic_processor1 (
 			end
 			else begin
 				if( bus_cs && bus_valid && bus_write && bus_address == 5'h06 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
+					//	start トリガーによる初期設定
 					if( reg_sx >= 16'd800 ) begin
 						ff_clipped_width <= 16'd0;
 					end

@@ -5,9 +5,10 @@ module tb;
 	localparam real SCLK_HALF_NS = 15.625;   // 32MHz
 	localparam [7:0] IO_DISPLAY = (0 << 5);
 	localparam [7:0] IO_VRAM = (6 << 5);
-	localparam [7:0] IO_VRAM_ADDRESS_L = 8'h00;
-	localparam [7:0] IO_VRAM_ADDRESS_H = 8'h01;
-	localparam [7:0] IO_VRAM_DATA = 8'h02;
+	localparam [7:0] IO_VRAM_ADDRESS_L	= 8'h00;
+	localparam [7:0] IO_VRAM_ADDRESS_H	= 8'h01;
+	localparam [7:0] IO_VRAM_DATA		= 8'h02;
+	localparam [7:0] IO_VRAM_FLASH		= 8'h03;
 
 	reg			clk27m;
 	reg			fpga_spi_cs_n;
@@ -41,6 +42,7 @@ module tb;
 	wire	[10:0]	O_sdram_addr;
 	wire	[1:0]	O_sdram_ba;
 	wire	[3:0]	O_sdram_dqm;
+	int				i;
 
 	// --------------------------------------------------------------------
 	//	DUT
@@ -205,6 +207,11 @@ module tb;
 		spi_write16(IO_VRAM | IO_VRAM_DATA, data);
 	endtask
 
+	task vram_flash(
+	);
+		spi_write16(IO_VRAM | IO_VRAM_FLASH, 16'h0001);
+	endtask
+
 	initial begin
 		clk27m = 1'b0;
 		fpga_spi_cs_n = 1'b1;
@@ -240,9 +247,9 @@ module tb;
 			$display("[TB][ERROR] ws2812 expected 0 but got %b", ws2812);
 			$stop;
 		end
-
-		$display("[TB] PASS");
-		$finish;
+		forever begin
+			//	hold
+		end
 	end
 
 	initial begin
@@ -252,12 +259,17 @@ module tb;
 		display_enable( 1'b1 );
 
 		//	random write
-		vram_write( 0, 16'hABCD );
-		vram_write( 1, 16'hBCDE );
-		vram_write( 2, 16'hDEF0 );
-		vram_write( 3, 16'hEF01 );
+		for( i = 0; i < 800; i++ ) begin
+			vram_write( i * 4 + 0, 16'hABCD );
+			vram_write( i * 4 + 1, 16'hBCDE );
+			vram_write( i * 4 + 2, 16'hDEF0 );
+			vram_write( i * 4 + 3, 16'hEF01 );
+		end
+		vram_flash();
 
-		$display("[TB][TIMEOUT] Simulation timeout");
-		$stop;
+		repeat( 1000 * 100 ) @( posedge clk27m );
+
+		$display("[TB] Finsh.");
+		$finish;
 	end
 endmodule

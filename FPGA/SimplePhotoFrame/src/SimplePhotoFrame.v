@@ -263,6 +263,31 @@ module simple_photo_frame (
 	assign w_sdram_display_wdata = 16'd0;
 
 	// ---------------------------------------------------------
+	//	VRAM読み書き (I/O C0h-DFh)
+	// ---------------------------------------------------------
+	vram_accessor u_vram_accessor (
+		.clk							( clk108m						),
+		.reset							( ff_reset_vram					),
+		.sdram_init_busy				( w_sdram_init_busy				),
+		.bus_cs							( w_bus_io_cs[6]				),
+		.bus_address					( w_bus_io_address				),
+		.bus_valid						( w_bus_io_valid				),
+		.bus_ready						( w_vram_bus_ready				),
+		.bus_write						( w_bus_io_write				),
+		.bus_wdata						( w_bus_io_wdata				),
+		.bus_rdata						( w_vram_bus_rdata				),
+		.bus_rdata_valid				( w_vram_bus_rdata_valid		),
+		.sdram_address					( w_sdram0_address				),
+		.sdram_write					( w_sdram0_write				),
+		.sdram_wdata					( w_sdram0_wdata				),
+		.sdram_valid					( w_sdram0_valid				),
+		.sdram_flush					( w_sdram0_flush				),
+		.sdram_ready					( w_sdram0_ready				),
+		.sdram_rdata					( w_sdram0_rdata				),
+		.sdram_rdata_valid				( w_sdram0_rdata_valid			)
+	);
+
+	// ---------------------------------------------------------
 	//	描画コントローラ1 (I/O 20h-3Fh)
 	// ---------------------------------------------------------
 	graphic_processor1 u_graphic_processor1 (
@@ -313,31 +338,6 @@ module simple_photo_frame (
 	);
 
 	// ---------------------------------------------------------
-	//	VRAM読み書き (I/O C0h-DFh)
-	// ---------------------------------------------------------
-	vram_accessor u_vram_accessor (
-		.clk							( clk108m						),
-		.reset							( ff_reset_vram					),
-		.sdram_init_busy				( w_sdram_init_busy				),
-		.bus_cs							( w_bus_io_cs[6]				),
-		.bus_address					( w_bus_io_address				),
-		.bus_valid						( w_bus_io_valid				),
-		.bus_ready						( w_vram_bus_ready				),
-		.bus_write						( w_bus_io_write				),
-		.bus_wdata						( w_bus_io_wdata				),
-		.bus_rdata						( w_vram_bus_rdata				),
-		.bus_rdata_valid				( w_vram_bus_rdata_valid		),
-		.sdram_address					( w_sdram3_address				),
-		.sdram_write					( w_sdram3_write				),
-		.sdram_wdata					( w_sdram3_wdata				),
-		.sdram_valid					( w_sdram3_valid				),
-		.sdram_flush					( w_sdram3_flush				),
-		.sdram_ready					( w_sdram3_ready				),
-		.sdram_rdata					( w_sdram3_rdata				),
-		.sdram_rdata_valid				( w_sdram3_rdata_valid			)
-	);
-
-	// ---------------------------------------------------------
 	//	バスアービター1
 	// ---------------------------------------------------------
 	bus_arbiter u_bus_arbiter (
@@ -384,6 +384,13 @@ module simple_photo_frame (
 		.sdram_rdata					( w_cache_rdata					),
 		.sdram_rdata_valid				( w_cache_rdata_valid			)
 	);
+
+	assign w_sdram3_address		= 22'd0;
+	assign w_sdram3_write		= 1'b0;
+	assign w_sdram3_wdata		= 16'd0;
+	assign w_sdram3_flush		= 1'b0;
+	assign w_sdram3_valid		= 1'b0;
+	assign w_sdram3_ready		= 1'b0;
 
 	// ---------------------------------------------------------
 	//	キャッシュメモリ

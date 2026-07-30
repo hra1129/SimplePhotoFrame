@@ -153,7 +153,10 @@ module cache (
 
 	reg		[2:0]	ff_alloc_clear_index;
 	reg		[2:0]	ff_prescan_index;
-	reg				ff_prescan_line_valid;
+	reg		[7:0]	ff_prescan_valid0_bits;
+	reg		[7:0]	ff_prescan_valid1_bits;
+	reg		[17:0]	ff_prescan_line0_word [0:7];
+	reg		[17:0]	ff_prescan_line1_word [0:7];
 
 	reg		[6:0]	ff_init_hash;
 
@@ -264,6 +267,10 @@ module cache (
 	wire	[15:0]		w_tag_new_refill1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, 1'b1, 1'b0, 1'b0);
 	wire	[15:0]		w_tag_new_refill2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, 1'b1, 1'b0, 1'b0);
 	wire	[15:0]		w_tag_new_refill3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, 1'b1, 1'b0, 1'b0);
+	wire	[15:0]		w_tag_new_partial_refill0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_partial_refill1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_partial_refill2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_partial_refill3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, 1'b1, 1'b0, 1'b1);
 
 	function [1:0] fn_choose_way;
 		input [15:0] t0;
@@ -631,7 +638,7 @@ module cache (
 			end
 
 			c_state_read_hit_line_analyze: begin
-				if( ff_line0_read[17] ) begin
+				if( ff_half_select ? ff_line1_read[17] : ff_line0_read[17] ) begin
 					if( ff_half_select )
 						ff_read_result <= ff_line1_read[15:0];
 					else
@@ -644,7 +651,8 @@ module cache (
 				end
 				else begin
 					ff_prescan_index <= 3'd0;
-					ff_prescan_valid_bits <= 8'd0;
+					ff_prescan_valid0_bits <= 8'd0;
+					ff_prescan_valid1_bits <= 8'd0;
 					ff_refill_partial <= 1'b1;
 					ff_state <= c_state_prescan_req;
 				end
@@ -657,12 +665,16 @@ module cache (
 			end
 
 			c_state_prescan_wait: begin
-				ff_prescan_line_valid <= w_line0_rdata[17];
+				ff_line0_read <= w_line0_rdata;
+				ff_line1_read <= w_line1_rdata;
 				ff_state <= c_state_prescan_capture;
 			end
 
 			c_state_prescan_capture: begin
-				ff_prescan_valid_bits[ff_prescan_index] <= ff_prescan_line_valid;
+				ff_prescan_valid0_bits[ff_prescan_index] <= ff_line0_read[17];
+				ff_prescan_valid1_bits[ff_prescan_index] <= ff_line1_read[17];
+				ff_prescan_line0_word[ff_prescan_index] <= ff_line0_read;
+				ff_prescan_line1_word[ff_prescan_index] <= ff_line1_read;
 				if( ff_prescan_index == 3'd7 ) begin
 					ff_state <= c_state_refill_read_req;
 				end
@@ -692,10 +704,10 @@ module cache (
 			c_state_refill_read_stream: begin
 				if( sdram_rdata_valid ) begin
 					ff_burst_rdata_latched <= sdram_rdata;
-					if( !ff_refill_partial || !ff_prescan_valid_bits[ff_burst_count] ) begin
+					if( !ff_refill_partial || !ff_prescan_valid0_bits[ff_burst_count] || !ff_prescan_valid1_bits[ff_burst_count] ) begin
 						ff_line_address <= { ff_selected_way, ff_hash, ff_burst_count };
-						ff_line0_wdata <= { 1'b1, 1'b0, sdram_rdata[15:0] };
-						ff_line1_wdata <= { 1'b1, 1'b0, sdram_rdata[31:16] };
+						ff_line0_wdata <= (!ff_refill_partial || !ff_prescan_valid0_bits[ff_burst_count]) ? { 1'b1, 1'b0, sdram_rdata[15:0] } : ff_prescan_line0_word[ff_burst_count];
+						ff_line1_wdata <= (!ff_refill_partial || !ff_prescan_valid1_bits[ff_burst_count]) ? { 1'b1, 1'b0, sdram_rdata[31:16] } : ff_prescan_line1_word[ff_burst_count];
 						ff_line_we_n <= 1'b0;
 					end
 					if( ff_burst_count == ff_word_index ) begin
@@ -705,10 +717,18 @@ module cache (
 							ff_read_result <= sdram_rdata[15:0];
 					end
 					if( ff_burst_count == 3'd7 ) begin
-						ff_tag_new0 <= w_tag_new_refill0;
-						ff_tag_new1 <= w_tag_new_refill1;
-						ff_tag_new2 <= w_tag_new_refill2;
-						ff_tag_new3 <= w_tag_new_refill3;
+						if( ff_refill_partial ) begin
+							ff_tag_new0 <= w_tag_new_partial_refill0;
+							ff_tag_new1 <= w_tag_new_partial_refill1;
+							ff_tag_new2 <= w_tag_new_partial_refill2;
+							ff_tag_new3 <= w_tag_new_partial_refill3;
+						end
+						else begin
+							ff_tag_new0 <= w_tag_new_refill0;
+							ff_tag_new1 <= w_tag_new_refill1;
+							ff_tag_new2 <= w_tag_new_refill2;
+							ff_tag_new3 <= w_tag_new_refill3;
+						end
 						ff_state <= c_state_prepare_tag_commit;
 					end
 					else begin
@@ -732,12 +752,12 @@ module cache (
 			c_state_write_hit_line_commit: begin
 				ff_line_address <= { ff_selected_way, ff_hash, ff_word_index };
 				if( ff_half_select ) begin
-					ff_line0_wdata <= { 1'b1, 1'b1, ff_line0_read[15:0] };
+					ff_line0_wdata <= ff_line0_read;
 					ff_line1_wdata <= { 1'b1, 1'b1, ff_req_wdata };
 				end
 				else begin
 					ff_line0_wdata <= { 1'b1, 1'b1, ff_req_wdata };
-					ff_line1_wdata <= { 1'b1, 1'b1, ff_line1_read[15:0] };
+					ff_line1_wdata <= ff_line1_read;
 				end
 				ff_line_we_n <= 1'b0;
 				ff_tag_new0 <= w_tag_new_write0;
@@ -780,12 +800,12 @@ module cache (
 			c_state_write_miss_line_commit: begin
 				ff_line_address <= { ff_selected_way, ff_hash, ff_word_index };
 				if( ff_half_select ) begin
-					ff_line0_wdata <= { 1'b1, 1'b1, ff_line0_read[15:0] };
+					ff_line0_wdata <= 18'd0;
 					ff_line1_wdata <= { 1'b1, 1'b1, ff_req_wdata };
 				end
 				else begin
 					ff_line0_wdata <= { 1'b1, 1'b1, ff_req_wdata };
-					ff_line1_wdata <= { 1'b1, 1'b1, ff_line1_read[15:0] };
+					ff_line1_wdata <= 18'd0;
 				end
 				ff_line_we_n <= 1'b0;
 				ff_tag_new0 <= w_tag_new_write0;
