@@ -390,7 +390,6 @@ module simple_photo_frame (
 	assign w_sdram3_wdata		= 16'd0;
 	assign w_sdram3_flush		= 1'b0;
 	assign w_sdram3_valid		= 1'b0;
-	assign w_sdram3_ready		= 1'b0;
 
 	// ---------------------------------------------------------
 	//	キャッシュメモリ

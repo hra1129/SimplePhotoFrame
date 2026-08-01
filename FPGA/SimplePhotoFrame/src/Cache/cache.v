@@ -111,6 +111,7 @@ module cache (
 	reg		[31:0]	ff_refresh_counter;
 	reg				ff_refresh_pending;
 	reg				ff_refresh_seen_busy;
+	reg				ff_evict_seen_busy;
 
 	reg		[22:1]	ff_req_address;
 	reg				ff_req_write;
@@ -460,6 +461,7 @@ module cache (
 			ff_refresh_counter <= 32'd0;
 			ff_refresh_pending <= 1'b0;
 			ff_refresh_seen_busy <= 1'b0;
+			ff_evict_seen_busy <= 1'b0;
 			ff_bus_rdata <= 16'd0;
 			ff_bus_rdata_valid <= 1'b0;
 			ff_sdram_address <= 18'd0;
@@ -695,9 +697,12 @@ module cache (
 			c_state_refill_read_wait_accept: begin
 				ff_sdram_address <= { ff_key, ff_hash };
 				ff_sdram_write <= 1'b0;
-				ff_sdram_valid <= 1'b1;
 				if( sdram_ready ) begin
+					ff_sdram_valid <= 1'b0;
 					ff_state <= c_state_refill_read_stream;
+				end
+				else begin
+					ff_sdram_valid <= 1'b1;
 				end
 			end
 
@@ -858,20 +863,19 @@ module cache (
 				ff_sdram_write <= 1'b0;
 				ff_sdram_refresh <= 1'b1;
 				ff_sdram_address <= 18'd0;
-				ff_sdram_valid <= 1'b1;
 				if( sdram_ready ) begin
+					ff_sdram_valid <= 1'b0;
 					ff_refresh_pending <= 1'b0;
 					ff_state <= c_state_refresh_wait_done;
+				end
+				else begin
+					ff_sdram_valid <= 1'b1;
 				end
 			end
 
 			c_state_refresh_wait_done: begin
-				if( !sdram_ready ) begin
-					ff_refresh_seen_busy <= 1'b1;
-				end
-				else if( ff_refresh_seen_busy ) begin
-					ff_state <= c_state_idle;
-				end
+				ff_refresh_seen_busy <= 1'b0;
+				ff_state <= c_state_idle;
 			end
 
 			c_state_flush_tag_req: begin
@@ -970,16 +974,20 @@ module cache (
 				ff_sdram_address <= { ff_evict_key, ff_evict_hash };
 				ff_sdram_write <= 1'b1;
 				ff_sdram_valid <= 1'b1;
+				ff_evict_seen_busy <= 1'b0;
 				ff_state <= c_state_evict_sdram_wait_accept;
 			end
 
 			c_state_evict_sdram_wait_accept: begin
 				ff_sdram_address <= { ff_evict_key, ff_evict_hash };
 				ff_sdram_write <= 1'b1;
-				ff_sdram_valid <= 1'b1;
 				if( sdram_ready ) begin
+					ff_sdram_valid <= 1'b0;
 					ff_evict_index <= 3'd0;
 					ff_state <= c_state_evict_sdram_stream;
+				end
+				else begin
+					ff_sdram_valid <= 1'b1;
 				end
 			end
 
@@ -988,7 +996,7 @@ module cache (
 				ff_sdram_wdata_mask <= fn_get_evict_mask(ff_evict_index);
 				ff_sdram_wdata_valid <= 1'b1;
 				if( ff_evict_index == 3'd7 ) begin
-					ff_refresh_seen_busy <= 1'b0;
+					ff_evict_seen_busy <= 1'b0;
 					ff_state <= c_state_evict_sdram_wait_done;
 				end
 				else begin
@@ -997,21 +1005,17 @@ module cache (
 			end
 
 			c_state_evict_sdram_wait_done: begin
-				if( !sdram_ready ) begin
-					ff_refresh_seen_busy <= 1'b1;
+				ff_evict_seen_busy <= 1'b0;
+				if( ff_evict_post_state == c_post_evict_write_miss ) begin
+					ff_alloc_clear_index <= 3'd0;
+					ff_state <= c_state_alloc_clear_req;
 				end
-				else if( ff_refresh_seen_busy ) begin
-					if( ff_evict_post_state == c_post_evict_write_miss ) begin
-						ff_alloc_clear_index <= 3'd0;
-						ff_state <= c_state_alloc_clear_req;
-					end
-					else if( ff_evict_post_state == c_post_evict_read_miss ) begin
-						ff_refill_partial <= 1'b0;
-						ff_state <= c_state_refill_read_req;
-					end
-					else begin
-						ff_state <= c_state_flush_tag_clear;
-					end
+				else if( ff_evict_post_state == c_post_evict_read_miss ) begin
+					ff_refill_partial <= 1'b0;
+					ff_state <= c_state_refill_read_req;
+				end
+				else begin
+					ff_state <= c_state_flush_tag_clear;
 				end
 			end
 

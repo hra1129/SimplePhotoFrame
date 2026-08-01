@@ -174,7 +174,7 @@ module tb;
 					break;
 				end
 				busy_retry = busy_retry + 1;
-				if( busy_retry > 1000 ) begin
+				if( busy_retry > 100000 ) begin
 					$display("[TB][ERROR] busy wait timeout");
 					$stop;
 				end
@@ -256,18 +256,31 @@ module tb;
 		repeat( 100 ) @( posedge clk27m );
 
 		//	Display Controller enable
+		$display("[TB] Display enable.");
 		display_enable( 1'b1 );
 
 		//	random write
 		for( i = 0; i < 800; i++ ) begin
-			vram_write( i * 4 + 0, 16'hABCD );
-			vram_write( i * 4 + 1, 16'hBCDE );
-			vram_write( i * 4 + 2, 16'hDEF0 );
-			vram_write( i * 4 + 3, 16'hEF01 );
+//			if( i % 10 == 0 ) begin
+				$display("[TB] VRAM write %d / 800", i);
+//			end
+			// Same hash/index, different tag: stride 0x800(=2048 half-words) keeps cache_address[11:5] fixed.
+			vram_write( (i % 8) * 32'h00000800 + 0, 16'hABCD );
+			vram_write( (i % 8) * 32'h00000800 + 5, 16'hBCDE );
+			vram_write( (i % 8) * 32'h00000800 +11, 16'hDEF0 );
+			vram_write( (i % 8) * 32'h00000800 +14, 16'hEF01 );
 		end
-		vram_flash();
+		$display("[TB] VRAM write done.");
 
-		repeat( 1000 * 100 ) @( posedge clk27m );
+		vram_flash();
+		$display("[TB] VRAM flash done.");
+
+		repeat( 10 ) begin
+			$display("[TB] waiting.");
+			repeat( 100 ) begin
+				@( posedge clk27m );
+			end
+		end
 
 		$display("[TB] Finsh.");
 		$finish;

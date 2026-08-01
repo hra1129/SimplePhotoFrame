@@ -64,8 +64,20 @@ module tb;
 	reg		[22:1]	test_addr2_lo;
 	reg		[22:1]	test_addr3_hi;
 	reg		[22:1]	test_addr3_lo;
+	reg		[22:1]	same_hash_addr0;
+	reg		[22:1]	same_hash_addr1;
+	reg		[22:1]	same_hash_addr2;
+	reg		[22:1]	same_hash_addr3;
+	reg		[22:1]	same_hash_addr4;
 	reg		[6:0]	test_hash;
 	reg		[2:0]	test_word;
+	reg			monitor_write_active;
+	reg	[22:5]	monitor_write_addr;
+	integer			monitor_write_beat;
+	reg			monitor_write_overflow;
+	reg			last_write_matched_same_hash_addr0;
+	reg			last_write_data_hit_same_hash_addr0;
+	integer			last_write_data_hit_beat_same_hash_addr0;
 
 	cache #( .c_refresh_interval_cycles(REFRESH_INTERVAL_CYCLES_TB) ) u_dut ( .reset				( reset ),
 		.clk				( clk ),
@@ -262,6 +274,13 @@ module tb;
 				end
 				else if( sdram_cache_write ) begin
 					sdram_write_req_count = sdram_write_req_count + 1;
+					monitor_write_active = 1'b1;
+					monitor_write_addr = sdram_cache_address;
+					monitor_write_beat = 0;
+					monitor_write_overflow = 1'b0;
+					last_write_matched_same_hash_addr0 = (sdram_cache_address == same_hash_addr0[22:5]);
+					last_write_data_hit_same_hash_addr0 = 1'b0;
+					last_write_data_hit_beat_same_hash_addr0 = -1;
 					$display( "[TB][SDRAM] write req: addr=%h data=%h mask=%b", sdram_cache_address, sdram_cache_wdata, sdram_cache_wdata_mask );
 				end
 				else begin
@@ -271,6 +290,20 @@ module tb;
 			end
 			if( sdram_cache_wdata_valid ) begin
 				sdram_actual_write_count = sdram_actual_write_count + 1;
+				$display( "[TB][SDRAM] write beat: addr=%h beat=%0d data=%h mask=%b", monitor_write_addr, monitor_write_beat, sdram_cache_wdata, sdram_cache_wdata_mask );
+				if( !monitor_write_active ) begin
+					monitor_write_overflow = 1'b1;
+				end
+				if( last_write_matched_same_hash_addr0 && (sdram_cache_wdata[15:0] == 16'h1001) && (sdram_cache_wdata_mask[1:0] == 2'b00) ) begin
+					last_write_data_hit_same_hash_addr0 = 1'b1;
+					last_write_data_hit_beat_same_hash_addr0 = monitor_write_beat;
+				end
+				if( monitor_write_beat == 7 ) begin
+					monitor_write_active = 1'b0;
+				end
+				else begin
+					monitor_write_beat = monitor_write_beat + 1;
+				end
 			end
 			if( ip_sdram_rdata_valid ) begin
 				sdram_actual_read_count = sdram_actual_read_count + 1;
@@ -284,6 +317,7 @@ module tb;
 	reg [15:0] rd;
 	reg [15:0] rd2;
 	integer i;
+	integer test_number;
 
 	task automatic reset_sdram_counters;
 	begin
@@ -292,6 +326,23 @@ module tb;
 		sdram_refresh_req_count = 0;
 		sdram_actual_write_count = 0;
 		sdram_actual_read_count = 0;
+		monitor_write_active = 1'b0;
+		monitor_write_addr = 18'd0;
+		monitor_write_beat = 0;
+		monitor_write_overflow = 1'b0;
+		last_write_matched_same_hash_addr0 = 1'b0;
+		last_write_data_hit_same_hash_addr0 = 1'b0;
+		last_write_data_hit_beat_same_hash_addr0 = -1;
+	end
+	endtask
+
+	task automatic start_test;
+		input integer number;
+		input string title;
+	begin
+		test_number = number;
+		$display( "-----------------" );
+		$display( "[TB][TEST%0d] %s", test_number, title );
 	end
 	endtask
 
@@ -305,6 +356,14 @@ module tb;
 		bus_flash = 1'b0;
 		bus_valid = 1'b0;
 		error_count = 0;
+		test_number = 0;
+		monitor_write_active = 1'b0;
+		monitor_write_addr = 18'd0;
+		monitor_write_beat = 0;
+		monitor_write_overflow = 1'b0;
+		last_write_matched_same_hash_addr0 = 1'b0;
+		last_write_data_hit_same_hash_addr0 = 1'b0;
+		last_write_data_hit_beat_same_hash_addr0 = -1;
 
 		// ---------------------------------------------------------
 		// 初期化中の信号を監視する
@@ -338,6 +397,11 @@ module tb;
 		test_addr2_lo = 22'h000324;
 		test_addr3_hi = 22'h000526;
 		test_addr3_lo = 22'h000524;
+		same_hash_addr0 = 22'h000726;
+		same_hash_addr1 = 22'h001726;
+		same_hash_addr2 = 22'h002726;
+		same_hash_addr3 = 22'h003726;
+		same_hash_addr4 = 22'h004726;
 		test_hash = test_addr[11:5];
 		test_word = test_addr[4:2];
 
@@ -345,7 +409,7 @@ module tb;
 		//	テスト１：
 		//	キャッシュミスの発生とSDRAMからのフェッチを確認する
 		// ---------------------------------------------------------
-		$display( "[TB][TEST1] read miss then fill" );
+		start_test( 1, "read miss then fill" );
 		reset_sdram_counters( );
 		$display( "[TB][DEBUG] Before read: addr=%h, bus_ready=%d", test_addr, bus_ready );
 		cache_read16(test_addr, rd );
@@ -379,7 +443,7 @@ module tb;
 		end
 		$display( "[TB][OK] TEST1 read response received (cache fill from SDRAM working)" );
 
-		$display( "[TB][TEST2] write hit then read back" );
+		start_test( 2, "write hit then read back" );
 		reset_sdram_counters( );
 		cache_write16(test_addr, 16'hA55A );
 		cache_read16(test_addr, rd );
@@ -414,7 +478,7 @@ module tb;
 			error_count = error_count + 1;
 		end
 
-		$display( "[TB][TEST3] flush then SDRAM writeback" );
+		start_test( 3, "flush then SDRAM writeback" );
 		reset_sdram_counters( );
 		cache_flush( );
 		repeat( 100 ) @( posedge clk );  // フラッシュがSDRAMへ到達するのを待つ
@@ -444,7 +508,7 @@ module tb;
 		end
 		$display( "[TB][OK] TEST3 flush completed" );
 
-		$display( "[TB][TEST4] refresh auto event and continued access" );
+		start_test( 4, "refresh auto event and continued access" );
 		reset_sdram_counters( );
 		for( i = 0; i < 200; i = i + 1 ) begin
 			@( posedge clk );
@@ -485,7 +549,7 @@ module tb;
 			error_count = error_count + 1;
 		end
 
-		$display( "[TB][TEST5] write miss preserves untouched halfword and partial refill keeps dirty halfword" );
+		start_test( 5, "write miss preserves untouched halfword and partial refill keeps dirty halfword" );
 		cache_read16(test_addr2_lo, rd );
 		cache_write16(test_addr2_lo, 16'h1234 );
 		cache_write16(test_addr2_hi, 16'h5678 );
@@ -558,7 +622,7 @@ module tb;
 		end
 		$display( "[TB][OK] TEST5 halfword write-miss and partial refill verified" );
 
-		$display( "[TB][TEST6] reverse partial refill keeps dirty lower halfword" );
+		start_test( 6, "reverse partial refill keeps dirty lower halfword" );
 		cache_read16(test_addr3_lo, rd );
 		cache_write16(test_addr3_lo, 16'h1357 );
 		cache_write16(test_addr3_hi, 16'h2468 );
@@ -593,6 +657,109 @@ module tb;
 			error_count = error_count + 1;
 		end
 		$display( "[TB][OK] TEST6 reverse partial refill verified" );
+
+		start_test( 7, "same-hash 4way fill stays on-cache and 5th write evicts oldest dirty line" );
+		reset_sdram_counters( );
+		cache_write16(same_hash_addr0, 16'h1001 );
+		cache_write16(same_hash_addr1, 16'h2002 );
+		cache_write16(same_hash_addr2, 16'h3003 );
+		cache_write16(same_hash_addr3, 16'h4004 );
+		cache_read16(same_hash_addr0, rd );
+		if( rd !== 16'h1001 ) begin
+			$display( "[TB][ERROR] TEST7 way0 read-back mismatch got=%04h exp=1001", rd );
+			error_count = error_count + 1;
+		end
+		cache_read16(same_hash_addr1, rd );
+		if( rd !== 16'h2002 ) begin
+			$display( "[TB][ERROR] TEST7 way1 read-back mismatch got=%04h exp=2002", rd );
+			error_count = error_count + 1;
+		end
+		cache_read16(same_hash_addr2, rd );
+		if( rd !== 16'h3003 ) begin
+			$display( "[TB][ERROR] TEST7 way2 read-back mismatch got=%04h exp=3003", rd );
+			error_count = error_count + 1;
+		end
+		cache_read16(same_hash_addr3, rd );
+		if( rd !== 16'h4004 ) begin
+			$display( "[TB][ERROR] TEST7 way3 read-back mismatch got=%04h exp=4004", rd );
+			error_count = error_count + 1;
+		end
+		assert (sdram_write_req_count == 0) else begin
+			$display( "[TB][ERROR] TEST7 unexpected write request count during 4way fill got=%0d exp=0", sdram_write_req_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_read_req_count == 0) else begin
+			$display( "[TB][ERROR] TEST7 unexpected read request count during 4way fill got=%0d exp=0", sdram_read_req_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_actual_write_count == 0) else begin
+			$display( "[TB][ERROR] TEST7 unexpected actual write count during 4way fill got=%0d exp=0", sdram_actual_write_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_actual_read_count == 0) else begin
+			$display( "[TB][ERROR] TEST7 unexpected actual read count during 4way fill got=%0d exp=0", sdram_actual_read_count );
+			error_count = error_count + 1;
+		end
+
+		reset_sdram_counters( );
+		cache_write16(same_hash_addr4, 16'h5005 );
+		repeat( 100 ) @( posedge clk );
+		assert (sdram_write_req_count == 1) else begin
+			$display( "[TB][ERROR] TEST7 unexpected write request count during 5th write got=%0d exp=1", sdram_write_req_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_read_req_count == 0) else begin
+			$display( "[TB][ERROR] TEST7 unexpected read request count during 5th write got=%0d exp=0", sdram_read_req_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_actual_write_count == 8) else begin
+			$display( "[TB][ERROR] TEST7 unexpected actual write count during 5th write got=%0d exp=8", sdram_actual_write_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_actual_read_count == 0) else begin
+			$display( "[TB][ERROR] TEST7 unexpected actual read count during 5th write got=%0d exp=0", sdram_actual_read_count );
+			error_count = error_count + 1;
+		end
+		assert (last_write_matched_same_hash_addr0) else begin
+			$display( "[TB][ERROR] TEST7 evict write address mismatch got=%h exp=%h", monitor_write_addr, same_hash_addr0[22:5] );
+			error_count = error_count + 1;
+		end
+		assert (last_write_data_hit_same_hash_addr0) else begin
+			$display( "[TB][ERROR] TEST7 evict write data missing exp lower16=1001 addr=%h", same_hash_addr0[22:5] );
+			error_count = error_count + 1;
+		end
+		assert (last_write_data_hit_beat_same_hash_addr0 == same_hash_addr0[4:2]) else begin
+			$display( "[TB][ERROR] TEST7 evict write beat mismatch got=%0d exp=%0d", last_write_data_hit_beat_same_hash_addr0, same_hash_addr0[4:2] );
+			error_count = error_count + 1;
+		end
+		assert (!monitor_write_overflow) else begin
+			$display( "[TB][ERROR] TEST7 unexpected write beat overflow for addr=%h", same_hash_addr0[22:5] );
+			error_count = error_count + 1;
+		end
+
+		reset_sdram_counters( );
+		cache_read16(same_hash_addr0, rd );
+		if( rd !== 16'h1001 ) begin
+			$display( "[TB][ERROR] TEST7 evicted line reload mismatch got=%04h exp=1001", rd );
+			error_count = error_count + 1;
+		end
+		assert (sdram_write_req_count == 1) else begin
+			$display( "[TB][ERROR] TEST7 unexpected write request count during evicted-line reload got=%0d exp=1", sdram_write_req_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_read_req_count == 1) else begin
+			$display( "[TB][ERROR] TEST7 unexpected read request count during evicted-line reload got=%0d exp=1", sdram_read_req_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_actual_write_count == 8) else begin
+			$display( "[TB][ERROR] TEST7 unexpected actual write count during evicted-line reload got=%0d exp=8", sdram_actual_write_count );
+			error_count = error_count + 1;
+		end
+		assert (sdram_actual_read_count == 8) else begin
+			$display( "[TB][ERROR] TEST7 unexpected actual read count during evicted-line reload got=%0d exp=8", sdram_actual_read_count );
+			error_count = error_count + 1;
+		end
+		$display( "[TB][OK] TEST7 4way same-hash fill and dirty eviction verified" );
 
 		if( error_count == 0 ) begin
 			$display( "[TB] ALL TESTS PASSED" );

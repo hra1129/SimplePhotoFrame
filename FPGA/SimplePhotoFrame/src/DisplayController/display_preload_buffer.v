@@ -90,13 +90,17 @@ module display_preload_buffer (
 	// 符号なしの引き算で求めて桁借りビットを捨てる。
 	// 0～2047 の値しか取り得ないため、SRAM の 1word は必ず未使用となる。
 	wire	[10:0]	w_count			= ff_wr_ptr - ff_rd_ptr;	// 自動ラップ
+	localparam	[10:0]	c_nearly_full_high	= 11'd2031;	// keep room for one DRAM burst (16 words)
+	localparam	[10:0]	c_nearly_full_low	= 11'd1024;	// half buffer watermark for hysteresis release
 
 	// DRAM に対する1アクセス分を確実に保持できる空きがなければ in_ready = 0 にして 
 	// DRAM への要求を止める。2047個の値までしか蓄積できないため、１アクセス = 16word の
 	// 空き容量チェックは、蓄積数が 2047 - 16 = 2031 より多いなら、
 	// 空き容量が足りないことになる。
 	// DRAM にリクエストを発行するモジュールにはこれを通知する。
-	wire			w_nearly_full	= (w_count > 11'd2031);
+	reg				ff_nearly_full;
+	wire			w_nearly_full_set	= (w_count > c_nearly_full_high);
+	wire			w_nearly_full_clr	= (w_count <= c_nearly_full_low);
 
 	// 本来の FIFO FULL 信号。in_ready はこれを使って制御。
 	wire			w_full			= (w_count == 11'd2047);
@@ -116,9 +120,25 @@ module display_preload_buffer (
 
 	always @( posedge clk ) begin
 		if( reset ) begin
+			ff_nearly_full <= 1'b0;
+		end
+		else if( ff_nearly_full ) begin
+			if( w_nearly_full_clr ) begin
+				ff_nearly_full <= 1'b0;
+			end
+		end
+		else begin
+			if( w_nearly_full_set ) begin
+				ff_nearly_full <= 1'b1;
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
 			ff_initial_charge <= 1'b1;
 		end
-		else if( w_nearly_full ) begin
+		else if( w_nearly_full_set ) begin
 			// 空き容量がなくなったら、初期チャージは完了
 			ff_initial_charge <= 1'b0;
 		end
@@ -129,7 +149,7 @@ module display_preload_buffer (
 	// -------------------------------------------------------------------------
 	wire	w_in_ready			= ~w_full;
 	assign	in_ready 			= w_in_ready;
-	assign	in_nearly_full		= w_nearly_full;
+	assign	in_nearly_full		= ff_nearly_full;
 
 	// -------------------------------------------------------------------------
 	//	SRAM 書き込み制御
