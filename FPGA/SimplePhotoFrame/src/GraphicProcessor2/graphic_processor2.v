@@ -94,6 +94,7 @@ module graphic_processor2 (
 	localparam [2:0] c_state_wait_dst_read  = 3'd4;
 	localparam [2:0] c_state_issue_write    = 3'd5;
 	localparam [2:0] c_state_issue_flush    = 3'd6;
+	localparam [2:0] c_state_prepare        = 3'd7;
 
 	reg signed	[15:0]	reg_sx;
 	reg signed	[15:0]	reg_sy;
@@ -156,6 +157,7 @@ module graphic_processor2 (
 	reg		[15:0]	ff_clipped_sy;
 	reg		[15:0]	ff_clipped_dx;
 	reg		[15:0]	ff_clipped_dy;
+	reg				ff_sdram_ready_d;
 
 	function [15:0] f_clip_start;
 		input signed [15:0] start;
@@ -315,38 +317,44 @@ module graphic_processor2 (
 			ff_clipped_sy			<= 16'd0;
 			ff_clipped_dx			<= 16'd0;
 			ff_clipped_dy			<= 16'd0;
+			ff_sdram_ready_d		<= 1'b0;
 		end
 		else begin
+			ff_sdram_ready_d <= sdram_ready;
 			if( sdram_init_busy ) begin
 				ff_state			<= c_state_idle;
 				ff_flush_pending	<= 1'b0;
 			end
 			else begin
 				if( bus_cs && bus_valid && bus_write && bus_address == 5'h09 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
-					ff_clipped_sx <= f_clip_start( reg_sx, 16'd800 );
-					ff_clipped_sy <= f_clip_start( reg_sy, 16'd480 );
-					ff_clipped_dx <= f_clip_start( reg_dx, 16'd800 );
-					ff_clipped_dy <= f_clip_start( reg_dy, 16'd480 );
-
-					ff_clipped_swidth <= f_clip_size( reg_sx, reg_swidth, 16'd800 );
-					ff_clipped_sheight <= f_clip_size( reg_sy, reg_sheight, 16'd480 );
-					ff_clipped_dwidth <= f_clip_size( reg_dx, reg_dwidth, 16'd800 );
-					ff_clipped_dheight <= f_clip_size( reg_dy, reg_dheight, 16'd480 );
-
-					ff_cur_dx <= 16'd0;
-					ff_cur_dy <= 16'd0;
-					ff_src_x_offset <= 16'd0;
-					ff_src_y_offset <= 16'd0;
-					ff_src_x_error <= 16'd0;
-					ff_src_y_error <= 16'd0;
-					ff_src_row_address <= reg_vram_address + f_clip_start( reg_sx, 16'd800 ) + ({ 6'd0, f_clip_start( reg_sy, 16'd480 ) } << 10);
-					ff_state <= c_state_issue_src_read;
+						ff_state <= c_state_prepare;
 				end
 
 				case( ff_state )
 				c_state_idle: begin
 					// do nothing
 				end
+
+					c_state_prepare: begin
+						ff_clipped_sx <= f_clip_start( ff_exec_sx, 16'd800 );
+						ff_clipped_sy <= f_clip_start( ff_exec_sy, 16'd480 );
+						ff_clipped_dx <= f_clip_start( ff_exec_dx, 16'd800 );
+						ff_clipped_dy <= f_clip_start( ff_exec_dy, 16'd480 );
+
+						ff_clipped_swidth <= f_clip_size( ff_exec_sx, ff_exec_swidth, 16'd800 );
+						ff_clipped_sheight <= f_clip_size( ff_exec_sy, ff_exec_sheight, 16'd480 );
+						ff_clipped_dwidth <= f_clip_size( ff_exec_dx, ff_exec_dwidth, 16'd800 );
+						ff_clipped_dheight <= f_clip_size( ff_exec_dy, ff_exec_dheight, 16'd480 );
+
+						ff_cur_dx <= 16'd0;
+						ff_cur_dy <= 16'd0;
+						ff_src_x_offset <= 16'd0;
+						ff_src_y_offset <= 16'd0;
+						ff_src_x_error <= 16'd0;
+						ff_src_y_error <= 16'd0;
+						ff_src_row_address <= ff_exec_base_address + f_clip_start( ff_exec_sx, 16'd800 ) + ({ 6'd0, f_clip_start( ff_exec_sy, 16'd480 ) } << 10);
+						ff_state <= c_state_issue_src_read;
+					end
 
 				c_state_issue_src_read: begin
 					if( ff_clipped_swidth == 16'd0 || ff_clipped_sheight == 16'd0 || ff_clipped_dwidth == 16'd0 || ff_clipped_dheight == 16'd0 ) begin
@@ -377,7 +385,7 @@ module graphic_processor2 (
 				end
 
 				c_state_issue_dst_read: begin
-					if( sdram_ready ) begin
+					if( ff_sdram_ready_d ) begin
 						ff_state <= c_state_wait_dst_read;
 					end
 				end
@@ -390,7 +398,7 @@ module graphic_processor2 (
 				end
 
 				c_state_issue_write: begin
-					if( sdram_ready ) begin
+					if( ff_sdram_ready_d ) begin
 						if( (ff_cur_dx + 16'd1) < ff_clipped_dwidth ) begin
 							if( (ff_src_x_error + ff_clipped_swidth) >= ff_clipped_dwidth ) begin
 								ff_src_x_error <= (ff_src_x_error + ff_clipped_swidth) - ff_clipped_dwidth;
@@ -426,7 +434,7 @@ module graphic_processor2 (
 
 				c_state_issue_flush: begin
 					if( ff_flush_pending ) begin
-						if( sdram_ready ) begin
+						if( ff_sdram_ready_d ) begin
 							ff_flush_pending <= 1'b0;
 							ff_state <= c_state_idle;
 						end
@@ -516,7 +524,7 @@ module graphic_processor2 (
 		else if( ff_state == c_state_issue_src_read && (ff_clipped_swidth == 16'd0 || ff_clipped_sheight == 16'd0 || ff_clipped_dwidth == 16'd0 || ff_clipped_dheight == 16'd0) ) begin
 			ff_busy <= 1'b0;
 		end
-		else if( ff_state == c_state_issue_write && sdram_ready && !((ff_cur_dx + 16'd1) < ff_clipped_dwidth) && !((ff_cur_dy + 16'd1) < ff_clipped_dheight) ) begin
+		else if( ff_state == c_state_issue_write && ff_sdram_ready_d && !((ff_cur_dx + 16'd1) < ff_clipped_dwidth) && !((ff_cur_dy + 16'd1) < ff_clipped_dheight) ) begin
 			ff_busy <= 1'b0;
 		end
 	end
@@ -570,7 +578,7 @@ module graphic_processor2 (
 					ff_sdram_flush			<= 1'b0;
 					ff_sdram_valid			<= 1'b1;
 				end
-				else if( sdram_ready ) begin
+				else if( ff_sdram_ready_d ) begin
 					ff_sdram_valid			<= 1'b0;
 				end
 			end
@@ -583,7 +591,7 @@ module graphic_processor2 (
 					ff_sdram_flush			<= 1'b0;
 					ff_sdram_valid			<= 1'b1;
 				end
-				else if( sdram_ready ) begin
+				else if( ff_sdram_ready_d ) begin
 					ff_sdram_valid			<= 1'b0;
 				end
 			end
@@ -596,7 +604,7 @@ module graphic_processor2 (
 					ff_sdram_flush			<= 1'b0;
 					ff_sdram_valid			<= 1'b1;
 				end
-				else if( sdram_ready ) begin
+				else if( ff_sdram_ready_d ) begin
 					ff_sdram_valid			<= 1'b0;
 				end
 			end
@@ -610,7 +618,7 @@ module graphic_processor2 (
 						ff_sdram_flush			<= 1'b1;
 						ff_sdram_valid			<= 1'b1;
 					end
-					else if( sdram_ready ) begin
+					else if( ff_sdram_ready_d ) begin
 						ff_sdram_valid			<= 1'b0;
 						ff_sdram_flush			<= 1'b0;
 					end

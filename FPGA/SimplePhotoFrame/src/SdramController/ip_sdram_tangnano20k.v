@@ -141,7 +141,6 @@ module ip_sdram #(
 	reg		[10:0]				ff_sdr_address;
 	reg		[31:0]				ff_sdr_write_data;
 	reg		[ 3:0]				ff_sdr_dq_mask;
-	reg		[31:0]				ff_sdr_read_word;
 	reg		[255:0]				ff_sdr_read_data;		// 8-word burst read buffer
 	reg		[2:0]				ff_read_word_count_sdram;	// word count in clk_sdram domain
 	reg							ff_read_capture_active_sdram;
@@ -155,7 +154,10 @@ module ip_sdram #(
 	reg		[ 3:0]				ff_wdata_mask_burst [0:7];
 	reg		[ 3:0]				ff_wdata_count;
 	reg							ff_wdata_burst_ready;
+	reg							ff_read_start_toggle_clk;
 	reg							ff_read_done_toggle_sdram;
+	reg							ff_read_start_toggle_sync1_sdram;
+	reg							ff_read_start_toggle_sync2_sdram;
 	reg							ff_read_done_sync1;
 	reg							ff_read_done_sync2;
 	reg		[31:0]				ff_bus_rdata;
@@ -168,12 +170,14 @@ module ip_sdram #(
 	wire						w_busy;
 	reg							ff_initial_finish;
 	wire						w_accept_request;
+	wire						w_read_start_sdram;
 	wire						w_read_burst_done;
 	wire						w_write_burst_phase;
 	wire	[ 3:0]				w_curr_write_mask;
 	wire	[31:0]				w_curr_write_data;
 
 	assign w_accept_request		= (ff_main_state == c_main_state_ready) && ff_sdr_ready && !ff_do_command && bus_valid;
+	assign w_read_start_sdram	= ff_read_start_toggle_sync1_sdram ^ ff_read_start_toggle_sync2_sdram;
 	assign w_read_burst_done	= ff_read_done_sync1 ^ ff_read_done_sync2;
 	assign w_write_burst_phase	= ff_do_command && ff_write && !ff_do_refresh &&
 		(	(ff_main_state == c_main_state_read_or_write)
@@ -221,6 +225,7 @@ module ip_sdram #(
 			ff_do_refresh			<= 1'b0;
 			ff_wdata_count			<= 4'd0;
 			ff_wdata_burst_ready	<= 1'b0;
+			ff_read_start_toggle_clk <= 1'b0;
 		end
 		else if( w_accept_request ) begin
 			ff_do_command	<= 1'b1;
@@ -236,6 +241,9 @@ module ip_sdram #(
 			else begin
 				ff_wdata_burst_ready	<= 1'b0;
 			end
+		end
+		else if( (ff_main_state == c_main_state_nop3) && ff_do_command && !ff_write && !ff_do_refresh ) begin
+			ff_read_start_toggle_clk <= ~ff_read_start_toggle_clk;
 		end
 		else if( ff_do_command && ff_write && !ff_wdata_burst_ready ) begin
 			if( bus_wdata_valid ) begin
@@ -426,11 +434,15 @@ module ip_sdram #(
 							ff_sdr_command		<= c_sdr_command_read;
 							ff_sdr_dq_mask		<= 4'b0000;
 						end
+					c_main_state_nop1, c_main_state_nop2,
 					c_main_state_nop3, c_main_state_data_fetch, c_main_state_finish,
 					c_main_state_nop4, c_main_state_nop5, c_main_state_nop6, c_main_state_nop7:
 						begin
 							ff_sdr_command		<= c_sdr_command_no_operation;
-							if( w_write_burst_phase ) begin
+							if( ff_do_command && ff_write && !ff_do_refresh && (ff_main_state == c_main_state_nop2) ) begin
+								ff_sdr_dq_mask	<= ff_wdata_mask_burst[0];
+							end
+							else if( w_write_burst_phase ) begin
 								ff_sdr_dq_mask	<= w_curr_write_mask;
 							end
 							else if( ff_do_command && !ff_write && !ff_do_refresh ) begin
@@ -535,7 +547,10 @@ module ip_sdram #(
 			ff_write_burst_word <= w_curr_write_data;
 			ff_write_burst_mask <= w_curr_write_mask;
 
-			if( w_write_burst_phase ) begin
+			if( ff_do_command && ff_write && !ff_do_refresh && (ff_main_state == c_main_state_nop2) ) begin
+				ff_sdr_write_data <= ff_wdata_burst[0];
+			end
+			else if( w_write_burst_phase ) begin
 				ff_sdr_write_data <= w_curr_write_data;
 			end
 			else begin
@@ -544,39 +559,40 @@ module ip_sdram #(
 		end
 	end
 
-	always @( posedge clk_sdram ) begin
+	// always @( posedge clk_sdram ) begin
+	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_sdr_read_word				<= 32'd0;
-			ff_read_done_toggle_sdram		<= 1'b0;
-			ff_sdr_read_data				<= 256'd0;
-			ff_read_word_count_sdram		<= 3'd0;
-			ff_read_capture_active_sdram	<= 1'b0;
-			ff_read_start_pending_sdram	<= 1'b0;
+			ff_read_start_toggle_sync1_sdram	<= 1'b0;
+			ff_read_start_toggle_sync2_sdram	<= 1'b0;
+			ff_read_done_toggle_sdram			<= 1'b0;
+			ff_sdr_read_data					<= 256'd0;
+			ff_read_word_count_sdram			<= 3'd0;
+			ff_read_capture_active_sdram		<= 1'b0;
+			ff_read_start_pending_sdram			<= 1'b0;
 		end
 		else begin
-			ff_sdr_read_word			<= IO_sdram_dq;
-			if( ff_read_start_pending_sdram ) begin
-				// Start capture using the first read word sampled on the previous clk_sdram edge.
-				ff_sdr_read_data[31:0]			<= ff_sdr_read_word;
+			ff_read_start_toggle_sync1_sdram	<= ff_read_start_toggle_clk;
+			ff_read_start_toggle_sync2_sdram	<= ff_read_start_toggle_sync1_sdram;
+			if( w_read_start_sdram ) begin
+				// Capture the first burst word on the start cycle to avoid losing beat0.
+				ff_sdr_read_data[31:0]			<= IO_sdram_dq;
 				ff_read_word_count_sdram		<= 3'd1;
 				ff_read_capture_active_sdram	<= 1'b1;
-				ff_read_start_pending_sdram	<= 1'b0;
+				ff_read_start_pending_sdram		<= 1'b0;
 			end
 			else if( !ff_read_capture_active_sdram ) begin
-				if( (ff_main_state == c_main_state_finish) && ff_do_command && !ff_write && !ff_do_refresh ) begin
-					ff_read_start_pending_sdram	<= 1'b1;
-				end
+				ff_read_start_pending_sdram		<= 1'b0;
 			end
 			else begin
-				// Continue capture for remaining burst words using the delayed sample register.
+				// Continue capture for remaining burst words using the current SDRAM sample.
 				case( ff_read_word_count_sdram )
-				3'd1: ff_sdr_read_data[ 63: 32]	<= ff_sdr_read_word;
-				3'd2: ff_sdr_read_data[ 95: 64]	<= ff_sdr_read_word;
-				3'd3: ff_sdr_read_data[127: 96]	<= ff_sdr_read_word;
-				3'd4: ff_sdr_read_data[159:128]	<= ff_sdr_read_word;
-				3'd5: ff_sdr_read_data[191:160]	<= ff_sdr_read_word;
-				3'd6: ff_sdr_read_data[223:192]	<= ff_sdr_read_word;
-				3'd7: ff_sdr_read_data[255:224]	<= ff_sdr_read_word;
+				3'd1: ff_sdr_read_data[ 63: 32]	<= IO_sdram_dq;
+				3'd2: ff_sdr_read_data[ 95: 64]	<= IO_sdram_dq;
+				3'd3: ff_sdr_read_data[127: 96]	<= IO_sdram_dq;
+				3'd4: ff_sdr_read_data[159:128]	<= IO_sdram_dq;
+				3'd5: ff_sdr_read_data[191:160]	<= IO_sdram_dq;
+				3'd6: ff_sdr_read_data[223:192]	<= IO_sdram_dq;
+				3'd7: ff_sdr_read_data[255:224]	<= IO_sdram_dq;
 				endcase
 
 				if( ff_read_word_count_sdram == 3'd7 ) begin

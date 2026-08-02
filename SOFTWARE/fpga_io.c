@@ -32,7 +32,7 @@
 #define SPI0_SCK_PIN  6
 #define SPI0_TX_PIN	  7
 #define SPI0_INTR_PIN 3
-#define SPI0_BAUDRATE (70 * 1000 * 1000)	// 70 MHz
+#define SPI0_BAUDRATE (32 * 1000 * 1000)	// 32 MHz
 
 // ---------------------------------------------------------
 void fpga_io_init( void ) {
@@ -51,8 +51,9 @@ void fpga_io_init( void ) {
 }
 
 // ---------------------------------------------------------
-static bool fpga_wait_ready( void ) {
+static bool fpga_wait_ready( uint8_t io_address ) {
 	uint8_t cmd = 0x03;
+	uint8_t addr = io_address;
 	uint8_t resp = 0x00;
 	absolute_time_t timeout_time;
 
@@ -60,6 +61,7 @@ static bool fpga_wait_ready( void ) {
 	while( !time_reached( timeout_time ) ) {
 		gpio_put( SPI0_CSN_PIN, 0 );
 		spi_write_blocking( SPI0_PORT, &cmd, 1 );
+		spi_write_blocking( SPI0_PORT, &addr, 1 );
 		spi_write_read_blocking( SPI0_PORT, &cmd, &resp, 1 );
 		gpio_put( SPI0_CSN_PIN, 1 );
 
@@ -89,7 +91,7 @@ static bool fpga_wait_intr( uint32_t timeout_ms ) {
 void fpga_outport( uint8_t io_address, uint16_t data ) {
 	uint8_t buf;
 
-	fpga_wait_ready();
+	fpga_wait_ready( io_address );
 
 	gpio_put( SPI0_CSN_PIN, 0 );
 	buf = 0x01;
@@ -107,7 +109,7 @@ void fpga_outport( uint8_t io_address, uint16_t data ) {
 uint16_t fpga_inport( uint8_t io_address ) {
 	uint8_t cmd;
 
-	fpga_wait_ready();
+	fpga_wait_ready( io_address );
 	uint8_t dummy = 0x00;
 	uint8_t rx_bytes[2] = {0x00, 0x00};
 

@@ -33,7 +33,7 @@
         <Option type="map_option" value="1"/>
         <Option type="max_fanout" value="1000"/>
         <Option type="netlist_hierarchy" value="1"/>
-        <Option type="opt_goal" value="auto"/>
+        <Option type="opt_goal" value="timing"/>
         <Option type="output_file" value="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg"/>
         <Option type="print_all_synthesis_warning" value="0"/>
         <Option type="ram_rw_check" value="0"/>

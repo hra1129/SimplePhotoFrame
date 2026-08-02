@@ -89,7 +89,7 @@ module tb ();
 	ip_sdram u_sdram_controller (
 		.reset				( reset				),
 		.clk				( clk				),
-		.clk_sdram			( clk				),
+		.clk_sdram			( clk_sdram			),
 		.sdram_init_busy	( sdram_init_busy	),
 		.bus_address		( bus_address		),
 		.bus_write			( bus_write			),
