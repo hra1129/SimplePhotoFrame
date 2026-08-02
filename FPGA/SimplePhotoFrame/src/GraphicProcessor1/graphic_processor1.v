@@ -94,8 +94,8 @@ module graphic_processor1 (
 	localparam [2:0] c_state_next_pixel        = 3'd4;
 	localparam [2:0] c_state_issue_flush       = 3'd5;
 
-	reg		[15:0]	reg_sx;
-	reg		[15:0]	reg_sy;
+	reg signed	[15:0]	reg_sx;
+	reg signed	[15:0]	reg_sy;
 	reg		[15:0]	reg_width;
 	reg		[15:0]	reg_height;
 	reg		[15:0]	reg_color;
@@ -107,8 +107,8 @@ module graphic_processor1 (
 	reg		[15:0]	ff_bus_rdata;
 	reg				ff_bus_rdata_valid;
 
-	reg		[15:0]	ff_exec_sx;
-	reg		[15:0]	ff_exec_sy;
+	reg signed	[15:0]	ff_exec_sx;
+	reg signed	[15:0]	ff_exec_sy;
 	reg		[15:0]	ff_exec_width;
 	reg		[15:0]	ff_exec_height;
 	reg		[15:0]	ff_exec_color;
@@ -135,6 +135,57 @@ module graphic_processor1 (
 
 	reg		[15:0]	ff_clipped_width;
 	reg		[15:0]	ff_clipped_height;
+	reg		[15:0]	ff_clipped_sx;
+	reg		[15:0]	ff_clipped_sy;
+
+	function [15:0] f_clip_start;
+		input signed [15:0] start;
+		input [15:0] limit;
+	begin
+		if( start < 16'sd0 ) begin
+			f_clip_start = 16'd0;
+		end
+		else if( start >= $signed({1'b0, limit}) ) begin
+			f_clip_start = 16'd0;
+		end
+		else begin
+			f_clip_start = start[15:0];
+		end
+	end
+	endfunction
+
+	function [15:0] f_clip_size;
+		input signed [15:0] start;
+		input [15:0] size;
+		input [15:0] limit;
+		reg signed [16:0] left;
+		reg signed [16:0] right;
+		reg signed [16:0] end_pos;
+	begin
+		end_pos = start + $signed({1'b0, size});
+
+		if( start < 16'sd0 ) begin
+			left = 17'sd0;
+		end
+		else begin
+			left = $signed({1'b0, start});
+		end
+
+		if( end_pos > $signed({1'b0, limit}) ) begin
+			right = $signed({1'b0, limit});
+		end
+		else begin
+			right = end_pos;
+		end
+
+		if( right <= left ) begin
+			f_clip_size = 16'd0;
+		end
+		else begin
+			f_clip_size = right - left;
+		end
+	end
+	endfunction
 
 	function [15:0] f_apply_rop;
 		input [15:0] op;
@@ -232,6 +283,8 @@ module graphic_processor1 (
 
 			ff_clipped_width		<= 16'd0;
 			ff_clipped_height		<= 16'd0;
+			ff_clipped_sx			<= 16'd0;
+			ff_clipped_sy			<= 16'd0;
 		end
 		else begin
 			if( sdram_init_busy ) begin
@@ -242,25 +295,10 @@ module graphic_processor1 (
 			else begin
 				if( bus_cs && bus_valid && bus_write && bus_address == 5'h06 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
 					//	start トリガーによる初期設定
-					if( reg_sx >= 16'd800 ) begin
-						ff_clipped_width <= 16'd0;
-					end
-					else if( reg_width > (16'd800 - reg_sx) ) begin
-						ff_clipped_width <= (16'd800 - reg_sx);
-					end
-					else begin
-						ff_clipped_width <= reg_width;
-					end
-
-					if( reg_sy >= 16'd480 ) begin
-						ff_clipped_height <= 16'd0;
-					end
-					else if( reg_height > (16'd480 - reg_sy) ) begin
-						ff_clipped_height <= (16'd480 - reg_sy);
-					end
-					else begin
-						ff_clipped_height <= reg_height;
-					end
+					ff_clipped_sx <= f_clip_start( reg_sx, 16'd800 );
+					ff_clipped_sy <= f_clip_start( reg_sy, 16'd480 );
+					ff_clipped_width <= f_clip_size( reg_sx, reg_width, 16'd800 );
+					ff_clipped_height <= f_clip_size( reg_sy, reg_height, 16'd480 );
 
 					ff_busy <= 1'b1;
 					ff_state <= c_state_next_pixel;
@@ -305,8 +343,8 @@ module graphic_processor1 (
 							else begin
 								ff_clip_width <= ff_clipped_width;
 								ff_clip_height <= ff_clipped_height;
-								ff_row_start_address <= ff_exec_base_address + ff_exec_sx + (ff_exec_sy * 16'd800);
-								ff_cur_address <= ff_exec_base_address + ff_exec_sx + (ff_exec_sy * 16'd800);
+								ff_row_start_address <= ff_exec_base_address + ff_clipped_sx + ({ 6'd0, ff_clipped_sy } << 10);
+								ff_cur_address <= ff_exec_base_address + ff_clipped_sx + ({ 6'd0, ff_clipped_sy } << 10);
 								ff_cur_x <= 16'd0;
 								ff_cur_y <= 16'd0;
 								ff_pixel_setup_done <= 1'b1;
@@ -333,8 +371,8 @@ module graphic_processor1 (
 						else if( (ff_cur_y + 16'd1) < ff_clip_height ) begin
 							ff_cur_y <= ff_cur_y + 16'd1;
 							ff_cur_x <= 16'd0;
-							ff_row_start_address <= ff_row_start_address + 22'd800;
-							ff_cur_address <= ff_row_start_address + 22'd800;
+							ff_row_start_address <= ff_row_start_address + 22'd1024;
+							ff_cur_address <= ff_row_start_address + 22'd1024;
 							if( ff_exec_rop == c_rop_put ) begin
 								ff_dst_color <= 16'd0;
 								ff_state <= c_state_issue_write;

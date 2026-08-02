@@ -34,12 +34,12 @@ sdram_valid = 1 で、sdram_flush = 0 の場合は、sdram_write が 1 なら書
 # レジスタ
 |アドレス|名前|読み書き|説明|
 |---|---|---|---|
-|0x00|SX|RW|転送元矩形の左上の X 座標|
-|0x01|SY|RW|転送元矩形の左上の Y 座標|
+|0x00|SX|RW|転送元矩形の左上の X 座標（-32768～32767）|
+|0x01|SY|RW|転送元矩形の左上の Y 座標（-32768～32767）|
 |0x02|SWIDTH|RW|転送元矩形の幅|
 |0x03|SHEIGHT|RW|転送元矩形の高さ|
-|0x00|DX|RW|転送先矩形の左上の X 座標|
-|0x01|DY|RW|転送先矩形の左上の Y 座標|
+|0x00|DX|RW|転送先矩形の左上の X 座標（-32768～32767）|
+|0x01|DY|RW|転送先矩形の左上の Y 座標（-32768～32767）|
 |0x02|DWIDTH|RW|転送先矩形の幅|
 |0x03|DHEIGHT|RW|転送先矩形の高さ|
 |0x05|ROP|RW|ロジカルオペレーション|
@@ -72,7 +72,7 @@ VRAM_ADDRESS で指定されている場所が、左上隅の扱いである。
 [10:5] 緑成分
 [4:0] 青成分
 
-(x,y) に対応する sdram_address は、VRAM_ADDRESS + (x + y * 800) * 2 である。
+(x,y) に対応する sdram_address は、VRAM_ADDRESS + (x + y * 1024) * 2 である。
 
 # 制御
 EXEC レジスタに 1 を書き込むと、SX, SY, SWIDTH, SHEIGHT, DX, DY, DWIDTH, DHEIGHT, COLOR, ROP, VRAM_ADDRESS_L/H の値を使って矩形コピーを開始する。

@@ -78,7 +78,8 @@ module display_address_generator (
 	input	[31:0]	sdram_rdata,
 	input			sdram_rdata_valid
 );
-	localparam		IMG_WIDTH	= 800 / 16;	//	ピクセル数/バーストリードワード数
+	localparam		IMG_WIDTH	= 800 / 16;	//	表示対象ピクセル数/バーストリードワード数
+	localparam		VRAM_STRIDE	= 1024 / 16;	//	VRAM 1ラインのバーストワード数
 	localparam		IMG_HEIGHT	= 480;
 	localparam		BURST_WORDS	= 8;
 	localparam		[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_MAX = IMG_WIDTH - 1;
@@ -251,7 +252,7 @@ module display_address_generator (
 			// FIFOが満杯の場合は、アドレスの更新を止めて待つ
 		end
 		else if( w_valid ) begin
-			ff_sdram_address <= ff_base_address + ff_v_counter * IMG_WIDTH + ff_h_counter;
+			ff_sdram_address <= ff_base_address + { ff_v_counter, 6'd0 } + ff_h_counter;
 		end
 	end
 

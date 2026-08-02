@@ -944,21 +944,18 @@ module cache (
 			end
 
 			c_state_evict_line_wait: begin
+				ff_line_oe_n <= 1'b0;
 				ff_evict_line_data <= { w_line1_rdata[15:0], w_line0_rdata[15:0] };
 				ff_evict_line_mask <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]);
-				ff_state <= c_state_evict_line_capture;
-			end
-
-			c_state_evict_line_capture: begin
 				case( ff_evict_index )
-				3'd0: begin 	ff_evict_data0 <= ff_evict_line_data; ff_evict_mask0 <= ff_evict_line_mask; end
-				3'd1: begin 	ff_evict_data1 <= ff_evict_line_data; ff_evict_mask1 <= ff_evict_line_mask; end
-				3'd2: begin 	ff_evict_data2 <= ff_evict_line_data; ff_evict_mask2 <= ff_evict_line_mask; end
-				3'd3: begin 	ff_evict_data3 <= ff_evict_line_data; ff_evict_mask3 <= ff_evict_line_mask; end
-				3'd4: begin		ff_evict_data4 <= ff_evict_line_data; ff_evict_mask4 <= ff_evict_line_mask; end
-				3'd5: begin		ff_evict_data5 <= ff_evict_line_data; ff_evict_mask5 <= ff_evict_line_mask; end
-				3'd6: begin		ff_evict_data6 <= ff_evict_line_data; ff_evict_mask6 <= ff_evict_line_mask; end
-				default: begin	ff_evict_data7 <= ff_evict_line_data; ff_evict_mask7 <= ff_evict_line_mask; end
+				3'd0: begin 	ff_evict_data0 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask0 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				3'd1: begin 	ff_evict_data1 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask1 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				3'd2: begin 	ff_evict_data2 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask2 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				3'd3: begin 	ff_evict_data3 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask3 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				3'd4: begin		ff_evict_data4 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask4 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				3'd5: begin		ff_evict_data5 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask5 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				3'd6: begin		ff_evict_data6 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask6 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
+				default: begin	ff_evict_data7 <= { w_line1_rdata[15:0], w_line0_rdata[15:0] }; ff_evict_mask7 <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]); end
 				endcase
 				if( ff_evict_index == 3'd7 ) begin
 					ff_evict_index <= 3'd0;
@@ -966,8 +963,13 @@ module cache (
 				end
 				else begin
 					ff_evict_index <= ff_evict_index + 3'd1;
-					ff_state <= c_state_evict_line_req;
+					ff_line_address <= { ff_selected_way, ff_evict_hash, ff_evict_index + 3'd1 };
+					ff_state <= c_state_evict_line_wait;
 				end
+			end
+
+			c_state_evict_line_capture: begin
+				ff_state <= c_state_evict_line_wait;
 			end
 
 			c_state_evict_sdram_req: begin

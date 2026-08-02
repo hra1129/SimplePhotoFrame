@@ -103,7 +103,7 @@ module tb;
 		input [15:0] x;
 		input [15:0] y;
 	begin
-		calc_addr = base + x + (y * 16'd800);
+		calc_addr = base + x + ({ 6'd0, y } << 10);
 	end
 	endfunction
 

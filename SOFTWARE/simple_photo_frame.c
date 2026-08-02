@@ -35,17 +35,25 @@ void vram_test( void ) {
 	uint16_t data;
 
 	//	テストパターンを描画
-	for( address = 0; address < (800 * 480); address++ ) {
+	printf( "VRAM test: writing test pattern...\n" );
+	for( address = 0; address < (1024 * 100); address++ ) {
 		vram_write( address, address & 0xFFFF );
 		data = vram_read( address );
 		if( data != (address & 0xFFFF) ) {
 			printf( "VRAM test failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
 			sleep_ms(1);
 		}
-		else {
-			printf( "VRAM test passed at address %d: got %04X\n", address, data );
+	}
+	//	テストパターンを再度読み出してチェック
+	printf( "VRAM test: verifying test pattern...\n" );
+	for( address = 0; address < (1024 * 100); address++ ) {
+		data = vram_read( address );
+		if( data != (address & 0xFFFF) ) {
+			printf( "VRAM test failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
+			sleep_ms(1);
 		}
 	}
+	printf( "VRAM test completed.\n" );
 }
 
 // ---------------------------------------------------------
@@ -64,7 +72,7 @@ int main() {
 			r = ((x + y) & 63) >> 1;
 			g = ((x + y) & 63);
 			b = ((x + y) & 63) >> 1;
-			vram_write( (y * 800) + x, DISPLAY_RGB( r, g, b ) );
+			vram_write( (y * 1024) + x, DISPLAY_RGB( r, g, b ) );
 		}
 	}
 

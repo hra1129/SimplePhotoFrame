@@ -522,6 +522,38 @@ module tb;
 		#1;
 		check_cond(!bus_valid, "bus_valid should deassert after downstream accepts buffered request");
 
+		test_number = 8;
+		$display("[TB][TEST%0d] flush request should not enter read stall", test_number);
+		@(posedge clk);
+		bus_ready <= 1'b1;
+		bus1_address <= 22'h2AAAA;
+		bus1_write <= 1'b0;
+		bus1_wdata <= 16'h0000;
+		bus1_flash <= 1'b1;
+		bus1_valid <= 1'b1;
+		@(posedge clk);
+		#1;
+		check_cond(bus1_ready, "bus1_ready should assert for flush request");
+		check_cond(bus_valid, "bus_valid should assert for flush request");
+		check_cond(bus_flash == 1'b1, "bus_flash should assert for flush request");
+		check_cond(bus_write == 1'b0, "bus_write should be 0 for flush request");
+		@(posedge clk);
+		bus1_valid <= 1'b0;
+		bus1_flash <= 1'b0;
+		// flush should complete without waiting for rdata_valid
+		repeat(2) @(posedge clk);
+		@(posedge clk);
+		bus0_address <= 22'h15555;
+		bus0_write <= 1'b1;
+		bus0_wdata <= 16'h5AA5;
+		bus0_valid <= 1'b1;
+		wait_ready_bus0();
+		@(posedge clk);
+		#1;
+		check_cond(bus0_ready, "bus0_ready should assert after flush without needing rdata_valid");
+		@(posedge clk);
+		bus0_valid <= 1'b0;
+
 		repeat(5) @(posedge clk);
 		if( error_count == 0 ) begin
 			$display("[TB] ALL TESTS PASSED");

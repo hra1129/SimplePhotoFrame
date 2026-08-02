@@ -95,12 +95,12 @@ module graphic_processor2 (
 	localparam [2:0] c_state_issue_write    = 3'd5;
 	localparam [2:0] c_state_issue_flush    = 3'd6;
 
-	reg		[15:0]	reg_sx;
-	reg		[15:0]	reg_sy;
+	reg signed	[15:0]	reg_sx;
+	reg signed	[15:0]	reg_sy;
 	reg		[15:0]	reg_swidth;
 	reg		[15:0]	reg_sheight;
-	reg		[15:0]	reg_dx;
-	reg		[15:0]	reg_dy;
+	reg signed	[15:0]	reg_dx;
+	reg signed	[15:0]	reg_dy;
 	reg		[15:0]	reg_dwidth;
 	reg		[15:0]	reg_dheight;
 	reg		[15:0]	reg_rop;
@@ -111,12 +111,12 @@ module graphic_processor2 (
 	reg		[15:0]	ff_bus_rdata;
 	reg				ff_bus_rdata_valid;
 
-	reg		[15:0]	ff_exec_sx;
-	reg		[15:0]	ff_exec_sy;
+	reg signed	[15:0]	ff_exec_sx;
+	reg signed	[15:0]	ff_exec_sy;
 	reg		[15:0]	ff_exec_swidth;
 	reg		[15:0]	ff_exec_sheight;
-	reg		[15:0]	ff_exec_dx;
-	reg		[15:0]	ff_exec_dy;
+	reg signed	[15:0]	ff_exec_dx;
+	reg signed	[15:0]	ff_exec_dy;
 	reg		[15:0]	ff_exec_dwidth;
 	reg		[15:0]	ff_exec_dheight;
 	reg		[15:0]	ff_exec_rop;
@@ -152,6 +152,59 @@ module graphic_processor2 (
 	reg		[15:0]	ff_clipped_sheight;
 	reg		[15:0]	ff_clipped_dwidth;
 	reg		[15:0]	ff_clipped_dheight;
+	reg		[15:0]	ff_clipped_sx;
+	reg		[15:0]	ff_clipped_sy;
+	reg		[15:0]	ff_clipped_dx;
+	reg		[15:0]	ff_clipped_dy;
+
+	function [15:0] f_clip_start;
+		input signed [15:0] start;
+		input [15:0] limit;
+	begin
+		if( start < 16'sd0 ) begin
+			f_clip_start = 16'd0;
+		end
+		else if( start >= $signed({1'b0, limit}) ) begin
+			f_clip_start = 16'd0;
+		end
+		else begin
+			f_clip_start = start[15:0];
+		end
+	end
+	endfunction
+
+	function [15:0] f_clip_size;
+		input signed [15:0] start;
+		input [15:0] size;
+		input [15:0] limit;
+		reg signed [16:0] left;
+		reg signed [16:0] right;
+		reg signed [16:0] end_pos;
+	begin
+		end_pos = start + $signed({1'b0, size});
+
+		if( start < 16'sd0 ) begin
+			left = 17'sd0;
+		end
+		else begin
+			left = $signed({1'b0, start});
+		end
+
+		if( end_pos > $signed({1'b0, limit}) ) begin
+			right = $signed({1'b0, limit});
+		end
+		else begin
+			right = end_pos;
+		end
+
+		if( right <= left ) begin
+			f_clip_size = 16'd0;
+		end
+		else begin
+			f_clip_size = right - left;
+		end
+	end
+	endfunction
 
 	function [15:0] f_apply_rop;
 		input [15:0] op;
@@ -258,6 +311,10 @@ module graphic_processor2 (
 			ff_clipped_sheight		<= 16'd0;
 			ff_clipped_dwidth		<= 16'd0;
 			ff_clipped_dheight		<= 16'd0;
+			ff_clipped_sx			<= 16'd0;
+			ff_clipped_sy			<= 16'd0;
+			ff_clipped_dx			<= 16'd0;
+			ff_clipped_dy			<= 16'd0;
 		end
 		else begin
 			if( sdram_init_busy ) begin
@@ -266,45 +323,15 @@ module graphic_processor2 (
 			end
 			else begin
 				if( bus_cs && bus_valid && bus_write && bus_address == 5'h09 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
-					if( reg_sx >= 16'd800 ) begin
-						ff_clipped_swidth <= 16'd0;
-					end
-					else if( reg_swidth > (16'd800 - reg_sx) ) begin
-						ff_clipped_swidth <= (16'd800 - reg_sx);
-					end
-					else begin
-						ff_clipped_swidth <= reg_swidth;
-					end
+					ff_clipped_sx <= f_clip_start( reg_sx, 16'd800 );
+					ff_clipped_sy <= f_clip_start( reg_sy, 16'd480 );
+					ff_clipped_dx <= f_clip_start( reg_dx, 16'd800 );
+					ff_clipped_dy <= f_clip_start( reg_dy, 16'd480 );
 
-					if( reg_sy >= 16'd480 ) begin
-						ff_clipped_sheight <= 16'd0;
-					end
-					else if( reg_sheight > (16'd480 - reg_sy) ) begin
-						ff_clipped_sheight <= (16'd480 - reg_sy);
-					end
-					else begin
-						ff_clipped_sheight <= reg_sheight;
-					end
-
-					if( reg_dx >= 16'd800 ) begin
-						ff_clipped_dwidth <= 16'd0;
-					end
-					else if( reg_dwidth > (16'd800 - reg_dx) ) begin
-						ff_clipped_dwidth <= (16'd800 - reg_dx);
-					end
-					else begin
-						ff_clipped_dwidth <= reg_dwidth;
-					end
-
-					if( reg_dy >= 16'd480 ) begin
-						ff_clipped_dheight <= 16'd0;
-					end
-					else if( reg_dheight > (16'd480 - reg_dy) ) begin
-						ff_clipped_dheight <= (16'd480 - reg_dy);
-					end
-					else begin
-						ff_clipped_dheight <= reg_dheight;
-					end
+					ff_clipped_swidth <= f_clip_size( reg_sx, reg_swidth, 16'd800 );
+					ff_clipped_sheight <= f_clip_size( reg_sy, reg_sheight, 16'd480 );
+					ff_clipped_dwidth <= f_clip_size( reg_dx, reg_dwidth, 16'd800 );
+					ff_clipped_dheight <= f_clip_size( reg_dy, reg_dheight, 16'd480 );
 
 					ff_cur_dx <= 16'd0;
 					ff_cur_dy <= 16'd0;
@@ -312,7 +339,7 @@ module graphic_processor2 (
 					ff_src_y_offset <= 16'd0;
 					ff_src_x_error <= 16'd0;
 					ff_src_y_error <= 16'd0;
-					ff_src_row_address <= reg_vram_address + reg_sx + { reg_sy, 9'd0 } + { reg_sy, 8'd0 } + { reg_sy, 5'd0 };
+					ff_src_row_address <= reg_vram_address + f_clip_start( reg_sx, 16'd800 ) + ({ 6'd0, f_clip_start( reg_sy, 16'd480 ) } << 10);
 					ff_state <= c_state_issue_src_read;
 				end
 
@@ -327,12 +354,12 @@ module graphic_processor2 (
 						ff_state <= c_state_issue_flush;
 					end
 					else begin
-						ff_cur_src_x <= ff_exec_sx + ff_src_x_offset;
-						ff_cur_src_y <= ff_exec_sy + ff_src_y_offset;
-						ff_cur_dst_x <= ff_exec_dx + ff_cur_dx;
-						ff_cur_dst_y <= ff_exec_dy + ff_cur_dy;
+						ff_cur_src_x <= ff_clipped_sx + ff_src_x_offset;
+						ff_cur_src_y <= ff_clipped_sy + ff_src_y_offset;
+						ff_cur_dst_x <= ff_clipped_dx + ff_cur_dx;
+						ff_cur_dst_y <= ff_clipped_dy + ff_cur_dy;
 						ff_cur_src_address <= ff_src_row_address + ff_src_x_offset;
-						ff_cur_dst_address <= ff_exec_base_address + (ff_exec_dx + ff_cur_dx) + ((ff_exec_dy + ff_cur_dy) * 16'd800);
+						ff_cur_dst_address <= ff_exec_base_address + (ff_clipped_dx + ff_cur_dx) + ({ 6'd0, (ff_clipped_dy + ff_cur_dy) } << 10);
 					end
 				end
 
@@ -383,7 +410,7 @@ module graphic_processor2 (
 							if( (ff_src_y_error + ff_clipped_sheight) >= ff_clipped_dheight ) begin
 								ff_src_y_error <= (ff_src_y_error + ff_clipped_sheight) - ff_clipped_dheight;
 								ff_src_y_offset <= ff_src_y_offset + 16'd1;
-								ff_src_row_address <= ff_src_row_address + 22'd800;
+								ff_src_row_address <= ff_src_row_address + 22'd1024;
 							end
 							else begin
 								ff_src_y_error <= ff_src_y_error + ff_clipped_sheight;

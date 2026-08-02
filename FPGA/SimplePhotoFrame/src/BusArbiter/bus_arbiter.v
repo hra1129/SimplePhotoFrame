@@ -98,6 +98,7 @@ module bus_arbiter (
 	wire	[15:0]		w_selected_bus_wdata;
 	wire				w_selected_bus_write;
 	wire				w_selected_bus_flush;
+	wire				w_selected_bus_read;
 	wire	[22:1]		w_request_address;
 	wire	[15:0]		w_request_wdata;
 	wire				w_request_write;
@@ -182,6 +183,7 @@ module bus_arbiter (
 	assign w_selected_bus_wdata		= func_select_wdata( w_selected_bus, sdram0_wdata, sdram1_wdata, sdram2_wdata, sdram3_wdata );
 	assign w_selected_bus_write		= func_select_1bit( w_selected_bus, sdram0_write, sdram1_write, sdram2_write, sdram3_write );
 	assign w_selected_bus_flush		= func_select_1bit( w_selected_bus, sdram0_flush, sdram1_flush, sdram2_flush, sdram3_flush );
+	assign w_selected_bus_read		= !w_selected_bus_write && !w_selected_bus_flush;
 
 	assign w_request_address		= ff_pending_valid ? ff_pending_address : w_selected_bus_address;
 	assign w_request_wdata			= ff_pending_valid ? ff_pending_wdata : w_selected_bus_wdata;
@@ -201,22 +203,27 @@ module bus_arbiter (
 	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_pending_valid	<= 1'b0;
+		end
+		else if( w_active && !sdram_ready ) begin
+			ff_pending_valid	<= 1'b1;
+		end
+		else if( ff_pending_valid && sdram_ready ) begin
+			ff_pending_valid	<= 1'b0;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
 			ff_pending_address	<= 22'd0;
 			ff_pending_wdata	<= 16'd0;
 			ff_pending_write	<= 1'b0;
 			ff_pending_flush	<= 1'b0;
 		end
-		else begin
-			if( ff_pending_valid && sdram_ready ) begin
-				ff_pending_valid	<= 1'b0;
-			end
-			if( w_active && !sdram_ready ) begin
-				ff_pending_valid	<= 1'b1;
-				ff_pending_address	<= w_selected_bus_address;
-				ff_pending_wdata	<= w_selected_bus_wdata;
-				ff_pending_write	<= w_selected_bus_write;
-				ff_pending_flush	<= w_selected_bus_flush;
-			end
+		else if( w_active && !sdram_ready ) begin
+			ff_pending_address	<= w_selected_bus_address;
+			ff_pending_wdata	<= w_selected_bus_wdata;
+			ff_pending_write	<= w_selected_bus_write;
+			ff_pending_flush	<= w_selected_bus_flush;
 		end
 	end
 
@@ -238,11 +245,11 @@ module bus_arbiter (
 			end
 		end
 		else if( w_active ) begin
-			if( !sdram_ready || !w_selected_bus_write ) begin
+			if( !sdram_ready || w_selected_bus_read ) begin
 				//	後段から busy が来ているか、あるいは read要求だった場合は次のサイクルで busy にする
 				ff_ready		<= 1'b0;
-				ff_read_stall	<= ~w_selected_bus_write;
-				if( !w_selected_bus_write ) begin
+				ff_read_stall	<= w_selected_bus_read;
+				if( w_selected_bus_read ) begin
 					ff_read_bus	<= w_selected_bus;
 				end
 			end

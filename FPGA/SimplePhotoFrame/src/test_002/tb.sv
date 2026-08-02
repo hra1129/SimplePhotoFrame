@@ -8,7 +8,7 @@ module tb;
 	localparam [7:0] IO_VRAM_ADDRESS_L	= 8'h00;
 	localparam [7:0] IO_VRAM_ADDRESS_H	= 8'h01;
 	localparam [7:0] IO_VRAM_DATA		= 8'h02;
-	localparam [7:0] IO_VRAM_FLASH		= 8'h03;
+	localparam [7:0] IO_VRAM_flush		= 8'h03;
 
 	reg			clk27m;
 	reg			fpga_spi_cs_n;
@@ -255,9 +255,9 @@ module tb;
 		spi_read16(IO_VRAM | IO_VRAM_DATA, data);
 	endtask
 
-	task vram_flash(
+	task vram_flush(
 	);
-		spi_write16(IO_VRAM | IO_VRAM_FLASH, 16'h0001);
+		spi_write16(IO_VRAM | IO_VRAM_flush, 16'h0001);
 	endtask
 
 	initial begin
@@ -270,22 +270,43 @@ module tb;
 		#2000;
 
 		//	random write
-		for( i = 0; i < 384000; i++ ) begin
+		$display("[TB] VRAM write and read test" );
+		for( i = 0; i < 1600; i++ ) begin
 			if( i[7:0] == 0 ) begin
-				$display("[TB] VRAM write and read %d / 384000", i);
+				$display("[TB] VRAM write and read %d / 1600", i);
 			end
 			// Address[0] is unused in vram_accessor ([22:1]), so use half-word aligned addresses.
 			vram_expected = i[15:0];
 			vram_write( i, vram_expected );
 			vram_read( i, vram_readback );
 			assert( vram_readback === vram_expected ) else begin
-				$display("[TB][ERROR] VRAM mismatch index=%0d addr=%0d expected=%04h got=%04h", i, i, vram_expected, vram_readback);
+				$display("[TB][ERROR] VRAM mismatch1 index=%0d addr=%0d expected=%04h got=%04h", i, i, vram_expected, vram_readback);
 				$stop;
 			end
 		end
+		$display("[TB] VRAM write and read test done.");
 
-		vram_flash();
-		$display("[TB] VRAM flash done.");
+		$display("[TB] VRAM flush" );
+		vram_flush();
+		repeat( 1000 ) begin
+			@( posedge clk27m );
+		end
+		$display("[TB] VRAM flush done.");
+
+		$display("[TB] VRAM read test" );
+		for( i = 0; i < 1600; i++ ) begin
+			if( i[7:0] == 0 ) begin
+				$display("[TB] VRAM read %d / 1600", i);
+			end
+			// Address[0] is unused in vram_accessor ([22:1]), so use half-word aligned addresses.
+			vram_expected = i[15:0];
+			vram_read( i, vram_readback );
+			assert( vram_readback === vram_expected ) else begin
+				$display("[TB][ERROR] VRAM mismatch2 index=%0d addr=%0d expected=%04h got=%04h", i, i, vram_expected, vram_readback);
+				$stop;
+			end
+		end
+		$display("[TB] VRAM read test done.");
 
 		repeat( 10 ) begin
 			$display("[TB] waiting.");

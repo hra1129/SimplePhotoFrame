@@ -109,7 +109,7 @@ module display_timing_generator (
 	// -------------------------------------------------------------------------
 	// w_de: high while counters are in the active video region
 	wire w_de = ( ff_h_counter >  H_BP_END     ) && ( ff_h_counter <= H_ACTIVE_END ) &&
-	            ( ff_v_counter >  V_BP_END      ) && ( ff_v_counter <= V_ACTIVE_END );
+	            ( ff_v_counter >  V_BP_END     ) && ( ff_v_counter <= V_ACTIVE_END );
 
 	// p_ready: asserted during the low phase of lcd_ck inside active area.
 	//          The upstream module must hold p_data stable until the handshake.
