@@ -248,6 +248,97 @@ module tb ();
 	endtask
 
 	// -----------------------------------------------------------------------
+	//	タスク: TEST9 専用
+	//	0x0000〜0xFFFF を順次生成して 32bit (low16->high16) に詰める。
+	//	書き込み側はランダムに in_valid=0 を挿入し、その間はインクリメント停止。
+	//	読み出し側はランダムに out_ready=0 を挿入して停止させる。
+	// -----------------------------------------------------------------------
+	task automatic run_full_range_random_test( input int tnum );
+		int			wr_word_cnt;
+		int			rd_half_cnt;
+		int			timeout;
+		int			max_timeout;
+		logic [15:0]	next_half;
+		logic [15:0]	expected;
+		logic [15:0]	wr_low;
+		logic [15:0]	wr_high;
+		begin
+			test_number = tnum;
+			$display("[TEST %0d] Full-range random flow test (0000h..FFFFh)", test_number);
+
+			do_reset();
+			wr_word_cnt = 0;
+			rd_half_cnt = 0;
+			timeout = 0;
+			// ランダム停止を入れるため余裕を持ったタイムアウト
+			max_timeout = 65536 * 64;
+			next_half = 16'h0000;
+			expected = 16'h0000;
+
+			while( (rd_half_cnt < 65536) && (timeout < max_timeout) ) begin
+				@( negedge clk );
+
+				if( wr_word_cnt < 32768 ) begin
+					wr_low = next_half;
+					wr_high = next_half + 16'd1;
+					in_data <= { wr_high, wr_low };
+					if( $urandom_range(0, 3) == 0 ) begin
+						in_valid <= 1'b0;
+					end
+					else begin
+						in_valid <= 1'b1;
+					end
+				end
+				else begin
+					in_valid <= 1'b0;
+				end
+
+				if( $urandom_range(0, 4) == 0 ) begin
+					out_ready <= 1'b0;
+				end
+				else begin
+					out_ready <= 1'b1;
+				end
+
+				@( posedge clk );
+				timeout++;
+
+				if( in_valid && in_ready ) begin
+					wr_word_cnt++;
+					next_half = next_half + 16'd2;
+				end
+
+				if( out_valid && out_ready ) begin
+					if( out_data !== expected ) begin
+						if( error_count < 10 ) begin
+							$display("[FAIL] TEST %0d: rd[%0d] expected=0x%04X got=0x%04X",
+								test_number, rd_half_cnt, expected, out_data);
+						end
+						error_count++;
+					end
+					expected = expected + 16'd1;
+					rd_half_cnt++;
+				end
+			end
+
+			in_valid = 1'b0;
+			out_ready = 1'b0;
+
+			if( wr_word_cnt != 32768 ) begin
+				$display("[FAIL] TEST %0d: write timeout wr_word_cnt=%0d/32768", test_number, wr_word_cnt);
+				error_count++;
+			end
+			if( rd_half_cnt != 65536 ) begin
+				$display("[FAIL] TEST %0d: read timeout rd_half_cnt=%0d/65536", test_number, rd_half_cnt);
+				error_count++;
+			end
+			if( (wr_word_cnt == 32768) && (rd_half_cnt == 65536) ) begin
+				$display("[PASS] TEST %0d: Full-range randomized transfer verified", test_number);
+			end
+		end
+	endtask
+
+	// -----------------------------------------------------------------------
 	//	メインテスト
 	// -----------------------------------------------------------------------
 	initial begin
@@ -527,6 +618,13 @@ module tb ();
 		//	TEST 8: 入力 valid=0 / 出力 ready=0 ランダム挿入 (組み合わせ)
 		// ===================================================================
 		run_randomized_flow_test( 8, 1'b1, 1'b1 );
+
+		repeat( 20 ) @( posedge clk );
+
+		// ===================================================================
+		//	TEST 9: 0000h〜FFFFh フルレンジ + ランダム invalid / ready=0
+		// ===================================================================
+		run_full_range_random_test( 9 );
 
 		repeat( 20 ) @( posedge clk );
 

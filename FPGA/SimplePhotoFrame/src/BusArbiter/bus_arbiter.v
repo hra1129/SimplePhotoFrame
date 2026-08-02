@@ -84,6 +84,11 @@ module bus_arbiter (
 	reg		[1:0]		ff_read_bus;
 	reg					ff_read_stall;
 	reg					ff_ready;
+	reg					ff_pending_valid;
+	reg	[22:1]		ff_pending_address;
+	reg	[15:0]		ff_pending_wdata;
+	reg					ff_pending_write;
+	reg					ff_pending_flush;
 	wire				w_active;
 	wire	[3:0]		w_valid;
 	wire	[3:0]		w_priority_valid;
@@ -92,7 +97,12 @@ module bus_arbiter (
 	wire	[22:1]		w_selected_bus_address;
 	wire	[15:0]		w_selected_bus_wdata;
 	wire				w_selected_bus_write;
-	wire				w_selected_bus_flash;
+	wire				w_selected_bus_flush;
+	wire	[22:1]		w_request_address;
+	wire	[15:0]		w_request_wdata;
+	wire				w_request_write;
+	wire				w_request_flush;
+	wire				w_request_valid;
 
 	function [3:0] func_rotate_priority(
 		input [3:0]		valid,
@@ -171,7 +181,13 @@ module bus_arbiter (
 	assign w_selected_bus_address	= func_select_address( w_selected_bus, sdram0_address, sdram1_address, sdram2_address, sdram3_address );
 	assign w_selected_bus_wdata		= func_select_wdata( w_selected_bus, sdram0_wdata, sdram1_wdata, sdram2_wdata, sdram3_wdata );
 	assign w_selected_bus_write		= func_select_1bit( w_selected_bus, sdram0_write, sdram1_write, sdram2_write, sdram3_write );
-	assign w_selected_bus_flash		= func_select_1bit( w_selected_bus, sdram0_flush, sdram1_flush, sdram2_flush, sdram3_flush );
+	assign w_selected_bus_flush		= func_select_1bit( w_selected_bus, sdram0_flush, sdram1_flush, sdram2_flush, sdram3_flush );
+
+	assign w_request_address		= ff_pending_valid ? ff_pending_address : w_selected_bus_address;
+	assign w_request_wdata			= ff_pending_valid ? ff_pending_wdata : w_selected_bus_wdata;
+	assign w_request_write			= ff_pending_valid ? ff_pending_write : w_selected_bus_write;
+	assign w_request_flush			= ff_pending_valid ? ff_pending_flush : w_selected_bus_flush;
+	assign w_request_valid			= ff_pending_valid | w_active;
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -179,6 +195,28 @@ module bus_arbiter (
 		end
 		else if( w_active ) begin
 			ff_priority		<= w_selected_bus + 2'd1;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_pending_valid	<= 1'b0;
+			ff_pending_address	<= 22'd0;
+			ff_pending_wdata	<= 16'd0;
+			ff_pending_write	<= 1'b0;
+			ff_pending_flush	<= 1'b0;
+		end
+		else begin
+			if( ff_pending_valid && sdram_ready ) begin
+				ff_pending_valid	<= 1'b0;
+			end
+			if( w_active && !sdram_ready ) begin
+				ff_pending_valid	<= 1'b1;
+				ff_pending_address	<= w_selected_bus_address;
+				ff_pending_wdata	<= w_selected_bus_wdata;
+				ff_pending_write	<= w_selected_bus_write;
+				ff_pending_flush	<= w_selected_bus_flush;
+			end
 		end
 	end
 
@@ -211,24 +249,24 @@ module bus_arbiter (
 		end
 	end
 
-	assign sdram0_rdata		= (ff_read_bus == 2'd0) ? sdram_rdata : 16'd0;
-	assign sdram1_rdata		= (ff_read_bus == 2'd1) ? sdram_rdata : 16'd0;
-	assign sdram2_rdata		= (ff_read_bus == 2'd2) ? sdram_rdata : 16'd0;
-	assign sdram3_rdata		= (ff_read_bus == 2'd3) ? sdram_rdata : 16'd0;
+	assign sdram0_rdata			= (ff_read_bus == 2'd0) ? sdram_rdata : 16'd0;
+	assign sdram1_rdata			= (ff_read_bus == 2'd1) ? sdram_rdata : 16'd0;
+	assign sdram2_rdata			= (ff_read_bus == 2'd2) ? sdram_rdata : 16'd0;
+	assign sdram3_rdata			= (ff_read_bus == 2'd3) ? sdram_rdata : 16'd0;
 
 	assign sdram0_rdata_valid	= (ff_read_bus == 2'd0) ? sdram_rdata_valid : 1'b0;
 	assign sdram1_rdata_valid	= (ff_read_bus == 2'd1) ? sdram_rdata_valid : 1'b0;
 	assign sdram2_rdata_valid	= (ff_read_bus == 2'd2) ? sdram_rdata_valid : 1'b0;
 	assign sdram3_rdata_valid	= (ff_read_bus == 2'd3) ? sdram_rdata_valid : 1'b0;
 
-	assign sdram0_ready		= (w_selected_bus == 2'd0) ? ff_ready : 1'b0;
-	assign sdram1_ready		= (w_selected_bus == 2'd1) ? ff_ready : 1'b0;
-	assign sdram2_ready		= (w_selected_bus == 2'd2) ? ff_ready : 1'b0;
-	assign sdram3_ready		= (w_selected_bus == 2'd3) ? ff_ready : 1'b0;
+	assign sdram0_ready			= (w_selected_bus == 2'd0) ? ff_ready : 1'b0;
+	assign sdram1_ready			= (w_selected_bus == 2'd1) ? ff_ready : 1'b0;
+	assign sdram2_ready			= (w_selected_bus == 2'd2) ? ff_ready : 1'b0;
+	assign sdram3_ready			= (w_selected_bus == 2'd3) ? ff_ready : 1'b0;
 
-	assign sdram_address		= w_selected_bus_address;
-	assign sdram_write		= w_selected_bus_write;
-	assign sdram_wdata		= w_selected_bus_wdata;
-	assign sdram_flush		= w_selected_bus_flash;
-	assign sdram_valid		= w_active;
+	assign sdram_address		= w_request_address;
+	assign sdram_write			= w_request_write;
+	assign sdram_wdata			= w_request_wdata;
+	assign sdram_flush			= w_request_flush;
+	assign sdram_valid			= w_request_valid;
 endmodule

@@ -61,46 +61,46 @@ module tb;
 	bus_arbiter u_dut (
 		.reset				( reset				),
 		.clk				( clk				),
-		.bus0_address		( bus0_address		),
-		.bus0_write			( bus0_write		),
-		.bus0_wdata			( bus0_wdata		),
-		.bus0_flash			( bus0_flash		),
-		.bus0_valid			( bus0_valid		),
-		.bus0_ready			( bus0_ready		),
-		.bus0_rdata			( bus0_rdata		),
-		.bus0_rdata_valid	( bus0_rdata_valid	),
-		.bus1_address		( bus1_address		),
-		.bus1_write			( bus1_write		),
-		.bus1_wdata			( bus1_wdata		),
-		.bus1_flash			( bus1_flash		),
-		.bus1_valid			( bus1_valid		),
-		.bus1_ready			( bus1_ready		),
-		.bus1_rdata			( bus1_rdata		),
-		.bus1_rdata_valid	( bus1_rdata_valid	),
-		.bus2_address		( bus2_address		),
-		.bus2_write			( bus2_write		),
-		.bus2_wdata			( bus2_wdata		),
-		.bus2_flash			( bus2_flash		),
-		.bus2_valid			( bus2_valid		),
-		.bus2_ready			( bus2_ready		),
-		.bus2_rdata			( bus2_rdata		),
-		.bus2_rdata_valid	( bus2_rdata_valid	),
-		.bus3_address		( bus3_address		),
-		.bus3_write			( bus3_write		),
-		.bus3_wdata			( bus3_wdata		),
-		.bus3_flash			( bus3_flash		),
-		.bus3_valid			( bus3_valid		),
-		.bus3_ready			( bus3_ready		),
-		.bus3_rdata			( bus3_rdata		),
-		.bus3_rdata_valid	( bus3_rdata_valid	),
-		.bus_address			( bus_address		),
-		.bus_write			( bus_write			),
-		.bus_wdata			( bus_wdata			),
-		.bus_flash			( bus_flash			),
-		.bus_valid			( bus_valid			),
-		.bus_ready			( bus_ready			),
-		.bus_rdata			( bus_rdata			),
-		.bus_rdata_valid	( bus_rdata_valid	)
+		.sdram0_address		( bus0_address		),
+		.sdram0_write		( bus0_write		),
+		.sdram0_wdata		( bus0_wdata		),
+		.sdram0_flush		( bus0_flash		),
+		.sdram0_valid		( bus0_valid		),
+		.sdram0_ready		( bus0_ready		),
+		.sdram0_rdata		( bus0_rdata		),
+		.sdram0_rdata_valid	( bus0_rdata_valid	),
+		.sdram1_address		( bus1_address		),
+		.sdram1_write		( bus1_write		),
+		.sdram1_wdata		( bus1_wdata		),
+		.sdram1_flush		( bus1_flash		),
+		.sdram1_valid		( bus1_valid		),
+		.sdram1_ready		( bus1_ready		),
+		.sdram1_rdata		( bus1_rdata		),
+		.sdram1_rdata_valid	( bus1_rdata_valid	),
+		.sdram2_address		( bus2_address		),
+		.sdram2_write		( bus2_write		),
+		.sdram2_wdata		( bus2_wdata		),
+		.sdram2_flush		( bus2_flash		),
+		.sdram2_valid		( bus2_valid		),
+		.sdram2_ready		( bus2_ready		),
+		.sdram2_rdata		( bus2_rdata		),
+		.sdram2_rdata_valid	( bus2_rdata_valid	),
+		.sdram3_address		( bus3_address		),
+		.sdram3_write		( bus3_write		),
+		.sdram3_wdata		( bus3_wdata		),
+		.sdram3_flush		( bus3_flash		),
+		.sdram3_valid		( bus3_valid		),
+		.sdram3_ready		( bus3_ready		),
+		.sdram3_rdata		( bus3_rdata		),
+		.sdram3_rdata_valid	( bus3_rdata_valid	),
+		.sdram_address		( bus_address		),
+		.sdram_write		( bus_write			),
+		.sdram_wdata		( bus_wdata			),
+		.sdram_flush		( bus_flash			),
+		.sdram_valid		( bus_valid			),
+		.sdram_ready		( bus_ready			),
+		.sdram_rdata		( bus_rdata			),
+		.sdram_rdata_valid	( bus_rdata_valid	)
 	);
 
 	always #(CLK_HALF) clk = ~clk;
@@ -484,6 +484,43 @@ module tb;
 		wait_ready_bus0();
 		@(posedge clk);
 		bus0_valid <= 1'b0;
+
+		test_number = 7;
+		$display("[TB][TEST%0d] keep downstream request valid until downstream ready", test_number);
+		@(posedge clk);
+		bus_ready <= 1'b0;
+		bus2_address <= 22'h34567;
+		bus2_write <= 1'b1;
+		bus2_wdata <= 16'h2468;
+		bus2_flash <= 1'b1;
+		bus2_valid <= 1'b1;
+		@(negedge clk);
+		#1;
+		check_cond(bus2_ready, "bus2_ready should assert when arbiter buffer accepts request");
+		check_cond(bus_valid, "bus_valid should assert while request is buffered");
+		check_cond(bus_address == 22'h34567, "buffered request address mismatch on accept cycle");
+		check_cond(bus_wdata == 16'h2468, "buffered request wdata mismatch on accept cycle");
+		check_cond(bus_flash == 1'b1, "buffered request flush mismatch on accept cycle");
+		@(posedge clk);
+		bus2_valid <= 1'b0;
+		#1;
+		check_cond(!bus2_ready, "bus2_ready should deassert while buffered request is pending downstream");
+		check_cond(bus_valid, "bus_valid should stay asserted until downstream ready");
+		check_cond(bus_address == 22'h34567, "buffered request address should be held");
+		check_cond(bus_wdata == 16'h2468, "buffered request wdata should be held");
+		check_cond(bus_flash == 1'b1, "buffered request flush should be held");
+		repeat(2) begin
+			@(posedge clk);
+			#1;
+			check_cond(bus_valid, "bus_valid should remain asserted while downstream ready is low");
+		end
+		@(posedge clk);
+		bus_ready <= 1'b1;
+		#1;
+		check_cond(bus_valid, "bus_valid should still be asserted on downstream accept cycle");
+		@(posedge clk);
+		#1;
+		check_cond(!bus_valid, "bus_valid should deassert after downstream accepts buffered request");
 
 		repeat(5) @(posedge clk);
 		if( error_count == 0 ) begin

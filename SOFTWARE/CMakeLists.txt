@@ -16,6 +16,7 @@ add_executable(simple_photo_frame
 	fpga_io.c
 	vram_accessor.c
 	display_controller.c
+	button.c
 	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ff.c
 	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffunicode.c
 )

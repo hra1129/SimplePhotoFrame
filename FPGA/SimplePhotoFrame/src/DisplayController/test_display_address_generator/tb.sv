@@ -8,34 +8,36 @@ module tb;
 	localparam integer OBSERVE_FRAMES = 2;
 	localparam integer MAX_CYCLES = REQUESTS_PER_FRAME * BURST_WORDS * OBSERVE_FRAMES + 2000;
 
-	reg			clk;
-	reg			reset;
-	reg			sdram_init_busy;
-	reg	[7:0]	bus_address;
-	reg			bus_valid;
+	reg				clk;
+	reg				reset;
+	reg				sdram_init_busy;
+	reg				bus_cs;
+	reg		[7:0]	bus_address;
+	reg				bus_valid;
 	wire			bus_ready;
-	reg			bus_write;
-	reg	[15:0]	bus_wdata;
+	reg				bus_write;
+	reg		[15:0]	bus_wdata;
 	wire	[15:0]	bus_rdata;
 	wire			bus_rdata_valid;
-	reg			fifo_full;
+	reg				fifo_full;
 	wire	[31:0]	fifo_wdata;
 	wire			fifo_valid;
 	wire	[22:5]	sdram_address;
 	wire			sdram_address_valid;
-	reg			sdram_address_ready;
-	reg	[31:0]	sdram_rdata;
-	reg			sdram_rdata_valid;
+	reg				sdram_address_ready;
+	reg		[31:0]	sdram_rdata;
+	reg				sdram_rdata_valid;
 
-	integer		fifo_pulses;
-	integer		request_pulses;
-	integer		frame_count;
-	integer		cycle_count;
+	integer			fifo_pulses;
+	integer			request_pulses;
+	integer			frame_count;
+	integer			cycle_count;
 
 	display_address_generator dut (
 		.clk					( clk					),
 		.reset					( reset					),
 		.sdram_init_busy		( sdram_init_busy		),
+		.bus_cs					( bus_cs				),
 		.bus_address			( bus_address			),
 		.bus_valid				( bus_valid				),
 		.bus_ready				( bus_ready				),
@@ -70,6 +72,7 @@ module tb;
 		clk = 1'b0;
 		reset = 1'b1;
 		sdram_init_busy = 1'b0;
+		bus_cs = 1'b1;
 		bus_address = 8'd0;
 		bus_valid = 1'b0;
 		bus_write = 1'b0;

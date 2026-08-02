@@ -207,6 +207,30 @@ pico_status_led_ws2812_pio_h/fast:
 	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2_common/pico_status_led/CMakeFiles/pico_status_led_ws2812_pio_h.dir/build.make pico-sdk/src/rp2_common/pico_status_led/CMakeFiles/pico_status_led_ws2812_pio_h.dir/build
 .PHONY : pico_status_led_ws2812_pio_h/fast
 
+button.o: button.c.o
+.PHONY : button.o
+
+# target to build an object file
+button.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/button.c.o
+.PHONY : button.c.o
+
+button.i: button.c.i
+.PHONY : button.i
+
+# target to preprocess a source file
+button.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/button.c.i
+.PHONY : button.c.i
+
+button.s: button.c.s
+.PHONY : button.s
+
+# target to generate assembly for a file
+button.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/button.c.s
+.PHONY : button.c.s
+
 display_controller.o: display_controller.c.o
 .PHONY : display_controller.o
 
@@ -2174,6 +2198,9 @@ help:
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
 	@echo "... simple_photo_frame"
+	@echo "... button.o"
+	@echo "... button.i"
+	@echo "... button.s"
 	@echo "... display_controller.o"
 	@echo "... display_controller.i"
 	@echo "... display_controller.s"

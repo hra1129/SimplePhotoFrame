@@ -26,7 +26,7 @@
 
 #include "fpga_io.h"
 
-#define DISPLAY_RGB( r, g, b ) (((b) & 0x1F) | (((g) & 0x1F) << 5) | (((r) & 0x1F) << 11))
+#define DISPLAY_RGB( r, g, b ) (((b) & 0x1F) | (((g) & 0x3F) << 5) | (((r) & 0x1F) << 11))
 
 #define C_ROP_PUT  0x0000
 #define C_ROP_OR   0x0001

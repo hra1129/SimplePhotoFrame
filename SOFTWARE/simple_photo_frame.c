@@ -27,45 +27,75 @@
 #include "sdcard.h"
 #include "display_controller.h"
 #include "vram_accessor.h"
+#include "button.h"
 
+// ---------------------------------------------------------
+void vram_test( void ) {
+	int address;
+	uint16_t data;
+
+	//	テストパターンを描画
+	for( address = 0; address < (800 * 480); address++ ) {
+		vram_write( address, address & 0xFFFF );
+		data = vram_read( address );
+		if( data != (address & 0xFFFF) ) {
+			printf( "VRAM test failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
+			sleep_ms(1);
+		}
+		else {
+			printf( "VRAM test passed at address %d: got %04X\n", address, data );
+		}
+	}
+}
+
+// ---------------------------------------------------------
 int main() {
 	int r, g, b, x, y;
+	uint8_t button_state;
 
 	stdio_init_all();
+	button_init();
 	fpga_io_init();
 	sleep_ms(2000);
+
+	//	テストパターンを描画
+	for( y = 0; y < 480; y++ ) {
+		for( x = 0; x < 800; x++ ) {
+			r = ((x + y) & 63) >> 1;
+			g = ((x + y) & 63);
+			b = ((x + y) & 63) >> 1;
+			vram_write( (y * 800) + x, DISPLAY_RGB( r, g, b ) );
+		}
+	}
 
 	while (1) {
 //		if( sdcard_init_and_mount() ) {
 //			break;
 //		}
 //		printf("SD card mount failed.\n");
-		display_enable( false );
-		r = rand() & 31;
-		g = rand() & 63;
-		b = rand() & 31;
-		printf( "Fill color: R=%d, G=%d, B=%d\n", r, g, b );
-		display_set_fill_color( DISPLAY_RGB( r, g, b ) );
-		sleep_ms(1000);
-		printf( "VRAM Image\n" );
-		display_enable( true );
-//		r = rand() & 31;
-//		g = rand() & 63;
-//		b = rand() & 31;
-//		graphic1_fill_rectangle( rand() % 800, rand() % 480, rand() % 100, rand() % 100, DISPLAY_RGB( r, g, b ), C_ROP_PUT );
-//		sleep_ms(1000);
 
-		printf( "Draw image begin\n" );
-		for( y = 0; y < 480; y++ ) {
-			for( x = 0; x < 800; x++ ) {
-				r = x & 31;
-				g = x & 63;
-				b = y & 31;
-				vram_write( (y * 800) + x, DISPLAY_RGB( r, g, b ) );
-			}
+		button_state = button_get();
+		if( button_state & SW_A ) {
+			printf( "Button A pressed.\n" );
+			display_enable( false );
+			r = rand() & 31;
+			g = rand() & 63;
+			b = rand() & 31;
+			display_set_fill_color( DISPLAY_RGB( r, g, b ) );
+			printf( "Fill color: R=%d, G=%d, B=%d\n", r, g, b );
 		}
-		printf( "Draw image end\n" );
-		sleep_ms(1000);
+		else if( button_state & SW_B ) {
+			printf( "Button B pressed.\n" );
+			display_enable( true );
+		}
+		else if( button_state & SW_U ) {
+			printf( "Button Up pressed.\n" );
+			vram_test();
+		}
+
+		do {
+			button_state = button_get();
+		} while( button_state != 0 );
 	}
 
 	while( 1 ) {
