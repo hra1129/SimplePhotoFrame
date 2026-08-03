@@ -112,7 +112,7 @@ module graphic_processor2 (
 	reg		[15:0]	ff_bus_rdata;
 	reg				ff_bus_rdata_valid;
 
-	reg signed	[15:0]	ff_exec_sx;
+	reg signed	[15:0]	ff_exec_sx;		/* synthesis syn_maxfan = 32 */
 	reg signed	[15:0]	ff_exec_sy;
 	reg		[15:0]	ff_exec_swidth;
 	reg		[15:0]	ff_exec_sheight;
@@ -123,7 +123,7 @@ module graphic_processor2 (
 	reg		[15:0]	ff_exec_rop;
 	reg		[22:1]	ff_exec_base_address;
 
-	reg		[15:0]	ff_cur_dx;
+	reg		[15:0]	ff_cur_dx;		/* synthesis syn_maxfan = 32 */
 	reg		[15:0]	ff_cur_dy;
 	reg		[15:0]	ff_cur_src_x;
 	reg		[15:0]	ff_cur_src_y;

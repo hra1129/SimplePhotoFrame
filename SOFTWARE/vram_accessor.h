@@ -28,6 +28,9 @@
 
 void vram_write( uint32_t address, uint16_t data );
 uint16_t vram_read( uint32_t address );
+void vram_set_address( uint32_t address );
+void vram_burst_write( uint16_t data );
+uint16_t vram_burst_read( void );
 void vram_flush( void );
 
 #endif

@@ -12,6 +12,7 @@
         <File path="src/Cache/cache_tag.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_address_generator.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_controller.v" type="file.verilog" enable="1"/>
+        <File path="src/DisplayController/display_fillcolor_generator.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_preload_buffer.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_single_port_ram.v" type="file.verilog" enable="1"/>
         <File path="src/DisplayController/display_timing_generator.v" type="file.verilog" enable="1"/>

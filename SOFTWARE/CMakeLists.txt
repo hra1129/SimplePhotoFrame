@@ -26,7 +26,7 @@ target_include_directories(simple_photo_frame PRIVATE
 )
 
 # Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(simple_photo_frame pico_stdlib hardware_spi)
+target_link_libraries(simple_photo_frame pico_stdlib hardware_spi pico_cyw43_arch_none)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(simple_photo_frame 1)

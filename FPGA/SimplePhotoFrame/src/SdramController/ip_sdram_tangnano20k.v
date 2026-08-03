@@ -489,13 +489,13 @@ module ip_sdram #(
 				end
 			default:
 				begin
-					//	モードレジスタ BL=8, BT=0, CAS=3, OP=0, WB=0
+					//	モードレジスタ BL=8, BT=0, CAS=2, OP=0, WB=0
 					ff_sdr_bank <= 2'd0;			//	Ignore
 					ff_sdr_address <= { 
 						1'b0,						//	Reserved
 						1'b0,						//	Write burst mode  0: Programmed Burst Length, 1: Single Location Access
 						2'b00,						//	Operation mode    00: Standard Operation, others: Reserved
-						3'b011,						//	CAS Latency       010: 2cyc, 011: 3cyc, others: Reserved
+						3'b010,						//	CAS Latency       010: 2cyc, 011: 3cyc, others: Reserved
 						1'b0,						//	Burst type        0: Sequential Access, 1: Interleave Access
 						3'b011						//	Burst length      000: 1, 001: 2, 010: 4, 011: 8, 111: full page (Sequential Access only), others: Reserved
 					};
@@ -574,8 +574,9 @@ module ip_sdram #(
 			ff_read_start_toggle_sync1_sdram	<= ff_read_start_toggle_clk;
 			ff_read_start_toggle_sync2_sdram	<= ff_read_start_toggle_sync1_sdram;
 			if( w_read_start_sdram ) begin
-				// Arm capture window. Beat0 is sampled on the next cycle.
-				ff_read_word_count_sdram		<= 3'd0;
+				// For CAS=2, capture beat0 on this cycle and continue with beat1..beat7.
+				ff_sdr_read_data[31:0]			<= IO_sdram_dq;
+				ff_read_word_count_sdram		<= 3'd1;
 				ff_read_capture_active_sdram	<= 1'b1;
 				ff_read_start_pending_sdram		<= 1'b0;
 			end

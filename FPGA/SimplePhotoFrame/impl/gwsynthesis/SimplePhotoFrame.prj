@@ -11,6 +11,7 @@
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_tag.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_controller.v" type="verilog"/>
+        <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_fillcolor_generator.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_preload_buffer.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_single_port_ram.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_timing_generator.v" type="verilog"/>
@@ -22,8 +23,8 @@
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\VramAccessor\vram_accessor.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\gowin_rpll\gowin_rpll.v" type="verilog"/>
-        <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\spi_rom\ip_spi_rom.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\gowin_rpll2\gowin_rpll2.v" type="verilog"/>
+        <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\spi_rom\ip_spi_rom.v" type="verilog"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>

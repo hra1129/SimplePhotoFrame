@@ -97,6 +97,7 @@ module bus_selector (
 	reg		[2:0]	ff_read_count;
 	reg		[2:0]	ff_write_count;
 	reg			ff_write_seen_busy;
+	wire			w_request_valid;
 	wire			w_active;
 	wire	[1:0]	w_valid;
 	wire	[1:0]	w_priority_valid;
@@ -130,7 +131,8 @@ module bus_selector (
 		endcase
 	endfunction
 
-	assign w_active						= (sdram_display_address_valid | sdram_cache_address_valid) & ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready;
+	assign w_request_valid			= (sdram_display_address_valid | sdram_cache_address_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
+	assign w_active					= w_request_valid & sdram_address_ready;
 	assign w_valid						= { sdram_cache_address_valid, sdram_display_address_valid };
 	assign w_priority_valid				= func_rotate_priority( w_valid, ff_priority );
 	assign w_selected_valid				= func_select_valid( w_priority_valid );
@@ -228,7 +230,7 @@ module bus_selector (
 	assign sdram_display_address_ready	= !w_selected_bus ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
 	assign sdram_cache_address_ready	=  w_selected_bus ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
 
-	assign sdram_address_valid			= w_active;
+	assign sdram_address_valid			= w_request_valid;
 	assign sdram_address				= w_output_bus ? sdram_cache_address     : sdram_display_address;
 	assign sdram_write					= w_output_bus ? sdram_cache_write       : 1'b0;
 	assign sdram_refresh				= w_output_bus ? sdram_cache_refresh     : 1'b0;

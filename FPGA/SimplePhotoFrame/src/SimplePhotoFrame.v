@@ -158,13 +158,13 @@ module simple_photo_frame (
 	//	クロック生成
 	// ---------------------------------------------------------
 	Gowin_rPLL u_rpll (
-		.clkout							( sysclk						),		//	108MHz
-        .clkoutp						( sysclk_n						),		//	108MHz (180deg)
+		.clkout							( sysclk						),		//	81MHz
+        .clkoutp						( sysclk_n						),		//	81MHz (180deg)
 		.clkin							( clk27m						)		//	27MHz
 	);
 
 	Gowin_rPLL2 u_rpll2 (
-		.clkout							( serialclk						),		//	216MHz
+		.clkout							( serialclk						),		//	162MHz
 		.clkin							( clk27m						)		//	27MHz
 	);
 

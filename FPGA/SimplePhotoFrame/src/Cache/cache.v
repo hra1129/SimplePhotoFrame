@@ -214,7 +214,7 @@ module cache (
 	reg				ff_tag1_we_n;
 	reg				ff_tag2_we_n;
 	reg				ff_tag3_we_n;
-	reg		[11:0]	ff_tag_address;
+	reg		[11:0]	ff_tag_address;	/* synthesis syn_maxfan = 32 */
 	reg		[15:0]	ff_tag0_wdata;
 	reg		[15:0]	ff_tag1_wdata;
 	reg		[15:0]	ff_tag2_wdata;

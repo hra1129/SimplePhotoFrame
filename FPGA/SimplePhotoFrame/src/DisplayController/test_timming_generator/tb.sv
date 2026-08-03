@@ -65,6 +65,8 @@ module tb ();
 	wire			lcd_hs;
 	wire			lcd_vs;
 	wire			lcd_de;
+	wire			frame_sync;
+	wire			frame_end;
 	wire	[4:0]	lcd_r;
 	wire	[5:0]	lcd_g;
 	wire	[4:0]	lcd_b;
@@ -83,6 +85,8 @@ module tb ();
 		.lcd_hs		( lcd_hs	),
 		.lcd_vs		( lcd_vs	),
 		.lcd_de		( lcd_de	),
+		.frame_sync	( frame_sync	),
+		.frame_end	( frame_end	),
 		.lcd_r		( lcd_r		),
 		.lcd_g		( lcd_g		),
 		.lcd_b		( lcd_b		),

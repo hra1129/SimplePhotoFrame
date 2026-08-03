@@ -86,7 +86,7 @@ module vram_accessor (
 	reg		[22:1]	ff_sdram_address;
 	reg				ff_sdram_write;
 	reg		[15:0]	ff_sdram_wdata;
-	reg				ff_sdram_valid;
+	reg				ff_sdram_valid;		/* synthesis syn_maxfan = 32 */
 	reg				ff_sdram_flush;
 	reg				ff_wait_rdata;
 	wire			w_bus_ready;

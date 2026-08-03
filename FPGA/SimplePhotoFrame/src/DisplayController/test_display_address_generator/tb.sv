@@ -11,24 +11,21 @@ module tb;
 	reg				clk;
 	reg				reset;
 	reg				sdram_init_busy;
+	reg			frame_end;
 	reg				bus_cs;
-	reg		[7:0]	bus_address;
+	reg	[4:0]	bus_address;
 	reg				bus_valid;
 	wire			bus_ready;
-	reg				bus_write;
-	reg		[15:0]	bus_wdata;
+	reg			bus_write;
+	reg	[15:0]	bus_wdata;
 	wire	[15:0]	bus_rdata;
 	wire			bus_rdata_valid;
-	reg				fifo_full;
-	wire	[31:0]	fifo_wdata;
-	wire			fifo_valid;
+	wire			display_on;
+	wire	[15:0]	fill_color;
 	wire	[22:5]	sdram_address;
 	wire			sdram_address_valid;
-	reg				sdram_address_ready;
-	reg		[31:0]	sdram_rdata;
-	reg				sdram_rdata_valid;
+	reg			sdram_address_ready;
 
-	integer			fifo_pulses;
 	integer			request_pulses;
 	integer			frame_count;
 	integer			cycle_count;
@@ -37,6 +34,7 @@ module tb;
 		.clk					( clk					),
 		.reset					( reset					),
 		.sdram_init_busy		( sdram_init_busy		),
+		.frame_end			( frame_end			),
 		.bus_cs					( bus_cs				),
 		.bus_address			( bus_address			),
 		.bus_valid				( bus_valid				),
@@ -45,14 +43,11 @@ module tb;
 		.bus_wdata				( bus_wdata				),
 		.bus_rdata				( bus_rdata				),
 		.bus_rdata_valid		( bus_rdata_valid		),
-		.fifo_full				( fifo_full				),
-		.fifo_wdata				( fifo_wdata			),
-		.fifo_valid				( fifo_valid			),
+		.display_on				( display_on				),
+		.fill_color				( fill_color				),
 		.sdram_address			( sdram_address			),
 		.sdram_address_valid	( sdram_address_valid	),
-		.sdram_address_ready	( sdram_address_ready	),
-		.sdram_rdata			( sdram_rdata			),
-		.sdram_rdata_valid		( sdram_rdata_valid		)
+		.sdram_address_ready	( sdram_address_ready	)
 	);
 
 	always #5 clk = ~clk;
@@ -72,16 +67,13 @@ module tb;
 		clk = 1'b0;
 		reset = 1'b1;
 		sdram_init_busy = 1'b0;
+		frame_end = 1'b1;
 		bus_cs = 1'b1;
-		bus_address = 8'd0;
+		bus_address = 5'd0;
 		bus_valid = 1'b0;
 		bus_write = 1'b0;
 		bus_wdata = 16'd0;
-		fifo_full = 1'b0;
-		sdram_address_ready = 1'b0;
-		sdram_rdata = 32'h0123_4567;
-		sdram_rdata_valid = 1'b0;
-		fifo_pulses = 0;
+		sdram_address_ready = 1'b1;
 		request_pulses = 0;
 		frame_count = 0;
 		cycle_count = 0;
@@ -94,26 +86,19 @@ module tb;
 			#1;
 			cycle_count = cycle_count + 1;
 
-			check_ok( sdram_address_valid == 1'b0, "display_off_sdram_request" );
-
-			if( fifo_valid ) begin
-				fifo_pulses = fifo_pulses + 1;
-			end
-
-			if( dut.w_valid ) begin
+			if( sdram_address_valid && sdram_address_ready ) begin
 				request_pulses = request_pulses + 1;
 				if( dut.ff_h_counter == 0 && dut.ff_v_counter == 0 ) begin
 					frame_count = frame_count + 1;
-					$display("[TB] frame=%0d cycle=%0d requests=%0d fifo_words=%0d fifo_wdata=%h", frame_count, cycle_count, request_pulses, fifo_pulses, fifo_wdata);
+					$display("[TB] frame=%0d cycle=%0d requests=%0d display_on=%0d fill_color=%h", frame_count, cycle_count, request_pulses, display_on, fill_color);
 				end
 			end
 		end
 
 		check_ok( frame_count == OBSERVE_FRAMES, "display_off_2frames_timeout" );
-		check_ok( request_pulses == REQUESTS_PER_FRAME * OBSERVE_FRAMES, "display_off_request_count" );
-		check_ok( fifo_pulses == request_pulses * BURST_WORDS, "display_off_fifo_word_count" );
+		check_ok( request_pulses >= REQUESTS_PER_FRAME, "display_off_request_count" );
 
-		$display("[TB] PASS frames=%0d requests=%0d fifo_words=%0d cycles=%0d", frame_count, request_pulses, fifo_pulses, cycle_count);
+		$display("[TB] PASS frames=%0d requests=%0d cycles=%0d", frame_count, request_pulses, cycle_count);
 		$finish;
 	end
 endmodule

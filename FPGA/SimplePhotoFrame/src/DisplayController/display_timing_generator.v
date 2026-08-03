@@ -69,6 +69,8 @@ module display_timing_generator (
 	output			lcd_hs,
 	output			lcd_vs,
 	output			lcd_de,
+	output			frame_sync,
+	output			frame_end,
 	output	[4:0]	lcd_r,
 	output	[5:0]	lcd_g,		// bit0 is fixed 0
 	output	[4:0]	lcd_b,
@@ -187,6 +189,12 @@ module display_timing_generator (
 
 	// lcd_de: high during active video area
 	assign lcd_de = w_de;
+
+	// frame_sync: high from the end of active lines through vertical blank.
+	assign frame_sync = ( ff_v_counter >= V_ACTIVE_END ) && ( ff_v_counter <= V_TOTAL );
+
+	// one-clock pulse at timing-generator frame boundary.
+	assign frame_end = w_lcd_ck_rise && ( ff_h_counter == H_TOTAL ) && ( ff_v_counter == V_TOTAL );
 
 	// -------------------------------------------------------------------------
 	// Pixel output

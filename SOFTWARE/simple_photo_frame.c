@@ -28,6 +28,7 @@
 #include "display_controller.h"
 #include "vram_accessor.h"
 #include "button.h"
+#include "pico/cyw43_arch.h"
 
 // ---------------------------------------------------------
 void vram_test( void ) {
@@ -36,21 +37,17 @@ void vram_test( void ) {
 
 	//	テストパターンを描画
 	printf( "VRAM test: writing test pattern...\n" );
-	for( address = 0; address < (1024 * 100); address++ ) {
-		vram_write( address, address & 0xFFFF );
-		data = vram_read( address );
-		if( data != (address & 0xFFFF) ) {
-			printf( "VRAM test failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
-			sleep_ms(1);
-		}
+	vram_set_address( 0 );
+	for( address = 0; address < (1024 * 480); address++ ) {
+		vram_burst_write( address & 0xFFFF );
 	}
 	//	テストパターンを再度読み出してチェック
 	printf( "VRAM test: verifying test pattern...\n" );
-	for( address = 0; address < (1024 * 100); address++ ) {
-		data = vram_read( address );
+	vram_set_address( 0 );
+	for( address = 0; address < (1024 * 480); address++ ) {
+		data = vram_burst_read();
 		if( data != (address & 0xFFFF) ) {
-			printf( "VRAM test failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
-			sleep_ms(1);
+			printf( "VRAM test2 failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
 		}
 	}
 	printf( "VRAM test completed.\n" );
@@ -64,15 +61,17 @@ int main() {
 	stdio_init_all();
 	button_init();
 	fpga_io_init();
+	cyw43_arch_init();
 	sleep_ms(2000);
 
 	//	テストパターンを描画
+	vram_set_address( 0 );
 	for( y = 0; y < 480; y++ ) {
-		for( x = 0; x < 800; x++ ) {
+		for( x = 0; x < 1024; x++ ) {
 			r = ((x + y) & 63) >> 1;
 			g = ((x + y) & 63);
 			b = ((x + y) & 63) >> 1;
-			vram_write( (y * 1024) + x, DISPLAY_RGB( r, g, b ) );
+			vram_burst_write( DISPLAY_RGB( r, g, b ) );
 		}
 	}
 
@@ -84,6 +83,9 @@ int main() {
 
 		button_state = button_get();
 		if( button_state & SW_A ) {
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+			sleep_ms(500);
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 			printf( "Button A pressed.\n" );
 			display_enable( false );
 			r = rand() & 31;

@@ -74,6 +74,7 @@ module display_preload_buffer (
 	reg		[10:0]	ff_wr_ptr;					/* synthesis syn_preserve = 1 */	// {wrap, addr[9:0]}　偶奇で SRAM0/1 を選択
 	reg		[10:0]	ff_wr_ptr_c1;				/* synthesis syn_preserve = 1 */
 	reg		[10:0]	ff_rd_ptr;					// 同上
+	reg		[10:0]	ff_count;
 
 	// wr_ptr は SRAM0/1 を交互にカウント → 合計インデックス
 	// 偶数インデックス → SRAM0、奇数インデックス → SRAM1
@@ -81,17 +82,13 @@ module display_preload_buffer (
 	wire	[10:0]	w_wr_ptr_next	= (ff_wr_ptr == 11'd2047) ? 11'd0 : ff_wr_ptr + 11'd1;
 	wire	[10:0]	w_rd_ptr_next	= (ff_rd_ptr == 11'd2047) ? 11'd0 : ff_rd_ptr + 11'd1;
 
-	// wr_ptr と rd_ptr の差分 = 蓄積ワード数
-	// 差分計算は 11bit の符号なし減算（ラップアラウンド考慮）
-	// wr_ptr の指すアドレスは次に書く場所であり、まだデータは存在していない。
-	// rd_ptr の指すアドレスは次に読む場所であり、データが存在している。
-	// 引き算した結果がそのまま蓄積されている数と一致する。
-	// ただし、wr_ptr = 10, rd_ptr = 2000 の循環点をまたぐケースもあるため、
-	// 符号なしの引き算で求めて桁借りビットを捨てる。
-	// 0～2047 の値しか取り得ないため、SRAM の 1word は必ず未使用となる。
-	wire	[10:0]	w_count			= ff_wr_ptr - ff_rd_ptr;	// 自動ラップ
+	// 蓄積ワード数。ff_rd_ptr 由来の減算経路が広がりやすいため、占有量は専用レジスタで保持する。
+	wire	[10:0]	w_count			= ff_count;
+	localparam	[10:0]	c_in_ready_max_count	= 11'd2015;	// require free >= 32 words
 	localparam	[10:0]	c_nearly_full_high	= 11'd2031;	// keep room for one DRAM burst (16 words)
 	localparam	[10:0]	c_nearly_full_low	= 11'd1024;	// half buffer watermark for hysteresis release
+	localparam	[10:0]	c_burst_safe_count	= 11'd2039;	// require free >= 8 words before starting a new burst
+	wire			w_initial_charge_done	= (w_count >= c_in_ready_max_count);
 
 	// DRAM に対する1アクセス分を確実に保持できる空きがなければ in_ready = 0 にして 
 	// DRAM への要求を止める。2047個の値までしか蓄積できないため、１アクセス = 16word の
@@ -99,11 +96,16 @@ module display_preload_buffer (
 	// 空き容量が足りないことになる。
 	// DRAM にリクエストを発行するモジュールにはこれを通知する。
 	reg				ff_nearly_full;
+	reg		[2:0]	ff_accept_lock;
+	wire			w_wr_en;
 	wire			w_nearly_full_set	= (w_count > c_nearly_full_high);
 	wire			w_nearly_full_clr	= (w_count <= c_nearly_full_low);
 
 	// 本来の FIFO FULL 信号。in_ready はこれを使って制御。
 	wire			w_full			= (w_count == 11'd2047);
+
+	// forward declaration (defined in read-control section)
+	wire			w_do_read;
 
 	// -------------------------------------------------------------------------
 	// 初期チャージフラグ
@@ -117,6 +119,21 @@ module display_preload_buffer (
 	// 待ってもらうステートであることを示すフラグが ff_initial_charge である。
 	// -------------------------------------------------------------------------
 	reg				ff_initial_charge;
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_count <= 11'd0;
+		end
+		else begin
+			case( {w_wr_en, w_do_read} )
+				2'b10: ff_count <= ff_count + 11'd1;
+				2'b01: ff_count <= ff_count - 11'd1;
+				default: begin
+					// hold
+				end
+			endcase
+		end
+	end
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -138,23 +155,40 @@ module display_preload_buffer (
 		if( reset ) begin
 			ff_initial_charge <= 1'b1;
 		end
-		else if( w_nearly_full_set ) begin
-			// 空き容量がなくなったら、初期チャージは完了
+		else if( w_initial_charge_done ) begin
+			// 32word連続受信を維持する閾値まで溜まったら初期チャージ完了
 			ff_initial_charge <= 1'b0;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_accept_lock <= 3'd0;
+		end
+		else if( w_wr_en ) begin
+			if( ff_accept_lock != 3'd0 ) begin
+				ff_accept_lock <= ff_accept_lock - 3'd1;
+			end
+			else begin
+				ff_accept_lock <= 3'd7;
+			end
 		end
 	end
 
 	// -------------------------------------------------------------------------
 	//	in_ready
+	// SDRAM read burst(8word)の受信開始後は、途中で in_ready を落とさず受け切る。
+	// これにより、backpressureできない SDRAM 返却データの取りこぼしを防ぐ。
 	// -------------------------------------------------------------------------
-	wire	w_in_ready			= ~w_full;
+	wire	w_burst_safe_start	= (w_count <= c_burst_safe_count);
+	wire	w_in_ready			= ~w_full && ( (ff_accept_lock != 3'd0) || w_burst_safe_start );
 	assign	in_ready 			= w_in_ready;
 	assign	in_nearly_full		= ff_nearly_full;
 
 	// -------------------------------------------------------------------------
 	//	SRAM 書き込み制御
 	// -------------------------------------------------------------------------
-	wire			w_wr_en			= in_valid & w_in_ready;
+	assign			w_wr_en			= in_valid & w_in_ready;
 	wire			w_wr_sram_sel	= ff_wr_ptr_c1[0];		// 0: SRAM0, 1: SRAM1
 	wire	[9:0]	w_wr_addr		= ff_wr_ptr_c1[10:1];
 
@@ -217,7 +251,7 @@ module display_preload_buffer (
 	// 書き込みを優先し、読み出しを1サイクル待機させる
 	wire			w_sram_conflict	= w_wr_en & w_do_read_req & (w_wr_sram_sel == w_rd_sram_sel);
 
-	wire			w_do_read		= w_do_read_req & ~w_sram_conflict;
+	assign			w_do_read		= w_do_read_req & ~w_sram_conflict;
 
 	// Stage1 制御
 	always @( posedge clk ) begin

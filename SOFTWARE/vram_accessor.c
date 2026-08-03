@@ -33,10 +33,20 @@
 //	description:
 //		VRAM アドレスレジスタへ 23bit アドレスを設定する
 // -----------------------------------------------------------------------------
-static void vram_set_address( uint32_t address ) {
+void vram_set_address( uint32_t address ) {
 
 	fpga_outport( IO_VRAM | IO_VRAM_ADDRESS_L, (uint16_t)(address & 0xFFFF) );
 	fpga_outport( IO_VRAM | IO_VRAM_ADDRESS_H, (uint16_t)((address >> 16) & 0x007F) );
+}
+
+// -----------------------------------------------------------------------------
+//	vram_burst_write
+//	description:
+//		設定済みのアドレスに 16bit データを書き込む
+// -----------------------------------------------------------------------------
+void vram_burst_write( uint16_t data ) {
+	
+	fpga_outport( IO_VRAM | IO_VRAM_DATA, data );
 }
 
 // -----------------------------------------------------------------------------
@@ -47,7 +57,17 @@ static void vram_set_address( uint32_t address ) {
 void vram_write( uint32_t address, uint16_t data ) {
 
 	vram_set_address( address );
-	fpga_outport( IO_VRAM | IO_VRAM_DATA, data );
+	vram_burst_write( data );
+}
+
+// -----------------------------------------------------------------------------
+//	vram_burst_read
+//	description:
+//		指定アドレスの VRAM から 16bit データを読み出す
+// -----------------------------------------------------------------------------
+uint16_t vram_burst_read( void ) {
+
+	return fpga_inport( IO_VRAM | IO_VRAM_DATA );
 }
 
 // -----------------------------------------------------------------------------
@@ -58,7 +78,7 @@ void vram_write( uint32_t address, uint16_t data ) {
 uint16_t vram_read( uint32_t address ) {
 
 	vram_set_address( address );
-	return fpga_inport( IO_VRAM | IO_VRAM_DATA );
+	return vram_burst_read();
 }
 
 // -----------------------------------------------------------------------------

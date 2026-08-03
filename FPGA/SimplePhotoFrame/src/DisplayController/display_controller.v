@@ -86,58 +86,83 @@ module display_controller (
 	wire			fifo_full;
 	wire	[31:0]	fifo_wdata;
 	wire			fifo_valid;
-	wire			display_on;
+	wire			fifo_ready;
 	wire			p_valid;
 	wire			p_ready;
 	wire	[15:0]	p_data;
 
+	wire			frame_sync;
+	wire			frame_end;
+	wire	[22:5]	request_sdram_address;
+	wire			request_sdram_address_valid;
+	wire			request_sdram_address_ready;
+	wire			display_on;
+	wire	[15:0]	fill_color;
+
 	display_address_generator display_address_generator (
-		.clk					( clk					),
-		.reset					( reset					),
-		.sdram_init_busy		( sdram_init_busy		),
-		.bus_cs					( bus_cs				),
-		.bus_address			( bus_address			),
-		.bus_valid				( bus_valid				),
-		.bus_ready				( bus_ready				),
-		.bus_write				( bus_write				),
-		.bus_wdata				( bus_wdata				),
-		.bus_rdata				( bus_rdata				),
-		.bus_rdata_valid		( bus_rdata_valid		),
-		.fifo_full				( fifo_full				),
-		.fifo_wdata				( fifo_wdata			),
-		.fifo_valid				( fifo_valid			),
-		.sdram_address			( sdram_address			),
-		.sdram_address_valid	( sdram_address_valid	),
-		.sdram_address_ready	( sdram_address_ready	),
-		.sdram_rdata			( sdram_rdata			),
-		.sdram_rdata_valid		( sdram_rdata_valid		)
+		.clk					( clk							),
+		.reset					( reset							),
+		.sdram_init_busy		( sdram_init_busy				),
+		.frame_end				( frame_end						),
+		.bus_cs					( bus_cs						),
+		.bus_address			( bus_address					),
+		.bus_valid				( bus_valid						),
+		.bus_ready				( bus_ready						),
+		.bus_write				( bus_write						),
+		.bus_wdata				( bus_wdata						),
+		.bus_rdata				( bus_rdata						),
+		.bus_rdata_valid		( bus_rdata_valid				),
+		.display_on				( display_on					),
+		.fill_color				( fill_color					),
+		.sdram_address			( request_sdram_address			),
+		.sdram_address_valid	( request_sdram_address_valid	),
+		.sdram_address_ready	( request_sdram_address_ready	)
 	);
 
+	display_fillcolor_generator display_fillcolor_generator (
+		.clk					( clk							),
+		.reset					( reset							),
+		.display_on				( display_on					),
+		.fill_color				( fill_color					),
+		.in_sdram_address		( request_sdram_address			),
+		.in_sdram_address_valid	( request_sdram_address_valid	),
+		.in_sdram_address_ready	( request_sdram_address_ready	),
+		.sdram_address			( sdram_address					),
+		.sdram_address_valid	( sdram_address_valid			),
+		.sdram_address_ready	( sdram_address_ready			),
+		.sdram_rdata			( sdram_rdata					),
+		.sdram_rdata_valid		( sdram_rdata_valid				),
+		.out_data				( fifo_wdata					),
+		.out_valid				( fifo_valid					),
+		.out_ready				( fifo_ready					)
+	);
 	display_preload_buffer display_preload_buffer (
-		.clk					( clk					),
-		.reset					( reset					),
-		.in_data				( fifo_wdata			),
-		.in_valid				( fifo_valid			),
-		.in_ready				( 						),
-		.in_nearly_full			( fifo_full				),
-		.out_data				( p_data				),
-		.out_valid				( p_valid				),
-		.out_ready				( p_ready				)
+		.clk					( clk							),
+		.reset					( reset							),
+		.in_data				( fifo_wdata					),
+		.in_valid				( fifo_valid					),
+		.in_ready				( fifo_ready					),
+		.in_nearly_full			( fifo_full						),
+		.out_data				( p_data						),
+		.out_valid				( p_valid						),
+		.out_ready				( p_ready						)
 	);
 
 	display_timing_generator display_timing_generator (
-		.clk					( clk					),
-		.reset					( reset					),
-		.p_data					( p_data				),
-		.p_valid				( p_valid				),
-		.p_ready				( p_ready				),
-		.lcd_ck					( lcd_ck				),
-		.lcd_hs					( lcd_hs				),
-		.lcd_vs					( lcd_vs				),
-		.lcd_de					( lcd_de				),
-		.lcd_r					( lcd_r					),
-		.lcd_g					( lcd_g					),
-		.lcd_b					( lcd_b					),
-		.lcd_bl					( lcd_bl				)
+		.clk					( clk							),
+		.reset					( reset							),
+		.p_data					( p_data						),
+		.p_valid				( p_valid						),
+		.p_ready				( p_ready						),
+		.lcd_ck					( lcd_ck						),
+		.lcd_hs					( lcd_hs						),
+		.lcd_vs					( lcd_vs						),
+		.lcd_de					( lcd_de						),
+		.frame_sync				( frame_sync					),
+		.frame_end				( frame_end						),
+		.lcd_r					( lcd_r							),
+		.lcd_g					( lcd_g							),
+		.lcd_b					( lcd_b							),
+		.lcd_bl					( lcd_bl						)
 	);
 endmodule

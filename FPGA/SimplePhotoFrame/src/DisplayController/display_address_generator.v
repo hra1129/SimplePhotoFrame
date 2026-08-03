@@ -58,6 +58,7 @@ module display_address_generator (
 	input			clk,
 	input			reset,
 	input			sdram_init_busy,
+	input			frame_end,
 	//	Register interface
 	input			bus_cs,
 	input	[4:0]	bus_address,
@@ -67,16 +68,12 @@ module display_address_generator (
 	input	[15:0]	bus_wdata,
 	output	[15:0]	bus_rdata,
 	output			bus_rdata_valid,
-	//	FIFO interface
-	input			fifo_full,
-	output	[31:0]	fifo_wdata,
-	output			fifo_valid,
+	output			display_on,
+	output	[15:0]	fill_color,
 	//	SDRAM address
 	output	[22:5]	sdram_address,
 	output			sdram_address_valid,
-	input			sdram_address_ready,
-	input	[31:0]	sdram_rdata,
-	input			sdram_rdata_valid
+	input			sdram_address_ready
 );
 	localparam		IMG_WIDTH	= 800 / 16;	//	表示対象ピクセル数/バーストリードワード数
 	localparam		VRAM_STRIDE	= 1024 / 16;	//	VRAM 1ラインのバーストワード数
@@ -88,7 +85,6 @@ module display_address_generator (
 	localparam		[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_ONE = {{($clog2(IMG_HEIGHT)-1){1'b0}}, 1'b1};
 	reg				[$clog2(IMG_WIDTH)-1:0]		ff_h_counter;
 	reg				[$clog2(IMG_HEIGHT)-1:0]	ff_v_counter;
-	reg				[2:0]						ff_fill_burst_remain;
 
 	reg				ff_ready;
 	reg				ff_rdata_valid;
@@ -96,20 +92,19 @@ module display_address_generator (
 	reg		[2:0]	reg_register_address;
 	reg				reg_display_on;
 	reg		[15:0]	reg_fill_color;
-	reg		[22:5]	ff_sdram_address;
 	reg		[22:5]	ff_base_address;
 	reg				ff_display_on;
-	wire			w_can_request;
-	wire			w_fill_burst_active;
-	wire			w_fill_burst_start;
-	wire			w_fill_burst_step;
+	reg				ff_frame_head_holdoff;
+	reg				ff_wait_frame_sync;
+	wire			w_issue_enable;
+	wire			w_issue_accept;
 	wire			w_valid;
+	wire	[22:5]	w_sdram_address;
 
-	assign w_can_request		= ~fifo_full;
-	assign w_fill_burst_active	= (ff_fill_burst_remain != 3'd0);
-	assign w_fill_burst_start	= w_can_request && ~ff_display_on && ~w_fill_burst_active;
-	assign w_fill_burst_step	= w_can_request && ~ff_display_on && w_fill_burst_active;
-	assign w_valid				= w_can_request && (ff_display_on ? sdram_address_ready : ~w_fill_burst_active);
+	assign w_issue_enable		= ~ff_frame_head_holdoff && ~ff_wait_frame_sync;
+	assign w_issue_accept		= w_issue_enable && sdram_address_ready;
+	assign w_valid				= w_issue_enable;
+	assign w_sdram_address		= ff_base_address + { ff_v_counter, 6'd0 } + ff_h_counter;
 
 	// ---------------------------------------------------------
 	//	Access ready/busy logic
@@ -195,27 +190,12 @@ module display_address_generator (
 	// ---------------------------------------------------------
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_fill_burst_remain <= 3'd0;
-		end
-		else if( ff_display_on ) begin
-			ff_fill_burst_remain <= 3'd0;
-		end
-		else if( w_fill_burst_start ) begin
-			ff_fill_burst_remain <= BURST_WORDS - 1;
-		end
-		else if( w_fill_burst_step ) begin
-			ff_fill_burst_remain <= ff_fill_burst_remain - 3'd1;
-		end
-	end
-
-	always @( posedge clk ) begin
-		if( reset ) begin
 			ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
 		end
-		else if( fifo_full ) begin
-			// FIFOが満杯の場合は、カウンターを止めて待つ
+		else if( !ff_ready ) begin
+			//	hold
 		end
-		else if( w_valid ) begin
+		else if( w_issue_accept ) begin
 			if( ff_h_counter == H_COUNTER_MAX ) begin
 				ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
 			end 
@@ -229,10 +209,10 @@ module display_address_generator (
 		if( reset ) begin
 			ff_v_counter <= { $clog2(IMG_HEIGHT){1'b0} };
 		end
-		else if( fifo_full ) begin
-			// FIFOが満杯の場合は、カウンターを止めて待つ
+		else if( !ff_ready ) begin
+			//	hold
 		end
-		else if( w_valid ) begin
+		else if( w_issue_accept ) begin
 			if( ff_h_counter == H_COUNTER_MAX ) begin
 				if( ff_v_counter == V_COUNTER_MAX ) begin
 					ff_v_counter <= { $clog2(IMG_HEIGHT){1'b0} };
@@ -246,13 +226,25 @@ module display_address_generator (
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_sdram_address <= 18'd0;
+			ff_frame_head_holdoff <= 1'b0;
 		end
-		else if( fifo_full ) begin
-			// FIFOが満杯の場合は、アドレスの更新を止めて待つ
+		else if( ff_frame_head_holdoff ) begin
+			ff_frame_head_holdoff <= 1'b0;
 		end
-		else if( w_valid ) begin
-			ff_sdram_address <= ff_base_address + { ff_v_counter, 6'd0 } + ff_h_counter;
+		else if( w_issue_accept && (ff_h_counter == H_COUNTER_MAX) && (ff_v_counter == V_COUNTER_MAX) && reg_display_on ) begin
+			ff_frame_head_holdoff <= 1'b1;
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_wait_frame_sync <= 1'b0;
+		end
+		else if( frame_end ) begin
+			ff_wait_frame_sync <= 1'b0;
+		end
+		else if( w_issue_accept && (ff_h_counter == H_COUNTER_MAX) && (ff_v_counter == V_COUNTER_MAX) ) begin
+			ff_wait_frame_sync <= 1'b1;
 		end
 	end
 
@@ -260,13 +252,9 @@ module display_address_generator (
 		if( reset ) begin
 			ff_display_on <= 1'b0;
 		end
-		else if( w_valid ) begin
-			if( ff_h_counter == H_COUNTER_MAX ) begin
-				if( ff_v_counter == V_COUNTER_MAX ) begin
-					// 表示ON/OFFの更新は、フレーム更新と同期する
-					ff_display_on <= reg_display_on;
-				end
-			end
+		else if( frame_end ) begin
+			// display_on update is synchronized to timing-generator frame boundary
+			ff_display_on <= reg_display_on;
 		end
 	end
 
@@ -274,9 +262,8 @@ module display_address_generator (
 	assign bus_rdata			= { 15'd0, sdram_init_busy };
 	assign bus_rdata_valid		= ff_rdata_valid;
 
-	assign sdram_address		= ff_sdram_address;
-	assign sdram_address_valid	= ff_display_on & w_can_request;
-
-	assign fifo_wdata			= ff_display_on ? sdram_rdata : { reg_fill_color, reg_fill_color };
-	assign fifo_valid			= (ff_display_on && sdram_rdata_valid) || w_fill_burst_start || w_fill_burst_step;
+	assign sdram_address		= w_sdram_address;
+	assign sdram_address_valid	= w_valid;
+	assign display_on			= ff_display_on;
+	assign fill_color			= reg_fill_color;
 endmodule
