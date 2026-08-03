@@ -436,7 +436,8 @@ module ip_sdram #(
 						end
 					c_main_state_nop1, c_main_state_nop2,
 					c_main_state_nop3, c_main_state_data_fetch, c_main_state_finish,
-					c_main_state_nop4, c_main_state_nop5, c_main_state_nop6, c_main_state_nop7:
+					c_main_state_nop4, c_main_state_nop5, c_main_state_nop6, c_main_state_nop7,
+					c_main_state_finish2:
 						begin
 							ff_sdr_command		<= c_sdr_command_no_operation;
 							if( ff_do_command && ff_write && !ff_do_refresh && (ff_main_state == c_main_state_nop2) ) begin
@@ -488,13 +489,13 @@ module ip_sdram #(
 				end
 			default:
 				begin
-					//	モードレジスタ BL=8, BT=0, CAS=2, OP=0, WB=0
+					//	モードレジスタ BL=8, BT=0, CAS=3, OP=0, WB=0
 					ff_sdr_bank <= 2'd0;			//	Ignore
 					ff_sdr_address <= { 
 						1'b0,						//	Reserved
 						1'b0,						//	Write burst mode  0: Programmed Burst Length, 1: Single Location Access
 						2'b00,						//	Operation mode    00: Standard Operation, others: Reserved
-						3'b010,						//	CAS Latency       010: 2cyc, 011: 3cyc, others: Reserved
+						3'b011,						//	CAS Latency       010: 2cyc, 011: 3cyc, others: Reserved
 						1'b0,						//	Burst type        0: Sequential Access, 1: Interleave Access
 						3'b011						//	Burst length      000: 1, 001: 2, 010: 4, 011: 8, 111: full page (Sequential Access only), others: Reserved
 					};
@@ -559,8 +560,7 @@ module ip_sdram #(
 		end
 	end
 
-	// always @( posedge clk_sdram ) begin
-	always @( posedge clk ) begin
+	always @( posedge clk_sdram ) begin
 		if( reset ) begin
 			ff_read_start_toggle_sync1_sdram	<= 1'b0;
 			ff_read_start_toggle_sync2_sdram	<= 1'b0;
@@ -574,9 +574,8 @@ module ip_sdram #(
 			ff_read_start_toggle_sync1_sdram	<= ff_read_start_toggle_clk;
 			ff_read_start_toggle_sync2_sdram	<= ff_read_start_toggle_sync1_sdram;
 			if( w_read_start_sdram ) begin
-				// Capture the first burst word on the start cycle to avoid losing beat0.
-				ff_sdr_read_data[31:0]			<= IO_sdram_dq;
-				ff_read_word_count_sdram		<= 3'd1;
+				// Arm capture window. Beat0 is sampled on the next cycle.
+				ff_read_word_count_sdram		<= 3'd0;
 				ff_read_capture_active_sdram	<= 1'b1;
 				ff_read_start_pending_sdram		<= 1'b0;
 			end
@@ -584,8 +583,9 @@ module ip_sdram #(
 				ff_read_start_pending_sdram		<= 1'b0;
 			end
 			else begin
-				// Continue capture for remaining burst words using the current SDRAM sample.
+				// Capture beat0..beat7 in order.
 				case( ff_read_word_count_sdram )
+				3'd0: ff_sdr_read_data[ 31:  0]	<= IO_sdram_dq;
 				3'd1: ff_sdr_read_data[ 63: 32]	<= IO_sdram_dq;
 				3'd2: ff_sdr_read_data[ 95: 64]	<= IO_sdram_dq;
 				3'd3: ff_sdr_read_data[127: 96]	<= IO_sdram_dq;

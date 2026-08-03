@@ -54,7 +54,7 @@
     "Multi_Boot": true,
     "Netlist_Hierarchy": true,
     "OUTPUT_BASE_NAME": "SimplePhotoFrame",
-    "Optimization_Goal": "Timing",
+    "Optimization_Goal": "Auto",
     "POWER_ON_RESET_MONITOR": true,
     "PRINT_BSRAM_MODE": "Default Mode",
     "PRINT_BSRAM_VALUE": true,

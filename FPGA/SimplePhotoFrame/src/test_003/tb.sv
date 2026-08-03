@@ -90,7 +90,7 @@ module tb;
 		.Dq					( IO_sdram_dq		),
 		.Addr				( O_sdram_addr		),
 		.Ba					( O_sdram_ba		),
-		.Clk				( ~O_sdram_clk		),
+		.Clk				( O_sdram_clk		),
 		.Cke				( O_sdram_cke		),
 		.Cs_n				( O_sdram_cs_n		),
 		.Ras_n				( O_sdram_ras_n		),
@@ -307,13 +307,6 @@ module tb;
 			end
 		end
 		$display("[TB] VRAM read test done.");
-
-		repeat( 10 ) begin
-			$display("[TB] waiting.");
-			repeat( 100 ) begin
-				@( posedge clk27m );
-			end
-		end
 
 		$display("[TB] Finsh.");
 		$finish;

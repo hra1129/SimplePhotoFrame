@@ -1,12 +1,12 @@
 //Copyright (C)2014-2026 Gowin Semiconductor Corporation.
 //All rights reserved.
 //File Title: IP file
-//Tool Version: V1.9.12.02_SP2 (64-bit)
+//Tool Version: V1.9.12.03 (64-bit)
 //IP Version: 1.0
 //Part Number: GW2AR-LV18QN88C8/I7
 //Device: GW2AR-18
 //Device Version: C
-//Created Time: Thu Jun 11 19:11:52 2026
+//Created Time: Mon Aug  3 07:55:51 2026
 
 module Gowin_rPLL (clkout, clkoutp, clkin);
 

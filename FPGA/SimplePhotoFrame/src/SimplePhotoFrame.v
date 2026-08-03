@@ -43,9 +43,8 @@ module simple_photo_frame (
 	output	[ 1:0]	O_sdram_ba,		//	GOWIN FPGA Internal
 	output	[ 3:0]	O_sdram_dqm		//	GOWIN FPGA Internal
 );
-	wire			clk108m;
-	wire			clk108m_n;
-	wire			clk216m;
+	wire			sysclk;
+	wire			serialclk;
 	reg				ff_reset_bus = 1'b1;		/* synthesis syn_preserve = 1 */
 	reg				ff_reset_spi = 1'b1;		/* synthesis syn_preserve = 1 */
 	reg				ff_reset_gp1 = 1'b1;		/* synthesis syn_preserve = 1 */
@@ -159,20 +158,20 @@ module simple_photo_frame (
 	//	クロック生成
 	// ---------------------------------------------------------
 	Gowin_rPLL u_rpll (
-		.clkout							( clk108m						),		//	108MHz
-		.clkoutp						( clk108m_n						),		//	108MHz (inverted)
+		.clkout							( sysclk						),		//	108MHz
+        .clkoutp						( sysclk_n						),		//	108MHz (180deg)
 		.clkin							( clk27m						)		//	27MHz
 	);
 
-	Gowin_rPLL2 your_instance_name(
-		.clkout							( clk216m						),		//	216MHz
+	Gowin_rPLL2 u_rpll2 (
+		.clkout							( serialclk						),		//	216MHz
 		.clkin							( clk27m						)		//	27MHz
 	);
 
 	// ---------------------------------------------------------
 	//	リセット生成
 	// ---------------------------------------------------------
-	always @( posedge clk108m ) begin
+	always @( posedge sysclk ) begin
 		ff_reset_bus		<= 1'b0;
 		ff_reset_spi		<= 1'b0;
 		ff_reset_gp1		<= 1'b0;
@@ -188,8 +187,8 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	ip_spi u_ip_spi (
 		.reset							( ff_reset_spi					),
-		.clk							( clk108m						),
-		.clk_serial						( clk216m						),
+		.clk							( sysclk						),
+		.clk_serial						( serialclk						),
 		.bus_cs							( w_bus_io_cs					),
 		.bus_write						( w_bus_io_write				),
 		.bus_valid						( w_bus_io_valid				),
@@ -210,8 +209,8 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	ip_spi_rom u_ip_spi_rom (
 		.reset							( ff_reset_spi					),
-		.clk							( clk108m						),
-		.clk_serial						( clk108m						),
+		.clk							( sysclk						),
+		.clk_serial						( sysclk						),
 		.bus_cs							( w_bus_io_cs[7]				),
 		.bus_address					( w_bus_io_address[0]			),
 		.bus_write						( w_bus_io_write				),
@@ -233,7 +232,7 @@ module simple_photo_frame (
 	//	表示コントローラ (I/O 00h-1Fh)
 	// ---------------------------------------------------------
 	display_controller u_display_controller (
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.reset							( ff_reset_display				),
 		.sdram_init_busy				( w_sdram_init_busy				),
 		.bus_cs							( w_bus_io_cs[0]				),
@@ -266,7 +265,7 @@ module simple_photo_frame (
 	//	VRAM読み書き (I/O C0h-DFh)
 	// ---------------------------------------------------------
 	vram_accessor u_vram_accessor (
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.reset							( ff_reset_vram					),
 		.sdram_init_busy				( w_sdram_init_busy				),
 		.bus_cs							( w_bus_io_cs[6]				),
@@ -291,7 +290,7 @@ module simple_photo_frame (
 	//	描画コントローラ1 (I/O 20h-3Fh)
 	// ---------------------------------------------------------
 	graphic_processor1 u_graphic_processor1 (
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.reset							( ff_reset_gp1					),
 		.sdram_init_busy				( w_sdram_init_busy				),
 		.bus_cs							( w_bus_io_cs[1]				),
@@ -316,7 +315,7 @@ module simple_photo_frame (
 	//	描画コントローラ2 (I/O 40h-5Fh)
 	// ---------------------------------------------------------
 	graphic_processor2 u_graphic_processor2 (
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.reset							( ff_reset_gp2					),
 		.sdram_init_busy				( w_sdram_init_busy				),
 		.bus_cs							( w_bus_io_cs[2]				),
@@ -342,7 +341,7 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	bus_arbiter u_bus_arbiter (
 		.reset							( ff_reset_bus					),
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.sdram0_address					( w_sdram0_address				),
 		.sdram0_write					( w_sdram0_write				),
 		.sdram0_wdata					( w_sdram0_wdata				),
@@ -396,7 +395,7 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	cache u_cache (
 		.reset							( ff_reset_cache				),
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.cache_address					( w_cache_address				),
 		.cache_write					( w_cache_write					),
 		.cache_wdata					( w_cache_wdata					),
@@ -422,7 +421,7 @@ module simple_photo_frame (
 	// ---------------------------------------------------------
 	bus_selector u_bus_selector (
 		.reset							( ff_reset_bus					),
-		.clk							( clk108m						),
+		.clk							( sysclk						),
 		.sdram_display_address			( w_sdram_display_address		),
 		.sdram_display_address_valid	( w_sdram_display_address_valid	),
 		.sdram_display_address_ready	( w_sdram_display_address_ready	),
@@ -454,8 +453,8 @@ module simple_photo_frame (
 	//	SDRAMコントローラ
 	// ---------------------------------------------------------
 	ip_sdram u_sdram_controller (
-		.clk							( clk108m						),
-		.clk_sdram						( clk108m_n						),
+		.clk							( sysclk						),
+		.clk_sdram						( sysclk_n						),
 		.reset							( ff_reset_sdram				),
 		.sdram_init_busy				( w_sdram_init_busy				),
 		.bus_address					( w_sdram_address				),

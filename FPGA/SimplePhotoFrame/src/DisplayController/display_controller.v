@@ -86,6 +86,7 @@ module display_controller (
 	wire			fifo_full;
 	wire	[31:0]	fifo_wdata;
 	wire			fifo_valid;
+	wire			display_on;
 	wire			p_valid;
 	wire			p_ready;
 	wire	[15:0]	p_data;
