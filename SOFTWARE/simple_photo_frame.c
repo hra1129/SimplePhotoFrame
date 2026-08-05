@@ -73,6 +73,25 @@ void usa_fpga_test( void ) {
 }
 
 // ---------------------------------------------------------
+void boxfill_test( void ) {
+	int i, x, y, w, h;
+	uint16_t color;
+
+	display_set_frame_address( 0 );
+	vram_set_address( 0 );
+	for( i = 0; i < 100; i++ ) {
+		color = rand() & 0xFFFF;
+		x = rand() % 1024;
+		y = rand() % 480;
+		w = rand() % 200 + 1;
+		h = rand() % 200 + 1;
+		printf( "Boxfill test: filling box at (%d, %d)-step(%d, %d) with color %04X\n", x, y, w, h, color );
+		graphic1_fill_rectangle( x, y, w, h, color, C_ROP_PUT );
+	}
+	vram_flush();
+}
+
+// ---------------------------------------------------------
 int main() {
 	int r, g, b, x, y;
 	uint8_t button_state;
@@ -127,6 +146,12 @@ int main() {
 			printf( "Button Down pressed.\n" );
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			usa_fpga_test();
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+		}
+		else if( button_state & SW_L ) {
+			printf( "Button Left pressed.\n" );
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+			boxfill_test();
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 

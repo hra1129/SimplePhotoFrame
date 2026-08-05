@@ -80,6 +80,11 @@ void display_set_fill_color( uint16_t color ) {
 // -----------------------------------------------------------------------------
 void graphic1_fill_rectangle( int sx, int sy, int width, int height, uint16_t color, uint16_t rop ) {
 
+	//	グラフィック1が IDLE状態になるまで待機する
+	while( (fpga_inport( IO_GRAPHIC1 | 6 ) & 1) == 1 ) {
+		// wait
+	}
+	//	グラフィック1の矩形塗りつぶし機能を使用する
 	fpga_outport( IO_GRAPHIC1 | 0, sx );
 	fpga_outport( IO_GRAPHIC1 | 1, sy );
 	fpga_outport( IO_GRAPHIC1 | 2, width );

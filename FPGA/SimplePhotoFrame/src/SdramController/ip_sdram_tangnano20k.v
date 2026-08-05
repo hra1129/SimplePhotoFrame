@@ -141,10 +141,8 @@ module ip_sdram #(
 	reg		[10:0]				ff_sdr_address;
 	reg		[31:0]				ff_sdr_write_data;
 	reg		[ 3:0]				ff_sdr_dq_mask;
-	reg		[255:0]				ff_sdr_read_data;		// 8-word burst read buffer
 	reg		[2:0]				ff_read_word_count_sdram;	// word count in clk_sdram domain
 	reg							ff_read_capture_active_sdram;
-	reg							ff_read_start_pending_sdram;
 	reg							ff_do_command;
 	reg							ff_write;
 	reg		[ 1:0]				ff_bank;
@@ -152,18 +150,17 @@ module ip_sdram #(
 	reg		[ 7:0]				ff_col_address;
 	reg		[31:0]				ff_wdata_burst [0:7];
 	reg		[ 3:0]				ff_wdata_mask_burst [0:7];
-	reg		[ 3:0]				ff_wdata_count;
+	reg		[ 3:0]				ff_wdata_count;			// buffered word count (0..8)
+	reg		[ 2:0]				ff_wdata_write_index;
+	reg		[ 2:0]				ff_wdata_read_index;
 	reg							ff_wdata_burst_ready;
 	reg							ff_read_start_toggle_clk;
-	reg							ff_read_done_toggle_sdram;
 	reg							ff_read_start_toggle_sync1_sdram;
 	reg							ff_read_start_toggle_sync2_sdram;
-	reg							ff_read_done_sync1;
-	reg							ff_read_done_sync2;
+	reg		[31:0]				ff_read_data_stage_sdram;
+	reg						ff_read_data_valid_stage_sdram;
 	reg		[31:0]				ff_bus_rdata;
 	reg							ff_bus_rdata_valid;
-	reg		[2:0]				ff_read_word_index;		// word index for bus output
-	reg							ff_read_burst_active;	// flag for 8-cycle output phase
 	reg		[ 2:0]				ff_write_burst_index;
 	reg		[31:0]				ff_write_burst_word;
 	reg		[ 3:0]				ff_write_burst_mask;
@@ -171,14 +168,12 @@ module ip_sdram #(
 	reg							ff_initial_finish;
 	wire						w_accept_request;
 	wire						w_read_start_sdram;
-	wire						w_read_burst_done;
 	wire						w_write_burst_phase;
 	wire	[ 3:0]				w_curr_write_mask;
 	wire	[31:0]				w_curr_write_data;
 
 	assign w_accept_request		= (ff_main_state == c_main_state_ready) && ff_sdr_ready && !ff_do_command && bus_valid;
 	assign w_read_start_sdram	= ff_read_start_toggle_sync1_sdram ^ ff_read_start_toggle_sync2_sdram;
-	assign w_read_burst_done	= ff_read_done_sync1 ^ ff_read_done_sync2;
 	assign w_write_burst_phase	= ff_do_command && ff_write && !ff_do_refresh &&
 		(	(ff_main_state == c_main_state_read_or_write)
 			|| (ff_main_state == c_main_state_nop3)
@@ -190,27 +185,8 @@ module ip_sdram #(
 			|| (ff_main_state == c_main_state_nop7)
 		);
 
-	assign w_curr_write_mask =
-		(ff_main_state == c_main_state_read_or_write)	? ff_wdata_mask_burst[0] :
-		(ff_main_state == c_main_state_nop3)			? ff_wdata_mask_burst[1] :
-		(ff_main_state == c_main_state_data_fetch)		? ff_wdata_mask_burst[2] :
-		(ff_main_state == c_main_state_finish)			? ff_wdata_mask_burst[3] :
-		(ff_main_state == c_main_state_nop4)			? ff_wdata_mask_burst[4] :
-		(ff_main_state == c_main_state_nop5)			? ff_wdata_mask_burst[5] :
-		(ff_main_state == c_main_state_nop6)			? ff_wdata_mask_burst[6] :
-		(ff_main_state == c_main_state_nop7)			? ff_wdata_mask_burst[7] :
-														  4'hF;
-
-	assign w_curr_write_data =
-		(ff_main_state == c_main_state_read_or_write)	? ff_wdata_burst[0] :
-		(ff_main_state == c_main_state_nop3)			? ff_wdata_burst[1] :
-		(ff_main_state == c_main_state_data_fetch)		? ff_wdata_burst[2] :
-		(ff_main_state == c_main_state_finish)			? ff_wdata_burst[3] :
-		(ff_main_state == c_main_state_nop4)			? ff_wdata_burst[4] :
-		(ff_main_state == c_main_state_nop5)			? ff_wdata_burst[5] :
-		(ff_main_state == c_main_state_nop6)			? ff_wdata_burst[6] :
-		(ff_main_state == c_main_state_nop7)			? ff_wdata_burst[7] :
-														  32'd0;
+	assign w_curr_write_mask	= ff_wdata_mask_burst[ff_wdata_read_index];
+	assign w_curr_write_data	= ff_wdata_burst[ff_wdata_read_index];
 
 	// --------------------------------------------------------------------
 	//	Request latch
@@ -224,17 +200,21 @@ module ip_sdram #(
 			ff_col_address			<= 8'd0;
 			ff_do_refresh			<= 1'b0;
 			ff_wdata_count			<= 4'd0;
+			ff_wdata_write_index	<= 3'd0;
+			ff_wdata_read_index		<= 3'd0;
 			ff_wdata_burst_ready	<= 1'b0;
-			ff_read_start_toggle_clk <= 1'b0;
+			ff_read_start_toggle_clk<= 1'b0;
 		end
 		else if( w_accept_request ) begin
-			ff_do_command	<= 1'b1;
-			ff_do_refresh	<= bus_refresh;
-			ff_write		<= bus_write & ~bus_refresh;
-			ff_bank			<= bus_address[22:21];
-			ff_row_address	<= bus_address[20:10];
-			ff_col_address	<= { bus_address[9:5], 3'b000 };
-			ff_wdata_count	<= 4'd0;
+			ff_do_command			<= 1'b1;
+			ff_do_refresh			<= bus_refresh;
+			ff_write				<= bus_write & ~bus_refresh;
+			ff_bank					<= bus_address[22:21];
+			ff_row_address			<= bus_address[20:10];
+			ff_col_address			<= { bus_address[9:5], 3'b000 };
+			ff_wdata_count			<= 4'd0;
+			ff_wdata_write_index	<= 3'd0;
+			ff_wdata_read_index		<= 3'd0;
 			if( bus_refresh || !bus_write ) begin
 				ff_wdata_burst_ready	<= 1'b1;
 			end
@@ -245,25 +225,33 @@ module ip_sdram #(
 		else if( (ff_main_state == c_main_state_nop3) && ff_do_command && !ff_write && !ff_do_refresh ) begin
 			ff_read_start_toggle_clk <= ~ff_read_start_toggle_clk;
 		end
-		else if( ff_do_command && ff_write && !ff_wdata_burst_ready ) begin
-			if( bus_wdata_valid ) begin
-				ff_wdata_burst[ff_wdata_count[2:0]] <= bus_wdata;
-				ff_wdata_mask_burst[ff_wdata_count[2:0]] <= bus_wdata_mask;
-
-				if( ff_wdata_count == 4'd7 ) begin
-					ff_wdata_burst_ready	<= 1'b1;
-				end
-				else begin
-					ff_wdata_count	<= ff_wdata_count + 4'd1;
-				end
-			end
-		end
 		else if( ff_main_state == c_main_state_finish2 ) begin
 			ff_do_command			<= 1'b0;
 			ff_do_refresh			<= 1'b0;
 			ff_write				<= 1'b0;
 			ff_wdata_burst_ready	<= 1'b0;
 			ff_wdata_count			<= 4'd0;
+			ff_wdata_write_index	<= 3'd0;
+			ff_wdata_read_index	<= 3'd0;
+		end
+		else if( ff_do_command && ff_write && !ff_do_refresh ) begin
+			if( bus_wdata_valid && (ff_wdata_count != 4'd8) ) begin
+				ff_wdata_burst[ff_wdata_write_index]		<= bus_wdata;
+				ff_wdata_mask_burst[ff_wdata_write_index]	<= bus_wdata_mask;
+				ff_wdata_write_index						<= ff_wdata_write_index + 3'd1;
+				ff_wdata_burst_ready						<= 1'b1;
+
+				if( w_write_burst_phase && (ff_wdata_count != 4'd0) ) begin
+					ff_wdata_read_index		<= ff_wdata_read_index + 3'd1;
+				end
+				else begin
+					ff_wdata_count			<= ff_wdata_count + 4'd1;
+				end
+			end
+			else if( w_write_burst_phase && (ff_wdata_count != 4'd0) ) begin
+				ff_wdata_read_index		<= ff_wdata_read_index + 3'd1;
+				ff_wdata_count			<= ff_wdata_count - 4'd1;
+			end
 		end
 	end
 
@@ -428,7 +416,7 @@ module ip_sdram #(
 						end
 						else if( ff_write ) begin
 							ff_sdr_command		<= c_sdr_command_write;
-						ff_sdr_dq_mask		<= ff_wdata_mask_burst[0];
+						ff_sdr_dq_mask		<= w_curr_write_mask;
 						end
 						else begin
 							ff_sdr_command		<= c_sdr_command_read;
@@ -440,10 +428,7 @@ module ip_sdram #(
 					c_main_state_finish2:
 						begin
 							ff_sdr_command		<= c_sdr_command_no_operation;
-							if( ff_do_command && ff_write && !ff_do_refresh && (ff_main_state == c_main_state_nop2) ) begin
-								ff_sdr_dq_mask	<= ff_wdata_mask_burst[0];
-							end
-							else if( w_write_burst_phase ) begin
+							if( w_write_burst_phase ) begin
 								ff_sdr_dq_mask	<= w_curr_write_mask;
 							end
 							else if( ff_do_command && !ff_write && !ff_do_refresh ) begin
@@ -481,8 +466,8 @@ module ip_sdram #(
 			case( ff_main_state )
 			c_init_state_send_precharge_all:
 				begin
-					ff_sdr_bank <= 2'd0;			// Ignore
-					ff_sdr_address <= { 
+					ff_sdr_bank		<= 2'd0;		// Ignore
+					ff_sdr_address	<= { 
 						1'b1,						//	All banks
 						10'd0						//	Ignore
 					};
@@ -490,8 +475,8 @@ module ip_sdram #(
 			default:
 				begin
 					//	モードレジスタ BL=8, BT=0, CAS=2, OP=0, WB=0
-					ff_sdr_bank <= 2'd0;			//	Ignore
-					ff_sdr_address <= { 
+					ff_sdr_bank		<= 2'd0;		//	Ignore
+					ff_sdr_address	<= { 
 						1'b0,						//	Reserved
 						1'b0,						//	Write burst mode  0: Programmed Burst Length, 1: Single Location Access
 						2'b00,						//	Operation mode    00: Standard Operation, others: Reserved
@@ -506,22 +491,22 @@ module ip_sdram #(
 			case( ff_main_state )
 			c_main_state_activate:
 				begin
-					ff_sdr_bank <= ff_bank;				// Bank
-					ff_sdr_address <= ff_row_address;	// Row address
+					ff_sdr_bank		<= ff_bank;				// Bank
+					ff_sdr_address	<= ff_row_address;	// Row address
 				end
 			c_main_state_read_or_write:
 				begin
 					if( ff_do_refresh ) begin
 //						$display( "do_refresh" );
-						ff_sdr_bank <= 2'd0;	// Ignore
-						ff_sdr_address <= { 
+						ff_sdr_bank		<= 2'd0;	// Ignore
+						ff_sdr_address	<= { 
 							1'b1,				// All banks
 							10'd0				// Ignore
 						};
 					end
 					else begin
-						ff_sdr_bank <= ff_bank;
-						ff_sdr_address <= { 
+						ff_sdr_bank		<= ff_bank;
+						ff_sdr_address	<= { 
 							1'b1,				// Enable auto precharge
 							2'd0,				// 00
 							ff_col_address	 	// Column address
@@ -538,24 +523,21 @@ module ip_sdram #(
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_sdr_write_data <= 32'dz;
-			ff_write_burst_index <= 3'd0;
-			ff_write_burst_word <= 32'd0;
-			ff_write_burst_mask <= 4'd0;
+			ff_sdr_write_data		<= 32'dz;
+			ff_write_burst_index	<= 3'd0;
+			ff_write_burst_word		<= 32'd0;
+			ff_write_burst_mask		<= 4'd0;
 		end
 		else begin
-			ff_write_burst_index <= 3'd0;
-			ff_write_burst_word <= w_curr_write_data;
-			ff_write_burst_mask <= w_curr_write_mask;
+			ff_write_burst_index	<= 3'd0;
+			ff_write_burst_word		<= w_curr_write_data;
+			ff_write_burst_mask		<= w_curr_write_mask;
 
-			if( ff_do_command && ff_write && !ff_do_refresh && (ff_main_state == c_main_state_nop2) ) begin
-				ff_sdr_write_data <= ff_wdata_burst[0];
-			end
-			else if( w_write_burst_phase ) begin
-				ff_sdr_write_data <= w_curr_write_data;
+			if( w_write_burst_phase ) begin
+				ff_sdr_write_data		<= w_curr_write_data;
 			end
 			else begin
-				ff_sdr_write_data <= 32'dz;
+				ff_sdr_write_data		<= 32'dz;
 			end
 		end
 	end
@@ -564,45 +546,34 @@ module ip_sdram #(
 		if( reset ) begin
 			ff_read_start_toggle_sync1_sdram	<= 1'b0;
 			ff_read_start_toggle_sync2_sdram	<= 1'b0;
-			ff_read_done_toggle_sdram			<= 1'b0;
-			ff_sdr_read_data					<= 256'd0;
 			ff_read_word_count_sdram			<= 3'd0;
 			ff_read_capture_active_sdram		<= 1'b0;
-			ff_read_start_pending_sdram			<= 1'b0;
+			ff_read_data_stage_sdram			<= 32'd0;
+			ff_read_data_valid_stage_sdram		<= 1'b0;
 		end
 		else begin
 			ff_read_start_toggle_sync1_sdram	<= ff_read_start_toggle_clk;
 			ff_read_start_toggle_sync2_sdram	<= ff_read_start_toggle_sync1_sdram;
+			ff_read_data_valid_stage_sdram		<= 1'b0;
 			if( w_read_start_sdram ) begin
 				// For CAS=2, capture beat0 on this cycle and continue with beat1..beat7.
-				ff_sdr_read_data[31:0]			<= IO_sdram_dq;
+				ff_read_data_stage_sdram		<= IO_sdram_dq;
+				ff_read_data_valid_stage_sdram	<= 1'b1;
 				ff_read_word_count_sdram		<= 3'd1;
 				ff_read_capture_active_sdram	<= 1'b1;
-				ff_read_start_pending_sdram		<= 1'b0;
-			end
-			else if( !ff_read_capture_active_sdram ) begin
-				ff_read_start_pending_sdram		<= 1'b0;
 			end
 			else begin
-				// Capture beat0..beat7 in order.
-				case( ff_read_word_count_sdram )
-				3'd0: ff_sdr_read_data[ 31:  0]	<= IO_sdram_dq;
-				3'd1: ff_sdr_read_data[ 63: 32]	<= IO_sdram_dq;
-				3'd2: ff_sdr_read_data[ 95: 64]	<= IO_sdram_dq;
-				3'd3: ff_sdr_read_data[127: 96]	<= IO_sdram_dq;
-				3'd4: ff_sdr_read_data[159:128]	<= IO_sdram_dq;
-				3'd5: ff_sdr_read_data[191:160]	<= IO_sdram_dq;
-				3'd6: ff_sdr_read_data[223:192]	<= IO_sdram_dq;
-				3'd7: ff_sdr_read_data[255:224]	<= IO_sdram_dq;
-				endcase
+				if( ff_read_capture_active_sdram ) begin
+					ff_read_data_stage_sdram		<= IO_sdram_dq;
+					ff_read_data_valid_stage_sdram	<= 1'b1;
 
-				if( ff_read_word_count_sdram == 3'd7 ) begin
-					ff_read_done_toggle_sdram		<= ~ff_read_done_toggle_sdram;
-					ff_read_word_count_sdram		<= 3'd0;
-					ff_read_capture_active_sdram	<= 1'b0;
-				end
-				else begin
-					ff_read_word_count_sdram		<= ff_read_word_count_sdram + 3'd1;
+					if( ff_read_word_count_sdram == 3'd7 ) begin
+						ff_read_word_count_sdram		<= 3'd0;
+						ff_read_capture_active_sdram	<= 1'b0;
+					end
+					else begin
+						ff_read_word_count_sdram		<= ff_read_word_count_sdram + 3'd1;
+					end
 				end
 			end
 		end
@@ -610,40 +581,13 @@ module ip_sdram #(
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_read_done_sync1		<= 1'b0;
-			ff_read_done_sync2		<= 1'b0;
-			ff_bus_rdata			<= 32'd0;
-			ff_bus_rdata_valid		<= 1'b0;
-			ff_read_word_index		<= 3'd0;
-			ff_read_burst_active	<= 1'b0;
+			ff_bus_rdata		<= 32'd0;
+			ff_bus_rdata_valid	<= 1'b0;
 		end
 		else begin
-			ff_read_done_sync1	<= ff_read_done_toggle_sdram;
-			ff_read_done_sync2	<= ff_read_done_sync1;
-			ff_bus_rdata_valid	<= 1'b0;
-
-			if( w_read_burst_done ) begin
-				ff_read_burst_active	<= 1'b1;
-				ff_read_word_index	<= 3'd0;
-			end
-
-			if( ff_read_burst_active ) begin
-				case( ff_read_word_index )
-				3'd0: ff_bus_rdata <= ff_sdr_read_data[ 31:  0];
-				3'd1: ff_bus_rdata <= ff_sdr_read_data[ 63: 32];
-				3'd2: ff_bus_rdata <= ff_sdr_read_data[ 95: 64];
-				3'd3: ff_bus_rdata <= ff_sdr_read_data[127: 96];
-				3'd4: ff_bus_rdata <= ff_sdr_read_data[159:128];
-				3'd5: ff_bus_rdata <= ff_sdr_read_data[191:160];
-				3'd6: ff_bus_rdata <= ff_sdr_read_data[223:192];
-				3'd7: ff_bus_rdata <= ff_sdr_read_data[255:224];
-				endcase
-				ff_bus_rdata_valid <= 1'b1;
-
-				if( ff_read_word_index == 3'd7 ) begin
-					ff_read_burst_active <= 1'b0;
-				end
-				ff_read_word_index <= ff_read_word_index + 3'd1;
+			ff_bus_rdata_valid	<= ff_read_data_valid_stage_sdram;
+			if( ff_read_data_valid_stage_sdram ) begin
+				ff_bus_rdata		<= ff_read_data_stage_sdram;
 			end
 		end
 	end

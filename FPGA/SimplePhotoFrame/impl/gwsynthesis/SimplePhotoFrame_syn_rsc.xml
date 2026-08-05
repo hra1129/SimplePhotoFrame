@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="simple_photo_frame" Register="16" Lut="1" T_Register="3203(16)" T_Alu="669(0)" T_Lut="4355(1)" T_Bsram="30(0)" T_Ssram="9(0)">
+<Module name="simple_photo_frame" Register="16" Lut="1" T_Register="2709(16)" T_Alu="673(0)" T_Lut="3964(1)" T_Bsram="30(0)" T_Ssram="18(0)">
  <SubModule name="u_rpll"/>
  <SubModule name="u_rpll2"/>
- <SubModule name="u_ip_spi" Register="64" Lut="107" T_Register="110(64)" T_Lut="143(107)">
+ <SubModule name="u_ip_spi" Register="64" Lut="106" T_Register="110(64)" T_Lut="142(106)">
   <SubModule name="u_spi" Register="46" Lut="36" T_Register="46(46)" T_Lut="36(36)"/>
  </SubModule>
- <SubModule name="u_ip_spi_rom" Register="135" Lut="362" T_Register="135(135)" T_Lut="362(362)"/>
- <SubModule name="u_display_controller" T_Register="305(0)" T_Alu="30(0)" T_Lut="394(0)" T_Bsram="4(0)">
-  <SubModule name="display_address_generator" Register="74" Alu="30" Lut="49" T_Register="74(74)" T_Alu="30(30)" T_Lut="49(49)"/>
-  <SubModule name="display_fillcolor_generator" Register="24" Lut="48" T_Register="24(24)" T_Lut="48(48)"/>
-  <SubModule name="display_preload_buffer" Register="184" Lut="223" T_Register="184(184)" T_Lut="223(223)" T_Bsram="4(0)">
+ <SubModule name="u_ip_spi_rom" Register="135" Lut="344" T_Register="135(135)" T_Lut="344(344)"/>
+ <SubModule name="u_display_controller" T_Register="305(0)" T_Alu="30(0)" T_Lut="392(0)" T_Bsram="4(0)">
+  <SubModule name="display_address_generator" Register="74" Alu="30" Lut="47" T_Register="74(74)" T_Alu="30(30)" T_Lut="47(47)"/>
+  <SubModule name="display_fillcolor_generator" Register="24" Lut="47" T_Register="24(24)" T_Lut="47(47)"/>
+  <SubModule name="display_preload_buffer" Register="184" Lut="225" T_Register="184(184)" T_Lut="225(225)" T_Bsram="4(0)">
    <SubModule name="u_sram0" Bsram="2" T_Bsram="2(2)"/>
    <SubModule name="u_sram1" Bsram="2" T_Bsram="2(2)"/>
   </SubModule>
-  <SubModule name="display_timing_generator" Register="23" Lut="74" T_Register="23(23)" T_Lut="74(74)"/>
+  <SubModule name="display_timing_generator" Register="23" Lut="73" T_Register="23(23)" T_Lut="73(73)"/>
  </SubModule>
- <SubModule name="u_vram_accessor" Register="81" Lut="139" T_Register="81(81)" T_Lut="139(139)"/>
- <SubModule name="u_graphic_processor1" Register="411" Alu="155" Lut="772" T_Register="411(411)" T_Alu="155(155)" T_Lut="772(772)"/>
- <SubModule name="u_graphic_processor2" Register="635" Alu="400" Lut="965" T_Register="635(635)" T_Alu="400(400)" T_Lut="965(965)"/>
- <SubModule name="u_bus_arbiter" Register="47" Lut="156" T_Register="47(47)" T_Lut="156(156)"/>
- <SubModule name="u_cache" Register="774" Alu="84" Lut="899" Ssram="9" T_Register="774(774)" T_Alu="84(84)" T_Lut="906(899)" T_Bsram="26(0)" T_Ssram="9(9)">
+ <SubModule name="u_vram_accessor" Register="81" Lut="141" T_Register="81(81)" T_Lut="141(141)"/>
+ <SubModule name="u_graphic_processor1" Register="411" Alu="157" Lut="731" T_Register="411(411)" T_Alu="157(157)" T_Lut="731(731)"/>
+ <SubModule name="u_graphic_processor2" Register="635" Alu="403" Lut="945" T_Register="635(635)" T_Alu="403(403)" T_Lut="945(945)"/>
+ <SubModule name="u_bus_arbiter" Register="47" Lut="155" T_Register="47(47)" T_Lut="155(155)"/>
+ <SubModule name="u_cache" Register="774" Alu="83" Lut="892" Ssram="9" T_Register="774(774)" T_Alu="83(83)" T_Lut="899(892)" T_Bsram="26(0)" T_Ssram="9(9)">
   <SubModule name="u_cache_line0" Bsram="5" T_Bsram="5(5)"/>
   <SubModule name="u_cache_line1" Lut="2" Bsram="5" T_Lut="2(2)" T_Bsram="5(5)"/>
   <SubModule name="u_cache_tag_way0" Lut="1" Bsram="4" T_Lut="1(1)" T_Bsram="4(4)"/>
@@ -27,6 +27,6 @@
   <SubModule name="u_cache_tag_way2" Lut="1" Bsram="4" T_Lut="1(1)" T_Bsram="4(4)"/>
   <SubModule name="u_cache_tag_way3" Lut="2" Bsram="4" T_Lut="2(2)" T_Bsram="4(4)"/>
  </SubModule>
- <SubModule name="u_bus_selector" Register="13" Lut="51" T_Register="13(13)" T_Lut="51(51)"/>
- <SubModule name="u_sdram_controller" Register="676" Lut="466" T_Register="676(676)" T_Lut="466(466)"/>
+ <SubModule name="u_bus_selector" Register="13" Lut="82" T_Register="13(13)" T_Lut="82(82)"/>
+ <SubModule name="u_sdram_controller" Register="182" Lut="132" Ssram="9" T_Register="182(182)" T_Lut="132(132)" T_Ssram="9(9)"/>
 </Module>
