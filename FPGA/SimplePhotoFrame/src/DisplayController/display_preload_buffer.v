@@ -57,6 +57,7 @@
 module display_preload_buffer (
 	input			clk,
 	input			reset,
+	input			clear,
 	//	DRAM からくるデータを受けるポート
 	input	[31:0]	in_data,
 	input			in_valid,
@@ -86,7 +87,7 @@ module display_preload_buffer (
 	wire	[10:0]	w_count			= ff_count;
 	localparam	[10:0]	c_in_ready_max_count	= 11'd2015;	// require free >= 32 words
 	localparam	[10:0]	c_nearly_full_high	= 11'd2031;	// keep room for one DRAM burst (16 words)
-	localparam	[10:0]	c_nearly_full_low	= 11'd1024;	// half buffer watermark for hysteresis release
+	localparam	[10:0]	c_nearly_full_low	= 11'd2015;	// half buffer watermark for hysteresis release
 	localparam	[10:0]	c_burst_safe_count	= 11'd2039;	// require free >= 8 words before starting a new burst
 	wire			w_initial_charge_done	= (w_count >= c_in_ready_max_count);
 
@@ -121,7 +122,7 @@ module display_preload_buffer (
 	reg				ff_initial_charge;
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_count <= 11'd0;
 		end
 		else begin
@@ -136,7 +137,7 @@ module display_preload_buffer (
 	end
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_nearly_full <= 1'b0;
 		end
 		else if( ff_nearly_full ) begin
@@ -152,7 +153,7 @@ module display_preload_buffer (
 	end
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_initial_charge <= 1'b1;
 		end
 		else if( w_initial_charge_done ) begin
@@ -162,7 +163,7 @@ module display_preload_buffer (
 	end
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_accept_lock <= 3'd0;
 		end
 		else if( w_wr_en ) begin
@@ -196,7 +197,7 @@ module display_preload_buffer (
 	wire			w_sram1_we		= w_wr_en &  w_wr_sram_sel;
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_wr_ptr			<= 11'd0;
 			ff_wr_ptr_c1		<= 11'd0;
 		end
@@ -255,7 +256,7 @@ module display_preload_buffer (
 
 	// Stage1 制御
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_rd_ptr		<= 11'd0;
 			ff_pipe_valid	<= 1'b0;
 			ff_pipe_sram_sel<= 1'b0;
@@ -320,7 +321,7 @@ module display_preload_buffer (
 	wire			w_word_pop		= w_take_new_word;
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_word0_data	<= 32'd0;
 			ff_word0_valid	<= 1'b0;
 			ff_word1_data	<= 32'd0;
@@ -377,7 +378,7 @@ module display_preload_buffer (
 	wire			w_out_push		= w_split_can_emit & w_out_can_push;
 
 	always @( posedge clk ) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_split_word	<= 32'd0;
 			ff_split_rem	<= 2'd0;
 			ff_out0_data	<= 16'd0;

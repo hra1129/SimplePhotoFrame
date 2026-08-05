@@ -31,12 +31,12 @@
 // -----------------------------------------------------------------------------
 //	vram_set_address
 //	description:
-//		VRAM アドレスレジスタへ 23bit アドレスを設定する
+	//		VRAM アドレスレジスタへ 22bit ワードアドレスを設定する
 // -----------------------------------------------------------------------------
 void vram_set_address( uint32_t address ) {
 
 	fpga_outport( IO_VRAM | IO_VRAM_ADDRESS_L, (uint16_t)(address & 0xFFFF) );
-	fpga_outport( IO_VRAM | IO_VRAM_ADDRESS_H, (uint16_t)((address >> 16) & 0x007F) );
+	fpga_outport( IO_VRAM | IO_VRAM_ADDRESS_H, (uint16_t)((address >> 16) & 0x003F) );
 }
 
 // -----------------------------------------------------------------------------

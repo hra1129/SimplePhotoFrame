@@ -32,7 +32,7 @@
 #define SPI0_SCK_PIN  6
 #define SPI0_TX_PIN	  7
 #define SPI0_INTR_PIN 3
-#define SPI0_BAUDRATE (32 * 1000 * 1000)	// 32 MHz
+#define SPI0_BAUDRATE (50 * 1000 * 1000)	// 50 MHz
 
 // ---------------------------------------------------------
 void fpga_io_init( void ) {

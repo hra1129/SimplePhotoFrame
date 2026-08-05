@@ -69,7 +69,6 @@ module display_timing_generator (
 	output			lcd_hs,
 	output			lcd_vs,
 	output			lcd_de,
-	output			frame_sync,
 	output			frame_end,
 	output	[4:0]	lcd_r,
 	output	[5:0]	lcd_g,		// bit0 is fixed 0
@@ -190,11 +189,8 @@ module display_timing_generator (
 	// lcd_de: high during active video area
 	assign lcd_de = w_de;
 
-	// frame_sync: high from the end of active lines through vertical blank.
-	assign frame_sync = ( ff_v_counter >= V_ACTIVE_END ) && ( ff_v_counter <= V_TOTAL );
-
-	// one-clock pulse at timing-generator frame boundary.
-	assign frame_end = w_lcd_ck_rise && ( ff_h_counter == H_TOTAL ) && ( ff_v_counter == V_TOTAL );
+	// one-clock pulse at the end of active video area (last visible pixel of frame).
+	assign frame_end = w_lcd_ck_rise && ( ff_h_counter == H_ACTIVE_END ) && ( ff_v_counter == V_ACTIVE_END );
 
 	// -------------------------------------------------------------------------
 	// Pixel output
@@ -203,8 +199,8 @@ module display_timing_generator (
 	// mechanism prevents lcd_ck from rising until p_valid is asserted, p_data
 	// is guaranteed to be stable at the sampling edge.
 	// -------------------------------------------------------------------------
-	assign lcd_r = w_de ? p_data[15:11]        : 5'd0;
-	assign lcd_g = w_de ? {p_data[10:6], 1'b0} : 6'd0;	// G[0] fixed 0
-	assign lcd_b = w_de ? p_data[4:0]          : 5'd0;
+	assign lcd_r = w_de ? p_data[15:11] : 5'd0;
+	assign lcd_g = w_de ? p_data[10: 5] : 6'd0;
+	assign lcd_b = w_de ? p_data[ 4: 0] : 5'd0;
 	assign lcd_bl = 1'b1;
 endmodule

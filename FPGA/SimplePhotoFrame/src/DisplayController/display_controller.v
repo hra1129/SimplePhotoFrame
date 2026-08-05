@@ -91,13 +91,15 @@ module display_controller (
 	wire			p_ready;
 	wire	[15:0]	p_data;
 
-	wire			frame_sync;
 	wire			frame_end;
 	wire	[22:5]	request_sdram_address;
 	wire			request_sdram_address_valid;
 	wire			request_sdram_address_ready;
 	wire			display_on;
 	wire	[15:0]	fill_color;
+	wire			preload_clear;
+
+	assign preload_clear = frame_end;
 
 	display_address_generator display_address_generator (
 		.clk					( clk							),
@@ -139,6 +141,7 @@ module display_controller (
 	display_preload_buffer display_preload_buffer (
 		.clk					( clk							),
 		.reset					( reset							),
+		.clear					( preload_clear					),
 		.in_data				( fifo_wdata					),
 		.in_valid				( fifo_valid					),
 		.in_ready				( fifo_ready					),
@@ -158,7 +161,6 @@ module display_controller (
 		.lcd_hs					( lcd_hs						),
 		.lcd_vs					( lcd_vs						),
 		.lcd_de					( lcd_de						),
-		.frame_sync				( frame_sync					),
 		.frame_end				( frame_end						),
 		.lcd_r					( lcd_r							),
 		.lcd_g					( lcd_g							),

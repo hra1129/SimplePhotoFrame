@@ -28,6 +28,7 @@
 #include "display_controller.h"
 #include "vram_accessor.h"
 #include "button.h"
+#include "usa_fpga.h"
 #include "pico/cyw43_arch.h"
 
 // ---------------------------------------------------------
@@ -37,6 +38,7 @@ void vram_test( void ) {
 
 	//	テストパターンを描画
 	printf( "VRAM test: writing test pattern...\n" );
+	display_set_frame_address( 0 );
 	vram_set_address( 0 );
 	for( address = 0; address < (1024 * 480); address++ ) {
 		vram_burst_write( address & 0xFFFF );
@@ -54,6 +56,24 @@ void vram_test( void ) {
 }
 
 // ---------------------------------------------------------
+void usa_fpga_test( void ) {
+	int x, y, i;
+
+//	vram_set_address( 1024 * 480 );
+	i = 0;
+	for( y = 0; y < 480; y++ ) {
+		vram_set_address( y * 1024 );
+		for( x = 0; x < 800; x++ ) {
+			vram_burst_write( usa_image[i] );
+			i++;
+		}
+	}
+	vram_flush();
+//	display_set_frame_address( 1024 * 480 );
+	display_set_frame_address( 0 );
+}
+
+// ---------------------------------------------------------
 int main() {
 	int r, g, b, x, y;
 	uint8_t button_state;
@@ -62,7 +82,7 @@ int main() {
 	button_init();
 	fpga_io_init();
 	cyw43_arch_init();
-	sleep_ms(2000);
+	sleep_ms(3000);
 
 	//	テストパターンを描画
 	vram_set_address( 0 );
@@ -74,6 +94,7 @@ int main() {
 			vram_burst_write( DISPLAY_RGB( r, g, b ) );
 		}
 	}
+	vram_flush();
 
 	while (1) {
 //		if( sdcard_init_and_mount() ) {
@@ -84,8 +105,6 @@ int main() {
 		button_state = button_get();
 		if( button_state & SW_A ) {
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			sleep_ms(500);
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 			printf( "Button A pressed.\n" );
 			display_enable( false );
 			r = rand() & 31;
@@ -93,6 +112,7 @@ int main() {
 			b = rand() & 31;
 			display_set_fill_color( DISPLAY_RGB( r, g, b ) );
 			printf( "Fill color: R=%d, G=%d, B=%d\n", r, g, b );
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_B ) {
 			printf( "Button B pressed.\n" );
@@ -100,7 +120,15 @@ int main() {
 		}
 		else if( button_state & SW_U ) {
 			printf( "Button Up pressed.\n" );
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			vram_test();
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+		}
+		else if( button_state & SW_D ) {
+			printf( "Button Down pressed.\n" );
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+			usa_fpga_test();
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 
 		do {

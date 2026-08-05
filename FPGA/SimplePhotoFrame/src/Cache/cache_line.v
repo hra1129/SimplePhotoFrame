@@ -43,13 +43,13 @@ module cache_line (
 	reg		[17:0]		ram_instance[0:4095];
 	reg		[17:0]		ff_rdata;
 
-	always @( negedge clk ) begin
+	always @( posedge clk ) begin
 		if( !we_n ) begin
 			ram_instance[address] <= wdata;
 		end
 	end
 
-	always @( negedge clk ) begin
+	always @( posedge clk ) begin
 		if( !oe_n ) begin
 			ff_rdata <= ram_instance[address];
 		end

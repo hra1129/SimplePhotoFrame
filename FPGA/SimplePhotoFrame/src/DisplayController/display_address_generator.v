@@ -157,10 +157,10 @@ module display_address_generator (
 		end else if( bus_cs && bus_valid && bus_ready && bus_write ) begin
 			case( bus_address )
 				5'd0: begin
-					reg_base_address[20:5] <= bus_wdata;
+					reg_base_address[16:5] <= bus_wdata[15:4];
 				end
 				5'd1: begin
-					reg_base_address[22:21] <= bus_wdata[1:0];
+					reg_base_address[22:17] <= bus_wdata[5:0];
 				end
 				5'd2: begin
 					reg_display_on <= bus_wdata[0];
@@ -179,7 +179,7 @@ module display_address_generator (
 		if( reset ) begin
 			ff_base_address <= 18'd0;
 		end
-		else if( bus_cs && bus_valid && bus_ready && !bus_write && bus_address == 5'd1 ) begin
+		else if( bus_cs && bus_valid && bus_ready && bus_write && bus_address == 5'd1 ) begin
 			// 必ず、下位→上位の順で更新するルール
 			ff_base_address <= reg_base_address;
 		end

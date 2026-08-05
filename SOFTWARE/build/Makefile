@@ -169,19 +169,6 @@ bs2_default_library/fast:
 .PHONY : bs2_default_library/fast
 
 #=============================================================================
-# Target rules for targets named pioasmBuild
-
-# Build rule for target.
-pioasmBuild: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pioasmBuild
-.PHONY : pioasmBuild
-
-# fast build rule for target.
-pioasmBuild/fast:
-	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2_common/pico_cyw43_driver/CMakeFiles/pioasmBuild.dir/build.make pico-sdk/src/rp2_common/pico_cyw43_driver/CMakeFiles/pioasmBuild.dir/build
-.PHONY : pioasmBuild/fast
-
-#=============================================================================
 # Target rules for targets named cyw43_driver_picow_cyw43_bus_pio_spi_pio_h
 
 # Build rule for target.
@@ -2567,6 +2554,30 @@ simple_photo_frame.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.s
 .PHONY : simple_photo_frame.c.s
 
+usa_fpga.o: usa_fpga.c.o
+.PHONY : usa_fpga.o
+
+# target to build an object file
+usa_fpga.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.o
+.PHONY : usa_fpga.c.o
+
+usa_fpga.i: usa_fpga.c.i
+.PHONY : usa_fpga.i
+
+# target to preprocess a source file
+usa_fpga.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.i
+.PHONY : usa_fpga.c.i
+
+usa_fpga.s: usa_fpga.c.s
+.PHONY : usa_fpga.s
+
+# target to generate assembly for a file
+usa_fpga.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.s
+.PHONY : usa_fpga.c.s
+
 vram_accessor.o: vram_accessor.c.o
 .PHONY : vram_accessor.o
 
@@ -2602,7 +2613,6 @@ help:
 	@echo "... bs2_default_bin"
 	@echo "... cyw43_driver_picow_cyw43_bus_pio_spi_pio_h"
 	@echo "... pico_status_led_ws2812_pio_h"
-	@echo "... pioasmBuild"
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
 	@echo "... simple_photo_frame"
@@ -2901,6 +2911,9 @@ help:
 	@echo "... simple_photo_frame.o"
 	@echo "... simple_photo_frame.i"
 	@echo "... simple_photo_frame.s"
+	@echo "... usa_fpga.o"
+	@echo "... usa_fpga.i"
+	@echo "... usa_fpga.s"
 	@echo "... vram_accessor.o"
 	@echo "... vram_accessor.i"
 	@echo "... vram_accessor.s"

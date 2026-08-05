@@ -133,6 +133,7 @@ module cache (
 	reg		[15:0]	ff_tag_new1;
 	reg		[15:0]	ff_tag_new2;
 	reg		[15:0]	ff_tag_new3;
+	reg		[1:0]	ff_selected_prio;
 
 	reg				ff_hit;
 	reg		[1:0]	ff_hit_way;
@@ -151,6 +152,7 @@ module cache (
 	reg		[2:0]	ff_burst_count;
 	reg		[15:0]	ff_read_result;
 	reg		[31:0]	ff_burst_rdata_latched;
+	reg				ff_ram_read_wait_phase;
 
 	reg		[2:0]	ff_alloc_clear_index;
 	reg		[2:0]	ff_prescan_index;
@@ -254,30 +256,31 @@ module cache (
 		(ff_flush_way == 2'd2) ? ff_tag2[10:0] :
 								ff_tag3[10:0];
 
-	wire	[15:0]		w_tag_new_write0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, 1'b1, 1'b1, 1'b0);
-	wire	[15:0]		w_tag_new_write1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, 1'b1, 1'b1, 1'b0);
-	wire	[15:0]		w_tag_new_write2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, 1'b1, 1'b1, 1'b0);
-	wire	[15:0]		w_tag_new_write3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, 1'b1, 1'b1, 1'b0);
+	wire	[15:0]		w_tag_new_write0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, ff_selected_prio, 1'b1, 1'b1, 1'b0);
+	wire	[15:0]		w_tag_new_write1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, ff_selected_prio, 1'b1, 1'b1, 1'b0);
+	wire	[15:0]		w_tag_new_write2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, ff_selected_prio, 1'b1, 1'b1, 1'b0);
+	wire	[15:0]		w_tag_new_write3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, ff_selected_prio, 1'b1, 1'b1, 1'b0);
 
-	wire	[15:0]		w_tag_new_read0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, 1'b0, 1'b0, 1'b1);
-	wire	[15:0]		w_tag_new_read1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, 1'b0, 1'b0, 1'b1);
-	wire	[15:0]		w_tag_new_read2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, 1'b0, 1'b0, 1'b1);
-	wire	[15:0]		w_tag_new_read3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, 1'b0, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_read0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, ff_selected_prio, 1'b0, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_read1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, ff_selected_prio, 1'b0, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_read2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, ff_selected_prio, 1'b0, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_read3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, ff_selected_prio, 1'b0, 1'b0, 1'b1);
 
-	wire	[15:0]		w_tag_new_refill0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, 1'b1, 1'b0, 1'b0);
-	wire	[15:0]		w_tag_new_refill1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, 1'b1, 1'b0, 1'b0);
-	wire	[15:0]		w_tag_new_refill2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, 1'b1, 1'b0, 1'b0);
-	wire	[15:0]		w_tag_new_refill3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, 1'b1, 1'b0, 1'b0);
-	wire	[15:0]		w_tag_new_partial_refill0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, 1'b1, 1'b0, 1'b1);
-	wire	[15:0]		w_tag_new_partial_refill1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, 1'b1, 1'b0, 1'b1);
-	wire	[15:0]		w_tag_new_partial_refill2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, 1'b1, 1'b0, 1'b1);
-	wire	[15:0]		w_tag_new_partial_refill3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_refill0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, ff_selected_prio, 1'b1, 1'b0, 1'b0);
+	wire	[15:0]		w_tag_new_refill1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, ff_selected_prio, 1'b1, 1'b0, 1'b0);
+	wire	[15:0]		w_tag_new_refill2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, ff_selected_prio, 1'b1, 1'b0, 1'b0);
+	wire	[15:0]		w_tag_new_refill3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, ff_selected_prio, 1'b1, 1'b0, 1'b0);
+	wire	[15:0]		w_tag_new_partial_refill0 = fn_update_tag(ff_tag0, ff_key, ff_selected_way, 2'd0, ff_selected_prio, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_partial_refill1 = fn_update_tag(ff_tag1, ff_key, ff_selected_way, 2'd1, ff_selected_prio, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_partial_refill2 = fn_update_tag(ff_tag2, ff_key, ff_selected_way, 2'd2, ff_selected_prio, 1'b1, 1'b0, 1'b1);
+	wire	[15:0]		w_tag_new_partial_refill3 = fn_update_tag(ff_tag3, ff_key, ff_selected_way, 2'd3, ff_selected_prio, 1'b1, 1'b0, 1'b1);
 
 	function [1:0] fn_choose_way;
 		input [15:0] t0;
 		input [15:0] t1;
 		input [15:0] t2;
 		input [15:0] t3;
+		reg [1:0] best_prio;
 		begin
 			if( !t0[14] )
 				fn_choose_way = 2'd0;
@@ -287,14 +290,21 @@ module cache (
 				fn_choose_way = 2'd2;
 			else if( !t3[14] )
 				fn_choose_way = 2'd3;
-			else if( t0[12:11] == 2'd0 )
+			else begin
 				fn_choose_way = 2'd0;
-			else if( t1[12:11] == 2'd0 )
-				fn_choose_way = 2'd1;
-			else if( t2[12:11] == 2'd0 )
-				fn_choose_way = 2'd2;
-			else
-				fn_choose_way = 2'd3;
+				best_prio = t0[12:11];
+				if( t1[12:11] < best_prio ) begin
+					fn_choose_way = 2'd1;
+					best_prio = t1[12:11];
+				end
+				if( t2[12:11] < best_prio ) begin
+					fn_choose_way = 2'd2;
+					best_prio = t2[12:11];
+				end
+				if( t3[12:11] < best_prio ) begin
+					fn_choose_way = 2'd3;
+				end
+			end
 		end
 	endfunction
 
@@ -313,6 +323,7 @@ module cache (
 		input [10:0] key;
 		input [1:0] selected_way;
 		input [1:0] this_way;
+		input [1:0] selected_prio;
 		input force_valid;
 		input force_update;
 		input keep_update;
@@ -322,8 +333,10 @@ module cache (
 		begin
 			if( this_way == selected_way )
 				nprio = 2'd3;
+			else if( old_tag[12:11] > selected_prio )
+				nprio = old_tag[12:11] - 2'd1;
 			else
-				nprio = fn_dec_prio(old_tag[12:11]);
+				nprio = old_tag[12:11];
 
 			nvalid = old_tag[14] | force_valid;
 			if( this_way == selected_way ) begin
@@ -489,6 +502,8 @@ module cache (
 			ff_tag1_wdata <= 16'd0;
 			ff_tag2_wdata <= 16'd0;
 			ff_tag3_wdata <= 16'd0;
+			ff_ram_read_wait_phase <= 1'b0;
+			ff_selected_prio <= 2'd0;
 		end
 		else begin
 			ff_bus_rdata_valid <= 1'b0;
@@ -568,15 +583,26 @@ module cache (
 				ff_tag1_oe_n <= 1'b0;
 				ff_tag2_oe_n <= 1'b0;
 				ff_tag3_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_tag_read_wait;
 			end
 
 			c_state_tag_read_wait: begin
-				ff_tag0 <= w_tag0_rdata;
-				ff_tag1 <= w_tag1_rdata;
-				ff_tag2 <= w_tag2_rdata;
-				ff_tag3 <= w_tag3_rdata;
-				ff_state <= c_state_tag_read_analyze;
+				if( !ff_ram_read_wait_phase ) begin
+					ff_tag0_oe_n <= 1'b0;
+					ff_tag1_oe_n <= 1'b0;
+					ff_tag2_oe_n <= 1'b0;
+					ff_tag3_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
+				end
+				else begin
+					ff_tag0 <= w_tag0_rdata;
+					ff_tag1 <= w_tag1_rdata;
+					ff_tag2 <= w_tag2_rdata;
+					ff_tag3 <= w_tag3_rdata;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_tag_read_analyze;
+				end
 			end
 
 			c_state_tag_read_analyze: begin
@@ -586,10 +612,12 @@ module cache (
 				if( ff_req_write ) begin
 					if( w_any_hit ) begin
 						ff_selected_way <= w_hit_way;
+						ff_selected_prio <= (w_hit_way == 2'd0) ? ff_tag0[12:11] : (w_hit_way == 2'd1) ? ff_tag1[12:11] : (w_hit_way == 2'd2) ? ff_tag2[12:11] : ff_tag3[12:11];
 						ff_state <= c_state_write_hit_line_req;
 					end
 					else begin
 						ff_selected_way <= w_repl_way;
+						ff_selected_prio <= (w_repl_way == 2'd0) ? ff_tag0[12:11] : (w_repl_way == 2'd1) ? ff_tag1[12:11] : (w_repl_way == 2'd2) ? ff_tag2[12:11] : ff_tag3[12:11];
 						ff_need_evict <= w_repl_need_evict;
 						if( w_repl_need_evict ) begin
 							ff_evict_hash <= ff_hash;
@@ -607,10 +635,12 @@ module cache (
 				else begin
 					if( w_any_hit ) begin
 						ff_selected_way <= w_hit_way;
+						ff_selected_prio <= (w_hit_way == 2'd0) ? ff_tag0[12:11] : (w_hit_way == 2'd1) ? ff_tag1[12:11] : (w_hit_way == 2'd2) ? ff_tag2[12:11] : ff_tag3[12:11];
 						ff_state <= c_state_read_hit_line_req;
 					end
 					else begin
 						ff_selected_way <= w_repl_way;
+						ff_selected_prio <= (w_repl_way == 2'd0) ? ff_tag0[12:11] : (w_repl_way == 2'd1) ? ff_tag1[12:11] : (w_repl_way == 2'd2) ? ff_tag2[12:11] : ff_tag3[12:11];
 						ff_need_evict <= w_repl_need_evict;
 						if( w_repl_need_evict ) begin
 							ff_evict_hash <= ff_hash;
@@ -630,13 +660,21 @@ module cache (
 			c_state_read_hit_line_req: begin
 				ff_line_address <= { ff_selected_way, ff_hash, ff_word_index };
 				ff_line_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_read_hit_line_wait;
 			end
 
 			c_state_read_hit_line_wait: begin
-				ff_line0_read <= w_line0_rdata;
-				ff_line1_read <= w_line1_rdata;
-				ff_state <= c_state_read_hit_line_analyze;
+				if( !ff_ram_read_wait_phase ) begin
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
+				end
+				else begin
+					ff_line0_read <= w_line0_rdata;
+					ff_line1_read <= w_line1_rdata;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_read_hit_line_analyze;
+				end
 			end
 
 			c_state_read_hit_line_analyze: begin
@@ -663,13 +701,21 @@ module cache (
 			c_state_prescan_req: begin
 				ff_line_address <= { ff_selected_way, ff_hash, ff_prescan_index };
 				ff_line_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_prescan_wait;
 			end
 
 			c_state_prescan_wait: begin
-				ff_line0_read <= w_line0_rdata;
-				ff_line1_read <= w_line1_rdata;
-				ff_state <= c_state_prescan_capture;
+				if( !ff_ram_read_wait_phase ) begin
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
+				end
+				else begin
+					ff_line0_read <= w_line0_rdata;
+					ff_line1_read <= w_line1_rdata;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_prescan_capture;
+				end
 			end
 
 			c_state_prescan_capture: begin
@@ -745,13 +791,21 @@ module cache (
 			c_state_write_hit_line_req: begin
 				ff_line_address <= { ff_selected_way, ff_hash, ff_word_index };
 				ff_line_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_write_hit_line_wait;
 			end
 
 			c_state_write_hit_line_wait: begin
-				ff_line0_read <= w_line0_rdata;
-				ff_line1_read <= w_line1_rdata;
-				ff_state <= c_state_write_hit_line_commit;
+				if( !ff_ram_read_wait_phase ) begin
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
+				end
+				else begin
+					ff_line0_read <= w_line0_rdata;
+					ff_line1_read <= w_line1_rdata;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_write_hit_line_commit;
+				end
 			end
 
 			c_state_write_hit_line_commit: begin
@@ -793,13 +847,21 @@ module cache (
 			c_state_write_miss_line_req: begin
 				ff_line_address <= { ff_selected_way, ff_hash, ff_word_index };
 				ff_line_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_write_miss_line_wait;
 			end
 
 			c_state_write_miss_line_wait: begin
-				ff_line0_read <= w_line0_rdata;
-				ff_line1_read <= w_line1_rdata;
-				ff_state <= c_state_write_miss_line_commit;
+				if( !ff_ram_read_wait_phase ) begin
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
+				end
+				else begin
+					ff_line0_read <= w_line0_rdata;
+					ff_line1_read <= w_line1_rdata;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_write_miss_line_commit;
+				end
 			end
 
 			c_state_write_miss_line_commit: begin
@@ -884,15 +946,26 @@ module cache (
 				ff_tag1_oe_n <= 1'b0;
 				ff_tag2_oe_n <= 1'b0;
 				ff_tag3_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_flush_tag_wait;
 			end
 
 			c_state_flush_tag_wait: begin
-				ff_tag0 <= w_tag0_rdata;
-				ff_tag1 <= w_tag1_rdata;
-				ff_tag2 <= w_tag2_rdata;
-				ff_tag3 <= w_tag3_rdata;
-				ff_state <= c_state_flush_tag_analyze;
+				if( !ff_ram_read_wait_phase ) begin
+					ff_tag0_oe_n <= 1'b0;
+					ff_tag1_oe_n <= 1'b0;
+					ff_tag2_oe_n <= 1'b0;
+					ff_tag3_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
+				end
+				else begin
+					ff_tag0 <= w_tag0_rdata;
+					ff_tag1 <= w_tag1_rdata;
+					ff_tag2 <= w_tag2_rdata;
+					ff_tag3 <= w_tag3_rdata;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_flush_tag_analyze;
+				end
 			end
 
 			c_state_flush_tag_analyze: begin
@@ -901,6 +974,7 @@ module cache (
 					ff_evict_hash <= ff_flush_hash;
 					ff_evict_key <= w_flush_evict_key;
 					ff_selected_way <= ff_flush_way;
+					ff_selected_prio <= (ff_flush_way == 2'd0) ? ff_tag0[12:11] : (ff_flush_way == 2'd1) ? ff_tag1[12:11] : (ff_flush_way == 2'd2) ? ff_tag2[12:11] : ff_tag3[12:11];
 					ff_evict_index <= 3'd0;
 					ff_evict_post_state <= c_post_evict_flush;
 					ff_state <= c_state_evict_line_req;
@@ -940,17 +1014,21 @@ module cache (
 			c_state_evict_line_req: begin
 				ff_line_address <= { ff_selected_way, ff_evict_hash, ff_evict_index };
 				ff_line_oe_n <= 1'b0;
+				ff_ram_read_wait_phase <= 1'b0;
 				ff_state <= c_state_evict_line_wait;
 			end
 
 			c_state_evict_line_wait: begin
-				ff_evict_line_data <= { w_line1_rdata[15:0], w_line0_rdata[15:0] };
-				ff_evict_line_mask <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]);
-				if( ff_evict_index != 3'd7 ) begin
-					ff_line_address <= { ff_selected_way, ff_evict_hash, ff_evict_index + 3'd1 };
+				if( !ff_ram_read_wait_phase ) begin
 					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b1;
 				end
-				ff_state <= c_state_evict_line_capture;
+				else begin
+					ff_evict_line_data <= { w_line1_rdata[15:0], w_line0_rdata[15:0] };
+					ff_evict_line_mask <= fn_make_dqm(w_line0_rdata[17], w_line0_rdata[16], w_line1_rdata[17], w_line1_rdata[16]);
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_evict_line_capture;
+				end
 			end
 
 			c_state_evict_line_capture: begin
@@ -970,7 +1048,7 @@ module cache (
 				end
 				else begin
 					ff_evict_index <= ff_evict_index + 3'd1;
-					ff_state <= c_state_evict_line_wait;
+					ff_state <= c_state_evict_line_req;
 				end
 			end
 

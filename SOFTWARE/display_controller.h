@@ -51,6 +51,17 @@
 void display_enable( bool enable );
 
 // -----------------------------------------------------------------------------
+//	display_set_frame_address
+//	input:
+//		address: フレームバッファの先頭アドレス
+//	output:
+//		none
+//	description:
+//		フレームバッファの先頭アドレスを設定する
+// -----------------------------------------------------------------------------
+void display_set_frame_address( uint32_t address );
+
+// -----------------------------------------------------------------------------
 //	display_set_fill_color
 //	input:
 //		color: 16bit RGB color value

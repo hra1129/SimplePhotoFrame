@@ -38,6 +38,21 @@ void display_enable( bool enable ) {
 }
 
 // -----------------------------------------------------------------------------
+//	display_set_frame_address
+//	input:
+//		address: フレームバッファの先頭アドレス
+//	output:
+//		none
+//	description:
+//		フレームバッファの先頭アドレスを設定する
+// -----------------------------------------------------------------------------
+void display_set_frame_address( uint32_t address ) {
+
+	fpga_outport( IO_DISPLAY | 0x00, (uint16_t)(address & 0xFFFF) );
+	fpga_outport( IO_DISPLAY | 0x01, (uint16_t)((address >> 16) & 0x003F) );
+}
+
+// -----------------------------------------------------------------------------
 //	display_set_fill_color
 //	input:
 //		color: 16bit RGB color value
