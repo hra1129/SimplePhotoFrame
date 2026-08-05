@@ -93,6 +93,7 @@ module display_address_generator (
 	reg				reg_display_on;
 	reg		[15:0]	reg_fill_color;
 	reg		[22:5]	ff_base_address;
+	reg				ff_base_address_valid;
 	reg				ff_display_on;
 	reg				ff_frame_head_holdoff;
 	reg				ff_wait_frame_sync;
@@ -177,11 +178,15 @@ module display_address_generator (
 
 	always @(posedge clk) begin
 		if( reset ) begin
-			ff_base_address <= 18'd0;
+			ff_base_address	<= 18'd0;
 		end
 		else if( bus_cs && bus_valid && bus_ready && bus_write && bus_address == 5'd1 ) begin
 			// 必ず、下位→上位の順で更新するルール
-			ff_base_address <= reg_base_address;
+			ff_base_address_valid	<= 1'b1;
+		end
+		else if( ff_base_address_valid && frame_end ) begin
+			ff_base_address_valid	<= 1'b0;
+			ff_base_address			<= reg_base_address;
 		end
 	end
 

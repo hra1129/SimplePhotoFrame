@@ -59,18 +59,17 @@ void vram_test( void ) {
 void usa_fpga_test( void ) {
 	int x, y, i;
 
-//	vram_set_address( 1024 * 480 );
+	vram_set_address( 1024 * 480 );
 	i = 0;
 	for( y = 0; y < 480; y++ ) {
-		vram_set_address( y * 1024 );
+		vram_set_address( 1024 * 480 + y * 1024 );
 		for( x = 0; x < 800; x++ ) {
 			vram_burst_write( usa_image[i] );
 			i++;
 		}
 	}
 	vram_flush();
-//	display_set_frame_address( 1024 * 480 );
-	display_set_frame_address( 0 );
+	display_set_frame_address( 1024 * 480 );
 }
 
 // ---------------------------------------------------------
