@@ -88,73 +88,43 @@ module bus_selector (
 );
 	localparam [2:0] c_read_burst_last = 3'd7;
 
-	reg				ff_priority;
-	reg			ff_grant_bus;
+	reg				ff_grant_bus;
 	reg				ff_read_bus;
 	reg				ff_read_stall;
 	reg				ff_write_stall;
 	reg				ff_ready;
 	reg		[2:0]	ff_read_count;
 	reg		[2:0]	ff_write_count;
-	reg			ff_write_seen_busy;
+	reg				ff_read_seen_busy;
+	reg				ff_read_data_started;
+	reg				ff_write_seen_busy;
 	wire			w_request_valid;
 	wire			w_active;
-	wire	[1:0]	w_valid;
-	wire	[1:0]	w_priority_valid;
-	wire	[0:0]	w_selected_valid;
 	wire	[0:0]	w_selected_bus;
-	wire	[22:5]	w_selected_bus_address;
-	wire	[31:0]	w_selected_bus_wdata;
-	wire	[3:0]	w_selected_bus_wdata_mask;
 	wire			w_selected_bus_write;
 	wire			w_selected_bus_refresh;
-	wire			w_selected_bus_wdata_valid;
 	wire			w_selected_bus_read;
 	wire			w_output_bus;
+	//	display または cache からのリクエストを受理するかどうかを決定する
+	assign w_request_valid				= (sdram_display_address_valid | sdram_cache_address_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
+	//	さらに、SDRAM Controller が受理可能かどうかを考慮して、active 信号を生成する
+	assign w_active						= w_request_valid & sdram_address_ready;
+	//	Display を常に優先し、Display 要求がなく Cache 要求がある場合のみ Cache を選択する。
+	assign w_selected_bus				= !sdram_display_address_valid && sdram_cache_address_valid;
 
-	function [1:0] func_rotate_priority(
-		input [1:0] valid,
-		input [0:0] priority
-	);
-		case( priority )
-			1'd0:		func_rotate_priority = valid;
-			default:	func_rotate_priority = { valid[0], valid[1] };
-		endcase
-	endfunction
-
-	function [0:0] func_select_valid(
-		input [1:0] valid
-	);
-		casex( valid )
-			2'bx1:		func_select_valid = 1'd0;
-			default:	func_select_valid = 1'd1;
-		endcase
-	endfunction
-
-	assign w_request_valid			= (sdram_display_address_valid | sdram_cache_address_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
-	assign w_active					= w_request_valid & sdram_address_ready;
-	assign w_valid						= { sdram_cache_address_valid, sdram_display_address_valid };
-	assign w_priority_valid				= func_rotate_priority( w_valid, ff_priority );
-	assign w_selected_valid				= func_select_valid( w_priority_valid );
-	assign w_selected_bus				= w_selected_valid + ff_priority;
-
-	assign w_selected_bus_address		= w_selected_bus ? sdram_cache_address     : sdram_display_address;
-	assign w_selected_bus_wdata			= w_selected_bus ? sdram_cache_wdata       : 32'd0;
-	assign w_selected_bus_wdata_mask	= w_selected_bus ? sdram_cache_wdata_mask  : 4'd0;
 	assign w_selected_bus_write			= w_selected_bus ? sdram_cache_write       : 1'b0;
 	assign w_selected_bus_refresh		= w_selected_bus ? sdram_cache_refresh     : 1'b0;
-	assign w_selected_bus_wdata_valid	= w_selected_bus ? sdram_cache_wdata_valid : 1'b0;
 	assign w_selected_bus_read			= !w_selected_bus_write & !w_selected_bus_refresh;
 	assign w_output_bus					= (ff_read_stall || ff_write_stall) ? ff_grant_bus : w_selected_bus;
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_priority		<= 1'd0;
 			ff_grant_bus	<= 1'd0;
 		end
-		else if( w_active ) begin
-			ff_priority		<= w_selected_bus ^ 1'd1;
+		else begin
+			if( w_active ) begin
 			ff_grant_bus	<= w_selected_bus;
+			end
 		end
 	end
 
@@ -166,40 +136,56 @@ module bus_selector (
 			ff_write_stall	<= 1'b0;
 			ff_read_count	<= 3'd0;
 			ff_write_count	<= 3'd0;
+			ff_read_seen_busy <= 1'b0;
+			ff_read_data_started <= 1'b0;
 			ff_write_seen_busy <= 1'b0;
 		end
 		else if( !ff_ready ) begin
 			if( ff_read_stall ) begin
+				if( !sdram_address_ready ) begin
+					ff_read_seen_busy <= 1'b1;
+				end
 				if( sdram_rdata_valid ) begin
+					ff_read_data_started <= 1'b1;
 					if( ff_read_count == c_read_burst_last ) begin
 						ff_ready		<= 1'b0;
 						ff_read_stall	<= 1'b0;
 						ff_read_count	<= 3'd0;
+						ff_read_seen_busy <= 1'b0;
+						ff_read_data_started <= 1'b0;
 					end
 					else begin
 						ff_read_count	<= ff_read_count + 3'd1;
 					end
 				end
+				else if( ff_read_seen_busy && sdram_address_ready && !ff_read_data_started ) begin
+					// Failsafe: request was likely not accepted yet. Once data starts,
+					// keep read_stall until the full 8-beat burst is consumed.
+					ff_read_stall			<= 1'b0;
+					ff_read_count			<= 3'd0;
+					ff_read_seen_busy		<= 1'b0;
+					ff_read_data_started	<= 1'b0;
+				end
 			end
 			else if( ff_write_stall ) begin
 				if( !sdram_address_ready ) begin
-					ff_write_seen_busy <= 1'b1;
+					ff_write_seen_busy	<= 1'b1;
 				end
 				if( sdram_cache_wdata_valid ) begin
 					if( ff_write_count == c_read_burst_last ) begin
-						ff_ready		<= 1'b0;
-						ff_write_stall	<= 1'b0;
-						ff_write_seen_busy <= 1'b0;
-						ff_write_count	<= 3'd0;
+						ff_ready			<= 1'b0;
+						ff_write_stall		<= 1'b0;
+						ff_write_seen_busy	<= 1'b0;
+						ff_write_count		<= 3'd0;
 					end
 					else begin
-						ff_write_count	<= ff_write_count + 3'd1;
+						ff_write_count		<= ff_write_count + 3'd1;
 					end
 				end
 				else if( ff_write_seen_busy && sdram_address_ready ) begin
-					ff_write_stall	<= 1'b0;
-					ff_write_count	<= 3'd0;
-					ff_write_seen_busy <= 1'b0;
+					ff_write_stall		<= 1'b0;
+					ff_write_count		<= 3'd0;
+					ff_write_seen_busy	<= 1'b0;
 				end
 			end
 			else if( sdram_address_ready ) begin
@@ -209,14 +195,16 @@ module bus_selector (
 		else if( w_active ) begin
 			ff_ready <= 1'b0;
 			if( w_selected_bus_read ) begin
-				ff_read_stall	<= 1'b1;
-				ff_read_bus		<= w_selected_bus;
-				ff_read_count	<= 3'd0;
+				ff_read_stall			<= 1'b1;
+				ff_read_bus				<= w_selected_bus;
+				ff_read_count			<= 3'd0;
+				ff_read_seen_busy		<= 1'b0;
+				ff_read_data_started	<= 1'b0;
 			end
 			else if( w_selected_bus_write ) begin
-				ff_write_stall	<= 1'b1;
-				ff_write_count	<= 3'd0;
-				ff_write_seen_busy <= 1'b0;
+				ff_write_stall			<= 1'b1;
+				ff_write_count			<= 3'd0;
+				ff_write_seen_busy		<= 1'b0;
 			end
 		end
 	end
@@ -227,8 +215,8 @@ module bus_selector (
 	assign sdram_display_rdata_valid	= !ff_read_bus ? sdram_rdata_valid : 1'b0;
 	assign sdram_cache_rdata_valid		=  ff_read_bus ? sdram_rdata_valid : 1'b0;
 
-	assign sdram_display_address_ready	= !w_selected_bus ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
-	assign sdram_cache_address_ready	=  w_selected_bus ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
+	assign sdram_display_address_ready	= (!w_selected_bus && sdram_display_address_valid) ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
+	assign sdram_cache_address_ready	=  (w_selected_bus && sdram_cache_address_valid) ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
 
 	assign sdram_address_valid			= w_request_valid;
 	assign sdram_address				= w_output_bus ? sdram_cache_address     : sdram_display_address;

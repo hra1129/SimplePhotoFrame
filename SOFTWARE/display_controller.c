@@ -22,6 +22,28 @@
 // -----------------------------------------------------------------------------
 
 #include "display_controller.h"
+#include <stdio.h>
+
+#define DISPLAY_WAIT_TIMEOUT_MS	3000
+#define DISPLAY_WAIT_POLL_US		50
+
+static bool wait_busy_clear( uint8_t io_address, const char *name, uint32_t timeout_ms ) {
+	absolute_time_t timeout_time;
+	uint16_t status;
+
+	timeout_time = make_timeout_time_ms( timeout_ms );
+	while( 1 ) {
+		status = fpga_inport( io_address );
+		if( (status & 1) == 0 ) {
+			return true;
+		}
+		if( time_reached( timeout_time ) ) {
+			printf( "[WARN] timeout: %s busy stuck (io=%02X status=%04X)\n", name, io_address, status );
+			return false;
+		}
+		sleep_us( DISPLAY_WAIT_POLL_US );
+	}
+}
 
 // -----------------------------------------------------------------------------
 //	display_enable
@@ -38,6 +60,36 @@ void display_enable( bool enable ) {
 }
 
 // -----------------------------------------------------------------------------
+//	display_wait_complete
+//	input:
+//		none
+//	output:
+//		none
+//	description:
+//		現在の描画が完了するまで待機する
+// -----------------------------------------------------------------------------
+void display_wait_complete( void ) {
+
+	wait_busy_clear( IO_GRAPHIC1 | 0x06, "graphic1", DISPLAY_WAIT_TIMEOUT_MS );
+	wait_busy_clear( IO_GRAPHIC2 | 0x09, "graphic2", DISPLAY_WAIT_TIMEOUT_MS );
+}
+
+// -----------------------------------------------------------------------------
+//	display_wait_frame_sync
+//	input:
+//		none
+//	output:
+//		none
+//	description:
+//		次の垂直同期信号まで待機する
+// -----------------------------------------------------------------------------
+void display_wait_frame_sync( void ) {
+
+	fpga_outport( IO_DISPLAY | 0x05, 1 );		// wait for next frame
+	wait_busy_clear( IO_DISPLAY | 0x05, "display_frame_sync", DISPLAY_WAIT_TIMEOUT_MS );
+}
+
+// -----------------------------------------------------------------------------
 //	display_set_frame_address
 //	input:
 //		address: フレームバッファの先頭アドレス
@@ -50,6 +102,27 @@ void display_set_frame_address( uint32_t address ) {
 
 	fpga_outport( IO_DISPLAY | 0x00, (uint16_t)(address & 0xFFFF) );
 	fpga_outport( IO_DISPLAY | 0x01, (uint16_t)((address >> 16) & 0x003F) );
+}
+
+// ---------------------------------------------------------
+void graphic1_set_frame_address( uint32_t address ) {
+
+	fpga_outport( IO_GRAPHIC1 | 0x07, (uint16_t)(address & 0xFFFF) );
+	fpga_outport( IO_GRAPHIC1 | 0x08, (uint16_t)((address >> 16) & 0x003F) );
+}
+
+// ---------------------------------------------------------
+void graphic2_set_source_frame_address( uint32_t address ) {
+
+	fpga_outport( IO_GRAPHIC2 | 0x0A, (uint16_t)(address & 0xFFFF) );
+	fpga_outport( IO_GRAPHIC2 | 0x0B, (uint16_t)((address >> 16) & 0x003F) );
+}
+
+// ---------------------------------------------------------
+void graphic2_set_destination_frame_address( uint32_t address ) {
+
+	fpga_outport( IO_GRAPHIC2 | 0x0C, (uint16_t)(address & 0xFFFF) );
+	fpga_outport( IO_GRAPHIC2 | 0x0D, (uint16_t)((address >> 16) & 0x003F) );
 }
 
 // -----------------------------------------------------------------------------
@@ -81,9 +154,7 @@ void display_set_fill_color( uint16_t color ) {
 void graphic1_fill_rectangle( int sx, int sy, int width, int height, uint16_t color, uint16_t rop ) {
 
 	//	グラフィック1が IDLE状態になるまで待機する
-	while( (fpga_inport( IO_GRAPHIC1 | 6 ) & 1) == 1 ) {
-		// wait
-	}
+	wait_busy_clear( IO_GRAPHIC1 | 6, "graphic1_before_start", DISPLAY_WAIT_TIMEOUT_MS );
 	//	グラフィック1の矩形塗りつぶし機能を使用する
 	fpga_outport( IO_GRAPHIC1 | 0, sx );
 	fpga_outport( IO_GRAPHIC1 | 1, sy );
@@ -92,4 +163,34 @@ void graphic1_fill_rectangle( int sx, int sy, int width, int height, uint16_t co
 	fpga_outport( IO_GRAPHIC1 | 4, color );
 	fpga_outport( IO_GRAPHIC1 | 5, rop );
 	fpga_outport( IO_GRAPHIC1 | 6, 1 );			// start operation
+}
+
+// -----------------------------------------------------------------------------
+//	graphic2_block_copy
+//	input:
+//		sx, sy: source top-left coordinates
+//		swidth, sheight: dimensions of the rectangle
+//		dx, dy: destination top-left coordinates
+//		dwidth, dheight: dimensions of the rectangle
+//		rop: raster operation code
+//	output:
+//		none
+//	description:
+//		指定された矩形を別の位置にコピーする
+// -----------------------------------------------------------------------------
+void graphic2_block_copy( int sx, int sy, int swidth, int sheight, int dx, int dy, int dwidth, int dheight, uint16_t rop ) {
+
+	//	グラフィック2が IDLE状態になるまで待機する
+	wait_busy_clear( IO_GRAPHIC2 | 9, "graphic2_before_start", DISPLAY_WAIT_TIMEOUT_MS );
+	//	グラフィック2の矩形コピー機能を使用する
+	fpga_outport( IO_GRAPHIC2 | 0, sx );
+	fpga_outport( IO_GRAPHIC2 | 1, sy );
+	fpga_outport( IO_GRAPHIC2 | 2, swidth );
+	fpga_outport( IO_GRAPHIC2 | 3, sheight );
+	fpga_outport( IO_GRAPHIC2 | 4, dx );
+	fpga_outport( IO_GRAPHIC2 | 5, dy );
+	fpga_outport( IO_GRAPHIC2 | 6, dwidth );
+	fpga_outport( IO_GRAPHIC2 | 7, dheight );
+	fpga_outport( IO_GRAPHIC2 | 8, rop );
+	fpga_outport( IO_GRAPHIC2 | 9, 1 );			// start operation
 }

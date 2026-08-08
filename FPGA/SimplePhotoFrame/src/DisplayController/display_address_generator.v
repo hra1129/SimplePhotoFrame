@@ -97,8 +97,8 @@ module display_address_generator (
 	reg				ff_display_on;
 	reg				ff_frame_head_holdoff;
 	reg				ff_wait_frame_sync;
+	reg				reg_frame_end_wait;
 	wire			w_issue_enable;
-	wire			w_issue_accept;
 	wire			w_valid;
 	wire	[22:5]	w_sdram_address;
 
@@ -112,7 +112,6 @@ module display_address_generator (
 	// ---------------------------------------------------------
 	always @(posedge clk) begin
 		if( reset ) begin
-			ff_ready <= 1'b0;
 			ff_rdata_valid <= 1'b0;
 		end
 		else if( sdram_init_busy ) begin
@@ -124,11 +123,11 @@ module display_address_generator (
 			ff_ready <= 1'b1;
 			ff_rdata_valid <= 1'b0;
 		end
-		else if( bus_valid && bus_write && bus_cs && bus_address <= 5'd3 ) begin
+		else if( bus_valid && bus_write && bus_cs && bus_address <= 5'd5 ) begin
 			ff_ready <= 1'b1;
 			ff_rdata_valid <= 1'b0;
 		end 
-		else if( bus_valid && !bus_write && bus_cs && bus_address == 5'd4 ) begin
+		else if( bus_valid && !bus_write && bus_cs && (bus_address == 5'd4 || bus_address == 5'd5) ) begin
 			ff_ready <= 1'b0;
 			ff_rdata_valid <= 1'b1;
 		end 
@@ -147,7 +146,8 @@ module display_address_generator (
 	//		2     | bit0: 液晶表示 ON(1)/OFF(0:Default)
 	//		3     | bit0: SDRAM初期化完了フラグ(読み取り専用)
 	//		4     | bit0-7: display off 時の色
-	//		5-7   | 未使用
+	//		5     | bit0: 1を書き込むとそのままリードバックできる。frame_end で 0 にクリアされる。
+	//		6-7   | 未使用
 	// ---------------------------------------------------------
 	always @(posedge clk) begin
 		if( reset ) begin
@@ -155,7 +155,8 @@ module display_address_generator (
 			reg_register_address <= 3'd0;
 			reg_display_on <= 1'b0;
 			reg_fill_color <= { 5'd31, 6'd0, 5'd0 };	// 赤
-		end else if( bus_cs && bus_valid && bus_ready && bus_write ) begin
+		end
+		else if( bus_cs && bus_valid && bus_ready && bus_write ) begin
 			case( bus_address )
 				5'd0: begin
 					reg_base_address[16:5] <= bus_wdata[15:4];
@@ -173,6 +174,20 @@ module display_address_generator (
 					// それ以外のアドレスは無視
 				end
 			endcase
+		end
+	end
+
+	always @(posedge clk) begin
+		if( reset ) begin
+			reg_frame_end_wait <= 1'b0;
+		end
+		else begin
+			if( frame_end ) begin
+				reg_frame_end_wait <= 1'b0;
+			end
+			else if( bus_cs && bus_valid && bus_ready && bus_write && bus_address == 5'd5 ) begin
+				reg_frame_end_wait <= bus_wdata[0];
+			end
 		end
 	end
 
@@ -197,9 +212,6 @@ module display_address_generator (
 		if( reset ) begin
 			ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
 		end
-		else if( !ff_ready ) begin
-			//	hold
-		end
 		else if( w_issue_accept ) begin
 			if( ff_h_counter == H_COUNTER_MAX ) begin
 				ff_h_counter <= { $clog2(IMG_WIDTH){1'b0} };
@@ -213,9 +225,6 @@ module display_address_generator (
 	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_v_counter <= { $clog2(IMG_HEIGHT){1'b0} };
-		end
-		else if( !ff_ready ) begin
-			//	hold
 		end
 		else if( w_issue_accept ) begin
 			if( ff_h_counter == H_COUNTER_MAX ) begin
@@ -264,7 +273,7 @@ module display_address_generator (
 	end
 
 	assign bus_ready			= ff_ready;
-	assign bus_rdata			= { 15'd0, sdram_init_busy };
+	assign bus_rdata			= ( bus_address == 5'd5 ) ? { 15'd0, reg_frame_end_wait } : { 15'd0, sdram_init_busy };
 	assign bus_rdata_valid		= ff_rdata_valid;
 
 	assign sdram_address		= w_sdram_address;

@@ -117,8 +117,8 @@ module graphic_processor1 (
 
 	reg		[15:0]	ff_clip_width;
 	reg		[15:0]	ff_clip_height;
-	reg		[15:0]	ff_cur_x;
-	reg		[15:0]	ff_cur_y;
+	reg		[15:0]	ff_cur_x;		/* synthesis syn_maxfan = 32 */
+	reg		[15:0]	ff_cur_y;		/* synthesis syn_maxfan = 32 */
 	reg		[22:1]	ff_row_start_address;
 	reg		[22:1]	ff_cur_address;
 
@@ -442,10 +442,10 @@ module graphic_processor1 (
 					reg_rop <= bus_wdata;
 				end
 				5'h07: begin
-					reg_vram_address[15:1] <= bus_wdata[15:1];
+					reg_vram_address[16:1] <= bus_wdata;
 				end
 				5'h08: begin
-					reg_vram_address[22:16] <= bus_wdata[6:0];
+					reg_vram_address[22:17] <= bus_wdata[5:0];
 				end
 				default: begin
 					// do nothing
@@ -471,8 +471,8 @@ module graphic_processor1 (
 					5'h04:		ff_bus_rdata <= reg_color;
 					5'h05:		ff_bus_rdata <= reg_rop;
 					5'h06:		ff_bus_rdata <= { 15'd0, ff_busy };
-					5'h07:		ff_bus_rdata <= { reg_vram_address[15:1], 1'b0 };
-					5'h08:		ff_bus_rdata <= { 9'd0, reg_vram_address[22:16] };
+					5'h07:		ff_bus_rdata <= reg_vram_address[16:1];
+					5'h08:		ff_bus_rdata <= { 10'd0, reg_vram_address[22:17] };
 					default:	ff_bus_rdata <= 16'd0;
 					endcase
 					ff_bus_rdata_valid <= 1'b1;

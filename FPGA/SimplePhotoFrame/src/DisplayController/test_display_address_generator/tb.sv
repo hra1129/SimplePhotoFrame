@@ -29,6 +29,8 @@ module tb;
 	integer			request_pulses;
 	integer			frame_count;
 	integer			cycle_count;
+	reg				seen_reg5_readback;
+	reg				seen_reg5_cleared;
 
 	display_address_generator dut (
 		.clk					( clk					),
@@ -67,7 +69,7 @@ module tb;
 		clk = 1'b0;
 		reset = 1'b1;
 		sdram_init_busy = 1'b0;
-		frame_end = 1'b1;
+		frame_end = 1'b0;
 		bus_cs = 1'b1;
 		bus_address = 5'd0;
 		bus_valid = 1'b0;
@@ -77,9 +79,42 @@ module tb;
 		request_pulses = 0;
 		frame_count = 0;
 		cycle_count = 0;
+		seen_reg5_readback = 1'b0;
+		seen_reg5_cleared = 1'b0;
 
 		repeat(3) @(posedge clk);
 		reset = 1'b0;
+
+		@(posedge clk);
+		bus_address <= 5'd5;
+		bus_wdata <= 16'h0001;
+		bus_write <= 1'b1;
+		bus_valid <= 1'b1;
+		@(posedge clk);
+		bus_valid <= 1'b0;
+		bus_write <= 1'b0;
+		bus_wdata <= 16'd0;
+		bus_address <= 5'd5;
+
+		@(posedge clk);
+		bus_valid <= 1'b1;
+		bus_write <= 1'b0;
+		@(posedge clk);
+		#1;
+		check_ok( bus_rdata_valid && bus_rdata[0], "reg5_readback_after_write" );
+		seen_reg5_readback = 1'b1;
+		bus_valid <= 1'b0;
+
+		frame_end = 1'b0;
+		@(posedge clk);
+		frame_end = 1'b1;
+		bus_valid <= 1'b1;
+		bus_write <= 1'b0;
+		@(posedge clk);
+		#1;
+		check_ok( bus_rdata_valid && !bus_rdata[0], "reg5_clear_on_frame_end" );
+		seen_reg5_cleared = 1'b1;
+		bus_valid <= 1'b0;
 
 		while( frame_count < OBSERVE_FRAMES && cycle_count < MAX_CYCLES ) begin
 			@(posedge clk);
@@ -97,6 +132,8 @@ module tb;
 
 		check_ok( frame_count == OBSERVE_FRAMES, "display_off_2frames_timeout" );
 		check_ok( request_pulses >= REQUESTS_PER_FRAME, "display_off_request_count" );
+		check_ok( seen_reg5_readback, "reg5_readback_not_observed" );
+		check_ok( seen_reg5_cleared, "reg5_clear_not_observed" );
 
 		$display("[TB] PASS frames=%0d requests=%0d cycles=%0d", frame_count, request_pulses, cycle_count);
 		$finish;

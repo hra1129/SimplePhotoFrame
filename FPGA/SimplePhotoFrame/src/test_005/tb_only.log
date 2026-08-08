@@ -1,0 +1,46 @@
+[TB] Configure frame addresses
+[TB] Fill solid frame base=0 color=0000
+[TB][WAIT] graphic1 busy poll=20000 state_g1=3 state_g2=0 bs_read_stall=0 bs_write_stall=1
+[TB] Fill vertical bar frame base=0 phase=0
+[TB] Fill solid frame base=491520 color=07e0
+[TB][WAIT] graphic1 busy poll=20000 state_g1=3 state_g2=0 bs_read_stall=0 bs_write_stall=1
+[TB] Fill solid frame base=983040 color=f800
+[TB][WAIT] graphic1 busy poll=20000 state_g1=3 state_g2=0 bs_read_stall=0 bs_write_stall=0
+[TB] Enable display
+[TB] Arm LCD corruption monitor
+[TB][PHASE] start id=0 offset_lcd_ck=0
+[TB] Start GP2 block-copy stress
+[TB] GP2 iter=0 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=2 bs_read_stall=0 bs_write_stall=0
+[TB] GP2 iter=1 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=5 bs_read_stall=1 bs_write_stall=0
+[TB] GP2 block-copy stress done
+[TB][PHASE] result id=0 offset_lcd_ck=0 stalls=0 mismatch_lines=0 mismatch_pixels=0 line_width_errors=0 first_bad_frame=-1 first_bad_line=-1 first_bad_x=-1
+[TB][PHASE] start id=1 offset_lcd_ck=16
+[TB] Start GP2 block-copy stress
+[TB] GP2 iter=0 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=2 bs_read_stall=0 bs_write_stall=0
+[TB] GP2 iter=1 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=5 bs_read_stall=0 bs_write_stall=0
+[TB] GP2 block-copy stress done
+[TB][PHASE] result id=1 offset_lcd_ck=16 stalls=0 mismatch_lines=0 mismatch_pixels=0 line_width_errors=0 first_bad_frame=-1 first_bad_line=-1 first_bad_x=-1
+[TB][PHASE] start id=2 offset_lcd_ck=32
+[TB] Start GP2 block-copy stress
+[TB] GP2 iter=0 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=2 bs_read_stall=0 bs_write_stall=0
+[TB] GP2 iter=1 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=2 bs_read_stall=0 bs_write_stall=0
+[TB] GP2 block-copy stress done
+[TB][PHASE] result id=2 offset_lcd_ck=32 stalls=0 mismatch_lines=0 mismatch_pixels=0 line_width_errors=0 first_bad_frame=-1 first_bad_line=-1 first_bad_x=-1
+[TB][PHASE] start id=3 offset_lcd_ck=48
+[TB] Start GP2 block-copy stress
+[TB] GP2 iter=0 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=2 bs_read_stall=0 bs_write_stall=0
+[TB] GP2 iter=1 sx=0 sy=0 sw=800 sh=480 dx=0 dy=0 dw=525 dh=315
+[TB][WAIT] graphic2 busy poll=20000 state_g1=0 state_g2=2 bs_read_stall=1 bs_write_stall=0
+[TB] GP2 block-copy stress done
+[TB][PHASE] result id=3 offset_lcd_ck=48 stalls=0 mismatch_lines=0 mismatch_pixels=0 line_width_errors=0 first_bad_frame=-1 first_bad_line=-1 first_bad_x=-1
+[TB] Sweep Summary: phases=4 failed_phases=0 first_failed_phase=-1 max_stalls=0 max_mismatch_lines=0 max_mismatch_pixels=0 max_line_width_errors=0
+[TB] Summary: phases=4 failed=0 first_failed_phase=-1
+[TB] Finish.
+Errors: 0, Warnings: 0

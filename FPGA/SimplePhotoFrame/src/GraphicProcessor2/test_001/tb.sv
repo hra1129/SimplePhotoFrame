@@ -76,6 +76,7 @@ module tb;
 			else begin
 				sdram_rdata <= 16'h0000;
 			end
+			$display("[TB][SDRAM RDATA] addr=%0h data=%04h", pending_read_addr, mem.exists(pending_read_addr) ? mem[pending_read_addr] : 16'h0000);
 			sdram_rdata_valid <= 1'b1;
 		end
 
@@ -89,9 +90,11 @@ module tb;
 				flush_accept_count = flush_accept_count + 1;
 			end
 			else if( sdram_write ) begin
+				$display("[TB][SDRAM WRITE] addr=%0h data=%04h", sdram_address, sdram_wdata);
 				mem[sdram_address] = sdram_wdata;
 			end
 			else begin
+				$display("[TB][SDRAM READ ] addr=%0h", sdram_address);
 				pending_read <= 1'b1;
 				pending_read_addr <= sdram_address;
 			end
@@ -379,6 +382,8 @@ module tb;
 		bus_write_reg(5'h08, ROP_XOR);
 		bus_write_reg(5'h0A, {1'b0, base_addr[15:1]});
 		bus_write_reg(5'h0B, {9'd0, base_addr[22:16]});
+		bus_write_reg(5'h0C, {1'b0, base_addr[15:1]});
+		bus_write_reg(5'h0D, {9'd0, base_addr[22:16]});
 
 		bus_read_reg(5'h00, read_data); check_eq16(read_data, 16'd32, "SX readback");
 		bus_read_reg(5'h01, read_data); check_eq16(read_data, 16'd48, "SY readback");
@@ -391,6 +396,8 @@ module tb;
 		bus_read_reg(5'h08, read_data); check_eq16(read_data, ROP_XOR, "ROP readback");
 		bus_read_reg(5'h0A, read_data); check_eq16(read_data, {1'b0, base_addr[15:1]}, "VRAM_ADDRESS_L readback");
 		bus_read_reg(5'h0B, read_data); check_eq16(read_data, {9'd0, base_addr[22:16]}, "VRAM_ADDRESS_H readback");
+		bus_read_reg(5'h0C, read_data); check_eq16(read_data, {1'b0, base_addr[15:1]}, "VRAM_DADDRESS_L readback");
+		bus_read_reg(5'h0D, read_data); check_eq16(read_data, {9'd0, base_addr[22:16]}, "VRAM_DADDRESS_H readback");
 
 		$display("[TB] TEST2: scale-up PUT 2x2 -> 4x4");
 		prepare_rect_data(base_addr, 16'd20, 16'd30, 16'd2, 16'd2, 16'h4000);

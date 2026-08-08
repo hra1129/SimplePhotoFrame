@@ -38,15 +38,17 @@ sdram_valid = 1 で、sdram_flush = 0 の場合は、sdram_write が 1 なら書
 |0x01|SY|RW|転送元矩形の左上の Y 座標（-32768～32767）|
 |0x02|SWIDTH|RW|転送元矩形の幅|
 |0x03|SHEIGHT|RW|転送元矩形の高さ|
-|0x00|DX|RW|転送先矩形の左上の X 座標（-32768～32767）|
-|0x01|DY|RW|転送先矩形の左上の Y 座標（-32768～32767）|
-|0x02|DWIDTH|RW|転送先矩形の幅|
-|0x03|DHEIGHT|RW|転送先矩形の高さ|
-|0x05|ROP|RW|ロジカルオペレーション|
-|0x06|EXEC|W|1を書き込むと実行|
-|0x06|STATUS|R|実行中は 1、完了すると 0|
-|0x07|VRAM_ADDRESS_L|RW|VRAM アドレス[15:1] |
-|0x08|VRAM_ADDRESS_H|RW|VRAM アドレス[22:16] |
+|0x04|DX|RW|転送先矩形の左上の X 座標（-32768～32767）|
+|0x05|DY|RW|転送先矩形の左上の Y 座標（-32768～32767）|
+|0x06|DWIDTH|RW|転送先矩形の幅|
+|0x07|DHEIGHT|RW|転送先矩形の高さ|
+|0x08|ROP|RW|ロジカルオペレーション|
+|0x09|EXEC|W|1を書き込むと実行|
+|0x09|STATUS|R|実行中は 1、完了すると 0|
+|0x0A|VRAM_SADDRESS_L|RW|転送元VRAM基準アドレス[16:1] |
+|0x0B|VRAM_SADDRESS_H|RW|転送元VRAM基準アドレス[22:17] |
+|0x0C|VRAM_DADDRESS_L|RW|転送先VRAM基準アドレス[16:1] |
+|0x0D|VRAM_DADDRESS_H|RW|転送先VRAM基準アドレス[22:17] |
 
 # ロジカルオペレーション
 |値|意味|

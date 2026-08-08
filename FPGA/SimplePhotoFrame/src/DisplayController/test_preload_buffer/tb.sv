@@ -58,16 +58,18 @@
 module tb ();
 	// 66 MHz clock: half period ≈ 7.576 ns
 	localparam		CLK_HALF_NS			= 8;		// 62.5 MHz (十分速い)
-	localparam		FIFO_DEPTH			= 2048;		// SRAM0 + SRAM1 合計 (1024 + 1024)
+	localparam		FIFO_DEPTH			= 4096;		// SRAM0 + SRAM1 合計 (2048 + 2048)
 	localparam		FIFO_USABLE_DEPTH	= FIFO_DEPTH - 1;	// リングFIFOの都合で1word未使用
 	localparam		OUT_DEPTH			= FIFO_USABLE_DEPTH * 2;	// 32bit -> 16bit x2 出力
 	localparam		NEARLY_FULL_SPACE	= 16;		// in_nearly_full を使用する前段が 1アクセスに要求するワード数
+	localparam		NEARLY_FULL_COUNT	= 3500;		// 新規読出し要求を早めに止める閾値
 
 	// -----------------------------------------------------------------------
 	//	DUT ポート
 	// -----------------------------------------------------------------------
 	reg				clk;
 	reg				reset;
+	reg				clear;
 
 	reg		[31:0]	in_data;
 	reg				in_valid;
@@ -84,6 +86,7 @@ module tb ();
 	display_preload_buffer u_dut (
 		.clk			( clk				),
 		.reset			( reset				),
+		.clear			( clear				),
 		.in_data		( in_data			),
 		.in_valid		( in_valid			),
 		.in_ready		( in_ready			),
@@ -142,6 +145,7 @@ module tb ();
 	// -----------------------------------------------------------------------
 	task do_reset();
 		reset		<= 1'b1;
+		clear		<= 1'b0;
 		in_valid	<= 1'b0;
 		in_data		<= 32'h0000_0000;
 		out_ready	<= 1'b0;
@@ -505,7 +509,7 @@ module tb ();
 
 		// ===================================================================
 		//	TEST 4: in_nearly_full 確認
-		//	FIFO を 16word 未満の空きにすると in_nearly_full = 1 になるか確認
+		//	FIFO が早期停止閾値に達すると in_nearly_full = 1 になるか確認
 		// ===================================================================
 		test_number = 4;
 		$display("[TEST %0d] in_nearly_full assertion test", test_number);
@@ -528,9 +532,9 @@ module tb ();
 				// in_nearly_full が立ったことを検出
 				if( in_nearly_full && nf_detected == 0 ) begin
 					nf_detected = 1;
-					if( u_dut.w_count > (FIFO_USABLE_DEPTH - NEARLY_FULL_SPACE) ) begin
+					if( u_dut.w_count >= NEARLY_FULL_COUNT ) begin
 						$display("[PASS] TEST %0d: in_nearly_full=1 at count=%0d (threshold=%0d)",
-							test_number, u_dut.w_count, FIFO_USABLE_DEPTH - NEARLY_FULL_SPACE + 1);
+							test_number, u_dut.w_count, NEARLY_FULL_COUNT);
 					end
 					else begin
 						$display("[FAIL] TEST %0d: in_nearly_full=1 too early at count=%0d",
@@ -576,8 +580,8 @@ module tb ();
 				// in_ready が落ちたことを検出
 				if( !in_ready && bp_detected == 0 ) begin
 					bp_detected = 1;
-					// このとき蓄積量が期待値（FIFO_DEPTH - 1 以上）かチェック
-					if( u_dut.w_count >= FIFO_USABLE_DEPTH ) begin
+					// このとき蓄積量がバースト安全閾値を超えていれば正常
+					if( u_dut.w_count > u_dut.c_burst_safe_count ) begin
 						$display("[PASS] TEST %0d: in_ready=0 at count=%0d (FIFO full)",
 							test_number, u_dut.w_count);
 					end

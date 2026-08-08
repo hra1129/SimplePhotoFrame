@@ -7,6 +7,7 @@
 module display_fillcolor_generator (
 	input			clk,
 	input			reset,
+	input			clear,
 	input			display_on,
 	input	[15:0]	fill_color,
 	input	[22:5]	in_sdram_address,
@@ -37,7 +38,7 @@ module display_fillcolor_generator (
 	wire w_emit = w_emit_on || w_emit_off;
 
 	always @(posedge clk) begin
-		if( reset ) begin
+		if( reset || clear ) begin
 			ff_busy <= 1'b0;
 			ff_mode_on <= 1'b0;
 			ff_remain <= 3'd0;

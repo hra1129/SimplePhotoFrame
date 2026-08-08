@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module tb;
-	localparam real CLK_HALF_NS = (1_000_000_000.0 / 108_000_000.0) / 2.0;
+	localparam real CLK_HALF_NS = (1_000_000_000.0 / 81_000_000.0) / 2.0;
 	localparam int BURST_WORDS = 8;
 	localparam int TIMEOUT_CYCLES = 50000;
 

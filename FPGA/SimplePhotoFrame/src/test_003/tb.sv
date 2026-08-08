@@ -8,7 +8,7 @@ module tb;
 	localparam [7:0] IO_VRAM_ADDRESS_L	= 8'h00;
 	localparam [7:0] IO_VRAM_ADDRESS_H	= 8'h01;
 	localparam [7:0] IO_VRAM_DATA		= 8'h02;
-	localparam [7:0] IO_VRAM_flush		= 8'h03;
+	localparam [7:0] IO_VRAM_FLUSH		= 8'h03;
 
 	reg			clk27m;
 	reg			fpga_spi_cs_n;
@@ -255,9 +255,9 @@ module tb;
 		spi_read16(IO_VRAM | IO_VRAM_DATA, data);
 	endtask
 
-	task vram_flush(
+	task automatic vram_flush(
 	);
-		spi_write16(IO_VRAM | IO_VRAM_flush, 16'h0001);
+		spi_write16(IO_VRAM | IO_VRAM_FLUSH, 16'h0001);
 	endtask
 
 	initial begin
@@ -308,7 +308,7 @@ module tb;
 		end
 		$display("[TB] VRAM read test done.");
 
-		$display("[TB] Finsh.");
+		$display("[TB] Finish.");
 		$finish;
 	end
 endmodule

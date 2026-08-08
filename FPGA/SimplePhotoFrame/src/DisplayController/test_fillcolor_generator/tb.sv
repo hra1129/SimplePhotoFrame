@@ -3,6 +3,7 @@
 module tb;
 	reg			clk;
 	reg			reset;
+	reg			clear;
 	reg			display_on;
 	reg	[15:0]	fill_color;
 	reg	[22:5]	in_sdram_address;
@@ -23,6 +24,7 @@ module tb;
 	display_fillcolor_generator dut (
 		.clk				( clk				),
 		.reset				( reset				),
+		.clear				( clear				),
 		.display_on			( display_on			),
 		.fill_color			( fill_color			),
 		.in_sdram_address	( in_sdram_address	),
@@ -57,7 +59,9 @@ module tb;
 			#1;
 			check_ok(in_sdram_address_ready, "request_not_accepted");
 			in_sdram_address_valid = 1'b1;
+			@(posedge clk);
 			#1;
+			in_sdram_address_valid = 1'b0;
 			if( display_on ) begin
 				check_ok(sdram_address_valid == 1'b1, "sdram_address_valid_should_be_1_in_on_mode");
 				check_ok(sdram_address == in_sdram_address, "sdram_address_should_passthrough");
@@ -65,15 +69,13 @@ module tb;
 			else begin
 				check_ok(sdram_address_valid == 1'b0, "sdram_address_valid_should_be_masked_in_off_mode");
 			end
-			@(posedge clk);
-			#1;
-			in_sdram_address_valid = 1'b0;
 		end
 	endtask
 
 	initial begin
 		clk = 1'b0;
 		reset = 1'b1;
+		clear = 1'b0;
 		display_on = 1'b0;
 		fill_color = 16'hA55A;
 		in_sdram_address = 18'h12345;
@@ -149,6 +151,37 @@ module tb;
 		#1;
 		check_ok(in_sdram_address_ready == 1'b1, "request_ready_not_recovered_after_on_mode");
 		check_ok(out_valid == 1'b0, "out_valid_should_drop_after_on_mode_8beats");
+
+		// -------------------------------------------------------------
+		// TEST3: SDRAM read burst中のframe clear
+		// clear後に残りの旧frame dataが到着しても出力しない
+		// -------------------------------------------------------------
+		display_on = 1'b1;
+		in_sdram_address = 18'h01234;
+		issue_request();
+
+		@(posedge clk);
+		#1;
+		sdram_rdata_valid = 1'b1;
+		sdram_rdata = 32'hDEAD_BEEF;
+		repeat(2) begin
+			@(posedge clk);
+			#1;
+			check_ok(out_valid == 1'b1, "old_frame_data_missing_before_clear");
+		end
+
+		clear = 1'b1;
+		@(posedge clk);
+		#1;
+		clear = 1'b0;
+		check_ok(out_valid == 1'b0, "old_frame_data_visible_after_clear");
+		check_ok(in_sdram_address_ready == 1'b1, "request_ready_not_recovered_after_clear");
+		repeat(6) begin
+			@(posedge clk);
+			#1;
+			check_ok(out_valid == 1'b0, "remaining_old_frame_data_visible_after_clear");
+		end
+		sdram_rdata_valid = 1'b0;
 
 		$display("[TB] PASS display_fillcolor_generator behavior verified.");
 		$finish;

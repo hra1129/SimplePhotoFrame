@@ -1,6 +1,9 @@
 `timescale 1ns/1ps
 
-module tb;
+module tb #(
+	parameter integer EXP_CLEAR_FLUSH_FIFO = 1,
+	parameter integer EXP_CLEAR_REARM_INITIAL_CHARGE = 1
+);
 	localparam integer H_ACTIVE_PIXELS = 800;
 	localparam integer V_ACTIVE_LINES = 480;
 	localparam integer BURST_PIXELS = 16;
@@ -51,7 +54,10 @@ module tb;
 	reg			seen_display_on;
 	reg			last_frame_end;
 
-	display_controller dut (
+	display_controller #(
+		.c_preload_clear_flush_fifo			( EXP_CLEAR_FLUSH_FIFO ),
+		.c_preload_clear_rearm_initial_charge	( EXP_CLEAR_REARM_INITIAL_CHARGE )
+	) dut (
 		.clk					( clk					),
 		.reset					( reset					),
 		.sdram_init_busy		( sdram_init_busy		),

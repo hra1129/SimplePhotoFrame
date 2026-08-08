@@ -1,6 +1,9 @@
 `timescale 1ns/1ps
 
-module tb;
+module tb #(
+	parameter integer EXP_CLEAR_FLUSH_FIFO = 1,
+	parameter integer EXP_CLEAR_REARM_INITIAL_CHARGE = 1
+);
 	localparam integer IMG_WIDTH = 800 / 16;
 	localparam integer IMG_HEIGHT = 480;
 	localparam integer MAX_CYCLES = 12_000_000;
@@ -45,6 +48,15 @@ module tb;
 	integer			cycle_count;
 	integer			frame_count;
 	integer			first_fifo_sample_count;
+	integer			frame_addr_accept_count;
+	integer			frame_sdram_accept_count;
+	integer			frame_preload_in_count;
+	integer			frame_preload_out_count;
+	integer			frame_timing_accept_count;
+	integer			clear_event_count;
+
+	reg				prev_preload_clear;
+	reg				clear_followup_pending;
 
 	reg				switched_to_on_in_frame1;
 	reg				switched_to_off_in_frame2;
@@ -59,7 +71,10 @@ module tb;
 	reg		[22:5]	frame4_first_address;
 	reg				prev_timing_origin;
 
-	display_controller dut (
+	display_controller #(
+		.c_preload_clear_flush_fifo			( EXP_CLEAR_FLUSH_FIFO ),
+		.c_preload_clear_rearm_initial_charge	( EXP_CLEAR_REARM_INITIAL_CHARGE )
+	) dut (
 		.clk					( clk					),
 		.reset					( reset					),
 		.sdram_init_busy		( sdram_init_busy		),
@@ -213,6 +228,12 @@ module tb;
 		cycle_count = 0;
 		frame_count = 0;
 		first_fifo_sample_count = 0;
+		frame_addr_accept_count = 0;
+		frame_sdram_accept_count = 0;
+		frame_preload_in_count = 0;
+		frame_preload_out_count = 0;
+		frame_timing_accept_count = 0;
+		clear_event_count = 0;
 		switched_to_on_in_frame1 = 1'b0;
 		switched_to_off_in_frame2 = 1'b0;
 		switched_to_on_in_frame3 = 1'b0;
@@ -223,6 +244,8 @@ module tb;
 		captured_frame4_first_address = 1'b0;
 		frame4_first_address = 18'd0;
 		prev_timing_origin = 1'b0;
+		prev_preload_clear = 1'b0;
+		clear_followup_pending = 1'b0;
 
 		// Focus this test on frame/address behavior without FIFO backpressure.
 		force dut.fifo_full = 1'b0;
@@ -235,11 +258,32 @@ module tb;
 			#1;
 			cycle_count = cycle_count + 1;
 
+			if( dut.request_sdram_address_valid && dut.request_sdram_address_ready ) begin
+				frame_addr_accept_count = frame_addr_accept_count + 1;
+			end
+			if( dut.sdram_address_valid && dut.sdram_address_ready ) begin
+				frame_sdram_accept_count = frame_sdram_accept_count + 1;
+			end
+			if( dut.fifo_valid && dut.fifo_ready ) begin
+				frame_preload_in_count = frame_preload_in_count + 1;
+			end
+			if( dut.p_valid && dut.p_ready ) begin
+				frame_preload_out_count = frame_preload_out_count + 1;
+			end
+			if( dut.display_timing_generator.p_valid && dut.display_timing_generator.p_ready ) begin
+				frame_timing_accept_count = frame_timing_accept_count + 1;
+			end
+
 			if( (dut.display_timing_generator.ff_h_counter == 0) &&
 			    (dut.display_timing_generator.ff_v_counter == 0) ) begin
 				if( !prev_timing_origin ) begin
 					frame_count = frame_count + 1;
 					first_fifo_sample_count = 0;
+					frame_addr_accept_count = 0;
+					frame_sdram_accept_count = 0;
+					frame_preload_in_count = 0;
+					frame_preload_out_count = 0;
+					frame_timing_accept_count = 0;
 					$display("[TB] frame_start=%0d cycle=%0d ff_display_on=%0d",
 						frame_count,
 						cycle_count,
@@ -283,6 +327,51 @@ module tb;
 				frame4_first_address = sdram_burst_base_addr;
 				$display("[TB] frame4 first accepted SDRAM address = %0d", sdram_burst_base_addr);
 			end
+
+			if( dut.display_timing_generator.frame_end ) begin
+				$display("[TB] frame_end counts: addr_accept=%0d sdram_accept=%0d preload_in=%0d preload_out=%0d timing_accept=%0d clear=%0d",
+					frame_addr_accept_count,
+					frame_sdram_accept_count,
+					frame_preload_in_count,
+					frame_preload_out_count,
+					frame_timing_accept_count,
+					dut.preload_clear);
+			end
+
+			if( dut.preload_clear && !prev_preload_clear ) begin
+				clear_event_count = clear_event_count + 1;
+				check_ok( !dut.display_fillcolor_generator.ff_busy,
+					"fill_generator_busy_during_preload_clear" );
+				check_ok( !dut.display_fillcolor_generator.ff_req_valid,
+					"fill_generator_request_valid_during_preload_clear" );
+				$display("[TB] preload_clear edge #%0d frame=%0d cycle=%0d fifo_vr=%0d/%0d p_vr=%0d/%0d pb_count=%0d init_charge=%0d nearly_full=%0d",
+					clear_event_count,
+					frame_count,
+					cycle_count,
+					dut.fifo_valid,
+					dut.fifo_ready,
+					dut.p_valid,
+					dut.p_ready,
+					dut.display_preload_buffer.ff_count,
+					dut.display_preload_buffer.ff_initial_charge,
+					dut.display_preload_buffer.in_nearly_full);
+				clear_followup_pending = 1'b1;
+			end
+			else if( clear_followup_pending ) begin
+				$display("[TB] preload_clear +1clk frame=%0d cycle=%0d fifo_vr=%0d/%0d p_vr=%0d/%0d pb_count=%0d init_charge=%0d nearly_full=%0d",
+					frame_count,
+					cycle_count,
+					dut.fifo_valid,
+					dut.fifo_ready,
+					dut.p_valid,
+					dut.p_ready,
+					dut.display_preload_buffer.ff_count,
+					dut.display_preload_buffer.ff_initial_charge,
+					dut.display_preload_buffer.in_nearly_full);
+				clear_followup_pending = 1'b0;
+			end
+
+			prev_preload_clear = dut.preload_clear;
 
 			if( dut.fifo_valid && (frame_count >= 1) && (frame_count <= 4) ) begin
 				if( first_fifo_sample_count == 0 ) begin

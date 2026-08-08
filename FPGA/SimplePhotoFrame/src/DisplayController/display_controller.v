@@ -54,7 +54,10 @@
 //
 //-----------------------------------------------------------------------------
 
-module display_controller (
+module display_controller #(
+	parameter integer c_preload_clear_flush_fifo = 1,
+	parameter integer c_preload_clear_rearm_initial_charge = 1
+) (
 	input			clk,
 	input			reset,
 	input			sdram_init_busy,
@@ -95,11 +98,13 @@ module display_controller (
 	wire	[22:5]	request_sdram_address;
 	wire			request_sdram_address_valid;
 	wire			request_sdram_address_ready;
+	wire			fill_request_ready;
 	wire			display_on;
 	wire	[15:0]	fill_color;
 	wire			preload_clear;
 
 	assign preload_clear = frame_end;
+	assign request_sdram_address_ready = fill_request_ready && !fifo_full;
 
 	display_address_generator display_address_generator (
 		.clk					( clk							),
@@ -124,11 +129,12 @@ module display_controller (
 	display_fillcolor_generator display_fillcolor_generator (
 		.clk					( clk							),
 		.reset					( reset							),
+		.clear					( preload_clear					),
 		.display_on				( display_on					),
 		.fill_color				( fill_color					),
 		.in_sdram_address		( request_sdram_address			),
-		.in_sdram_address_valid	( request_sdram_address_valid	),
-		.in_sdram_address_ready	( request_sdram_address_ready	),
+		.in_sdram_address_valid	( request_sdram_address_valid && !fifo_full ),
+		.in_sdram_address_ready	( fill_request_ready				),
 		.sdram_address			( sdram_address					),
 		.sdram_address_valid	( sdram_address_valid			),
 		.sdram_address_ready	( sdram_address_ready			),
@@ -138,7 +144,10 @@ module display_controller (
 		.out_valid				( fifo_valid					),
 		.out_ready				( fifo_ready					)
 	);
-	display_preload_buffer display_preload_buffer (
+	display_preload_buffer #(
+		.c_clear_flush_fifo			( c_preload_clear_flush_fifo			),
+		.c_clear_rearm_initial_charge	( c_preload_clear_rearm_initial_charge	)
+	) display_preload_buffer (
 		.clk					( clk							),
 		.reset					( reset							),
 		.clear					( preload_clear					),

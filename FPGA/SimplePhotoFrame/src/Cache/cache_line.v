@@ -36,11 +36,11 @@ module cache_line (
 	input				clk,
 	input				oe_n,
 	input				we_n,
-	input	[11:0]		address,
+	input	[6:0]		address,
 	input	[17:0]		wdata,		//	[15:0] data, [16] update flag, [17] valid flag
 	output	[17:0]		rdata
 );
-	reg		[17:0]		ram_instance[0:4095];
+	reg		[17:0]		ram_instance[0:127];
 	reg		[17:0]		ff_rdata;
 
 	always @( posedge clk ) begin

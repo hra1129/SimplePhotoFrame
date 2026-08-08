@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module tb;
-	localparam integer CLK_HALF = 5;
+	localparam real CLK_HALF = (1_000_000_000.0 / 81_000_000.0) / 2.0;
 	localparam integer TIMEOUT_CYCLES = 200;
 	localparam integer BURST_WORDS = 8;
 	localparam integer REFRESH_READY_LOW_CYCLES = 50;
@@ -45,6 +45,8 @@ module tb;
 	int				test_num;
 	int				error_count;
 	int				timeout;
+	integer			cache_accept_cycle;
+	integer			cache_reaccept_cycle;
 	integer			sdram_wait_count;
 	reg		[2:0]	sdram_read_count;
 	reg		[2:0]	sdram_write_count;
@@ -83,6 +85,15 @@ module tb;
 	);
 
 	always #(CLK_HALF) clk = ~clk;
+
+	always @(posedge clk) begin
+		if( reset ) begin
+			dbg_cycle <= 0;
+		end
+		else begin
+			dbg_cycle <= dbg_cycle + 1;
+		end
+	end
 
 	always @(posedge clk) begin
 		if( reset ) begin
@@ -262,10 +273,9 @@ module tb;
 		check( timeout < TIMEOUT_CYCLES, "timeout waiting for SDRAM accept" );
 		if( timeout >= TIMEOUT_CYCLES ) begin
 			$display(
-				"[TB][DEBUG][TEST%0d] ff_ready=%b ff_priority=%b ff_read_bus=%b ff_read_stall=%b display_v=%b cache_v=%b sdram_v=%b display_rdy=%b cache_rdy=%b",
+				"[TB][DEBUG][TEST%0d] ff_ready=%b ff_read_bus=%b ff_read_stall=%b display_v=%b cache_v=%b sdram_v=%b display_rdy=%b cache_rdy=%b",
 				test_num,
 				u_dut.ff_ready,
-				u_dut.ff_priority,
 				u_dut.ff_read_bus,
 				u_dut.ff_read_stall,
 				sdram_display_address_valid,
@@ -477,6 +487,41 @@ module tb;
 		sdram_cache_wdata_valid = 1'b0;
 		wait_accept( 1'b1, 1'b0 );
 		expect_sdram( 1'b1, 1'b0, 1'b0, 1'b0, 1'b1, 18'h01111, 32'd0, 4'h0, 1'b0 );
+		clear_requests();
+
+		start_test( "cache read/write requests are throttled for 32 cycles after acceptance" );
+		sdram_cache_address = 18'h03333;
+		sdram_cache_write = 1'b0;
+		sdram_cache_refresh = 1'b0;
+		sdram_cache_address_valid = 1'b1;
+		wait_accept( 1'b0, 1'b1 );
+		cache_accept_cycle = dbg_cycle;
+		sdram_cache_address_valid = 1'b0;
+		for( i = 0; i < BURST_WORDS; i = i + 1 ) begin
+			wait_rdata();
+			step();
+		end
+		sdram_cache_address = 18'h04444;
+		sdram_cache_address_valid = 1'b1;
+		while( !sdram_cache_address_ready && (dbg_cycle - cache_accept_cycle) <= 40 ) begin
+			step();
+		end
+		cache_reaccept_cycle = dbg_cycle;
+		check( sdram_cache_address_ready === 1'b1, "cache request was not accepted after cooldown" );
+		check( (cache_reaccept_cycle - cache_accept_cycle) >= 32, "cache request was accepted before 32-cycle cooldown elapsed" );
+		sdram_cache_address_valid = 1'b0;
+		for( i = 0; i < BURST_WORDS; i = i + 1 ) begin
+			wait_rdata();
+			step();
+		end
+
+		start_test( "cache refresh bypasses read/write cooldown" );
+		sdram_cache_address = 18'h05555;
+		sdram_cache_write = 1'b0;
+		sdram_cache_refresh = 1'b1;
+		sdram_cache_address_valid = 1'b1;
+		wait_accept( 1'b0, 1'b1 );
+		expect_sdram( 1'b0, 1'b1, 1'b0, 1'b1, 1'b1, 18'h05555, 32'd0, 4'h0, 1'b0 );
 		clear_requests();
 
 		$display("[TB] completed with %0d error(s)", error_count);

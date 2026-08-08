@@ -59,17 +59,16 @@ void vram_test( void ) {
 void usa_fpga_test( void ) {
 	int x, y, i;
 
-	vram_set_address( 1024 * 480 );
 	i = 0;
 	for( y = 0; y < 480; y++ ) {
-		vram_set_address( 1024 * 480 + y * 1024 );
+		vram_set_address( 1024 * 480 * 2 + y * 1024 );
 		for( x = 0; x < 800; x++ ) {
 			vram_burst_write( usa_image[i] );
 			i++;
 		}
 	}
 	vram_flush();
-	display_set_frame_address( 1024 * 480 );
+	display_set_frame_address( 1024 * 480 * 2 );
 }
 
 // ---------------------------------------------------------
@@ -79,7 +78,8 @@ void boxfill_test( void ) {
 
 	display_set_frame_address( 0 );
 	vram_set_address( 0 );
-	for( i = 0; i < 100; i++ ) {
+	graphic1_set_frame_address( 0 );
+	for( i = 0; i < 10000; i++ ) {
 		color = rand() & 0xFFFF;
 		x = rand() % 1024;
 		y = rand() % 480;
@@ -87,8 +87,33 @@ void boxfill_test( void ) {
 		h = rand() % 200 + 1;
 		printf( "Boxfill test: filling box at (%d, %d)-step(%d, %d) with color %04X\n", x, y, w, h, color );
 		graphic1_fill_rectangle( x, y, w, h, color, C_ROP_PUT );
+
 	}
 	vram_flush();
+}
+
+// ---------------------------------------------------------
+void resizer_test( void ) {
+	uint32_t src_address, dst_address;
+	int x, y, i, j;
+
+	display_set_frame_address( 0 );
+	graphic1_set_frame_address( 0 );
+	graphic1_fill_rectangle( 0, 0, 1024, 480, DISPLAY_RGB( 0, 12, 0 ), C_ROP_PUT );
+	graphic1_set_frame_address( 1024 * 480 * 1 );
+	graphic1_fill_rectangle( 0, 0, 1024, 480, DISPLAY_RGB( 0, 12, 0 ), C_ROP_PUT );
+
+	src_address = 1024 * 480 * 2;
+	dst_address = 1024 * 480 * 1;
+	graphic2_set_source_frame_address( src_address );
+	for( i = 0; i <= 800; i+=16 ) {
+		graphic2_set_destination_frame_address( dst_address );
+		graphic2_block_copy( 0, 0, 800, 480, 0, 0, i, i * 480 / 800, C_ROP_PUT );
+		display_wait_complete();
+		display_set_frame_address( dst_address );
+		display_wait_frame_sync();
+		dst_address = 1024 * 480 * 1 - dst_address;
+	}
 }
 
 // ---------------------------------------------------------
@@ -152,6 +177,12 @@ int main() {
 			printf( "Button Left pressed.\n" );
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			boxfill_test();
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+		}
+		else if( button_state & SW_R ) {
+			printf( "Button Right pressed.\n" );
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+			resizer_test();
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 

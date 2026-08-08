@@ -53,6 +53,9 @@
 //	POSSIBILITY OF SUCH DAMAGE.
 //
 //-----------------------------------------------------------------------------
+//	乗算器・除算器・剰余器を使わずに、ブレゼンハムのアルゴリズムを利用すること
+//	により拡大・縮小を実現する
+//-----------------------------------------------------------------------------
 
 module graphic_processor2 (
 	input			clk,
@@ -87,14 +90,18 @@ module graphic_processor2 (
 	localparam [15:0] c_rop_min = 16'h0007;
 	localparam [15:0] c_rop_max = 16'h0008;
 
-	localparam [2:0] c_state_idle           = 3'd0;
-	localparam [2:0] c_state_issue_src_read = 3'd1;
-	localparam [2:0] c_state_wait_src_read  = 3'd2;
-	localparam [2:0] c_state_issue_dst_read = 3'd3;
-	localparam [2:0] c_state_wait_dst_read  = 3'd4;
-	localparam [2:0] c_state_issue_write    = 3'd5;
-	localparam [2:0] c_state_issue_flush    = 3'd6;
-	localparam [2:0] c_state_prepare        = 3'd7;
+	localparam [3:0] c_state_idle           = 4'd0;
+	localparam [3:0] c_state_issue_src_read = 4'd1;
+	localparam [3:0] c_state_wait_src_read  = 4'd2;
+	localparam [3:0] c_state_issue_dst_read = 4'd3;
+	localparam [3:0] c_state_wait_dst_read  = 4'd4;
+	localparam [3:0] c_state_issue_write    = 4'd5;
+	localparam [3:0] c_state_issue_flush    = 4'd6;
+	localparam [3:0] c_state_prepare        = 4'd7;
+	localparam [3:0] c_state_prepare_x_div  = 4'd8;
+	localparam [3:0] c_state_prepare_y_div  = 4'd9;
+	localparam [3:0] c_state_issue_src_req  = 4'd10;
+	localparam [3:0] c_state_issue_src_decide = 4'd11;
 
 	reg signed	[15:0]	reg_sx;
 	reg signed	[15:0]	reg_sy;
@@ -105,9 +112,10 @@ module graphic_processor2 (
 	reg		[15:0]	reg_dwidth;
 	reg		[15:0]	reg_dheight;
 	reg		[15:0]	reg_rop;
-	reg		[22:1]	reg_vram_address;
+	reg		[22:1]	reg_vram_src_address;
+	reg		[22:1]	reg_vram_dst_address;
 
-	reg		[2:0]	ff_state;
+	reg		[3:0]	ff_state;
 	reg				ff_busy;
 	reg		[15:0]	ff_bus_rdata;
 	reg				ff_bus_rdata_valid;
@@ -121,10 +129,17 @@ module graphic_processor2 (
 	reg		[15:0]	ff_exec_dwidth;
 	reg		[15:0]	ff_exec_dheight;
 	reg		[15:0]	ff_exec_rop;
-	reg		[22:1]	ff_exec_base_address;
+	reg				ff_scale_x_expand;
+	reg				ff_scale_y_expand;
+	reg		[15:0]	ff_scale_x_step_base;
+	reg		[15:0]	ff_scale_x_step_rem;
+	reg		[15:0]	ff_scale_y_step_base;
+	reg		[15:0]	ff_scale_y_step_rem;
+	reg		[22:1]	ff_exec_src_base_address;
+	reg		[22:1]	ff_exec_dst_base_address;
 
 	reg		[15:0]	ff_cur_dx;		/* synthesis syn_maxfan = 32 */
-	reg		[15:0]	ff_cur_dy;
+	reg		[15:0]	ff_cur_dy;		/* synthesis syn_maxfan = 32 */
 	reg		[15:0]	ff_cur_src_x;
 	reg		[15:0]	ff_cur_src_y;
 
@@ -141,12 +156,16 @@ module graphic_processor2 (
 	reg		[15:0]	ff_src_x_error;
 	reg		[15:0]	ff_src_y_error;
 	reg		[22:1]	ff_src_row_address;
+	reg		[22:1]	ff_prev_src_address;
+	reg		[15:0]	ff_prev_src_color;
+	reg			ff_prev_src_valid;
 
 	reg		[22:1]	ff_sdram_address;
 	reg				ff_sdram_write;
 	reg		[15:0]	ff_sdram_wdata;
 	reg				ff_sdram_valid;
 	reg				ff_sdram_flush;
+	reg				ff_write_pending;
 	reg				ff_flush_pending;
 
 	reg		[15:0]	ff_clipped_swidth;
@@ -157,7 +176,17 @@ module graphic_processor2 (
 	reg		[15:0]	ff_clipped_sy;
 	reg		[15:0]	ff_clipped_dx;
 	reg		[15:0]	ff_clipped_dy;
-	reg				ff_sdram_ready_d;
+	reg				ff_src_visible;
+	reg				ff_dst_visible;
+	reg				ff_src_reuse_hit;
+
+	function		f_in_visible;
+		input signed [15:0] x;
+		input signed [15:0] y;
+	begin
+		f_in_visible = (x >= 16'sd0) && (x < 16'sd800) && (y >= 16'sd0) && (y < 16'sd480);
+	end
+	endfunction
 
 	function [15:0] f_clip_start;
 		input signed [15:0] start;
@@ -306,8 +335,12 @@ module graphic_processor2 (
 			ff_src_x_error			<= 16'd0;
 			ff_src_y_error			<= 16'd0;
 			ff_src_row_address		<= 22'd0;
+			ff_prev_src_address		<= 22'd0;
+			ff_prev_src_color		<= 16'd0;
+			ff_prev_src_valid		<= 1'b0;
 
 			ff_flush_pending		<= 1'b0;
+			ff_write_pending		<= 1'b0;
 
 			ff_clipped_swidth		<= 16'd0;
 			ff_clipped_sheight		<= 16'd0;
@@ -317,13 +350,24 @@ module graphic_processor2 (
 			ff_clipped_sy			<= 16'd0;
 			ff_clipped_dx			<= 16'd0;
 			ff_clipped_dy			<= 16'd0;
-			ff_sdram_ready_d		<= 1'b0;
+			ff_scale_x_step_base	<= 16'd0;
+			ff_scale_x_step_rem		<= 16'd0;
+			ff_scale_y_step_base	<= 16'd0;
+			ff_scale_y_step_rem		<= 16'd0;
+			ff_src_visible			<= 1'b0;
+			ff_dst_visible			<= 1'b0;
+			ff_src_reuse_hit		<= 1'b0;
 		end
 		else begin
-			ff_sdram_ready_d <= sdram_ready;
 			if( sdram_init_busy ) begin
 				ff_state			<= c_state_idle;
 				ff_flush_pending	<= 1'b0;
+				ff_write_pending	<= 1'b0;
+				ff_scale_x_step_base	<= 16'd0;
+				ff_scale_x_step_rem		<= 16'd0;
+				ff_scale_y_step_base	<= 16'd0;
+				ff_scale_y_step_rem		<= 16'd0;
+				ff_prev_src_valid		<= 1'b0;
 			end
 			else begin
 				if( bus_cs && bus_valid && bus_write && bus_address == 5'h09 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
@@ -336,25 +380,73 @@ module graphic_processor2 (
 				end
 
 					c_state_prepare: begin
-						ff_clipped_sx <= f_clip_start( ff_exec_sx, 16'd800 );
-						ff_clipped_sy <= f_clip_start( ff_exec_sy, 16'd480 );
-						ff_clipped_dx <= f_clip_start( ff_exec_dx, 16'd800 );
-						ff_clipped_dy <= f_clip_start( ff_exec_dy, 16'd480 );
+						ff_clipped_sx <= ff_exec_sx[15:0];
+						ff_clipped_sy <= ff_exec_sy[15:0];
+						ff_clipped_dx <= ff_exec_dx[15:0];
+						ff_clipped_dy <= ff_exec_dy[15:0];
 
-						ff_clipped_swidth <= f_clip_size( ff_exec_sx, ff_exec_swidth, 16'd800 );
-						ff_clipped_sheight <= f_clip_size( ff_exec_sy, ff_exec_sheight, 16'd480 );
-						ff_clipped_dwidth <= f_clip_size( ff_exec_dx, ff_exec_dwidth, 16'd800 );
-						ff_clipped_dheight <= f_clip_size( ff_exec_dy, ff_exec_dheight, 16'd480 );
+						ff_clipped_swidth <= ff_exec_swidth;
+						ff_clipped_sheight <= ff_exec_sheight;
+						ff_clipped_dwidth <= ff_exec_dwidth;
+						ff_clipped_dheight <= ff_exec_dheight;
+						if( ff_exec_dwidth == 16'd0 ) begin
+							ff_scale_x_step_base <= 16'd0;
+							ff_scale_x_step_rem <= 16'd0;
+						end
+						else begin
+							ff_scale_x_step_base <= 16'd0;
+							ff_scale_x_step_rem <= ff_exec_swidth;
+						end
 
+						if( ff_exec_dheight == 16'd0 ) begin
+							ff_scale_y_step_base <= 16'd0;
+							ff_scale_y_step_rem <= 16'd0;
+						end
+						else begin
+							ff_scale_y_step_base <= 16'd0;
+							ff_scale_y_step_rem <= ff_exec_sheight;
+						end
 						ff_cur_dx <= 16'd0;
 						ff_cur_dy <= 16'd0;
 						ff_src_x_offset <= 16'd0;
 						ff_src_y_offset <= 16'd0;
 						ff_src_x_error <= 16'd0;
 						ff_src_y_error <= 16'd0;
-						ff_src_row_address <= ff_exec_base_address + f_clip_start( ff_exec_sx, 16'd800 ) + ({ 6'd0, f_clip_start( ff_exec_sy, 16'd480 ) } << 10);
+						ff_src_row_address <= ff_exec_src_base_address;
+						ff_prev_src_valid <= 1'b0;
+						if( (ff_exec_dwidth != 16'd0) && !ff_scale_x_expand ) begin
+							ff_state <= c_state_prepare_x_div;
+						end
+						else if( (ff_exec_dheight != 16'd0) && !ff_scale_y_expand ) begin
+							ff_state <= c_state_prepare_y_div;
+						end
+						else begin
+							ff_state <= c_state_issue_src_read;
+						end
+					end
+
+				c_state_prepare_x_div: begin
+					if( ff_scale_x_step_rem >= ff_exec_dwidth ) begin
+						ff_scale_x_step_rem <= ff_scale_x_step_rem - ff_exec_dwidth;
+						ff_scale_x_step_base <= ff_scale_x_step_base + 16'd1;
+					end
+					else if( (ff_exec_dheight != 16'd0) && !ff_scale_y_expand ) begin
+						ff_state <= c_state_prepare_y_div;
+					end
+					else begin
 						ff_state <= c_state_issue_src_read;
 					end
+				end
+
+				c_state_prepare_y_div: begin
+					if( ff_scale_y_step_rem >= ff_exec_dheight ) begin
+						ff_scale_y_step_rem <= ff_scale_y_step_rem - ff_exec_dheight;
+						ff_scale_y_step_base <= ff_scale_y_step_base + 16'd1;
+					end
+					else begin
+						ff_state <= c_state_issue_src_read;
+					end
+				end
 
 				c_state_issue_src_read: begin
 					if( ff_clipped_swidth == 16'd0 || ff_clipped_sheight == 16'd0 || ff_clipped_dwidth == 16'd0 || ff_clipped_dheight == 16'd0 ) begin
@@ -362,20 +454,66 @@ module graphic_processor2 (
 						ff_state <= c_state_issue_flush;
 					end
 					else begin
-						ff_cur_src_x <= ff_clipped_sx + ff_src_x_offset;
-						ff_cur_src_y <= ff_clipped_sy + ff_src_y_offset;
-						ff_cur_dst_x <= ff_clipped_dx + ff_cur_dx;
-						ff_cur_dst_y <= ff_clipped_dy + ff_cur_dy;
-						ff_cur_src_address <= ff_src_row_address + ff_src_x_offset;
-						ff_cur_dst_address <= ff_exec_base_address + (ff_clipped_dx + ff_cur_dx) + ({ 6'd0, (ff_clipped_dy + ff_cur_dy) } << 10);
+						ff_cur_src_x <= ff_exec_sx + $signed({1'b0, ff_src_x_offset});
+						ff_cur_src_y <= ff_exec_sy + $signed({1'b0, ff_src_y_offset});
+						ff_cur_dst_x <= ff_exec_dx + $signed({1'b0, ff_cur_dx});
+						ff_cur_dst_y <= ff_exec_dy + $signed({1'b0, ff_cur_dy});
+						ff_cur_src_address <= ff_exec_src_base_address + (ff_exec_sx + $signed({1'b0, ff_src_x_offset})) + ({ 6'd0, (ff_exec_sy + $signed({1'b0, ff_src_y_offset})) } << 10);
+						ff_cur_dst_address <= ff_exec_dst_base_address + (ff_exec_dx + $signed({1'b0, ff_cur_dx})) + ({ 6'd0, (ff_exec_dy + $signed({1'b0, ff_cur_dy})) } << 10);
+						ff_src_visible <= f_in_visible(ff_exec_sx + $signed({1'b0, ff_src_x_offset}), ff_exec_sy + $signed({1'b0, ff_src_y_offset}));
+						ff_dst_visible <= f_in_visible(ff_exec_dx + $signed({1'b0, ff_cur_dx}), ff_exec_dy + $signed({1'b0, ff_cur_dy}));
+						ff_src_reuse_hit <= ff_prev_src_valid && (ff_prev_src_address == (ff_exec_src_base_address + (ff_exec_sx + $signed({1'b0, ff_src_x_offset})) + ({ 6'd0, (ff_exec_sy + $signed({1'b0, ff_src_y_offset})) } << 10)));
+						ff_state <= c_state_issue_src_decide;
+					end
+				end
+
+				c_state_issue_src_decide: begin
+					if( !ff_dst_visible ) begin
+						ff_write_pending <= 1'b0;
+						ff_state <= c_state_issue_write;
+					end
+					else if( !ff_src_visible ) begin
+						ff_src_color <= 16'h0000;
+						if( ff_exec_rop == c_rop_put ) begin
+							ff_dst_color <= 16'd0;
+							ff_write_pending <= 1'b1;
+							ff_state <= c_state_issue_write;
+						end
+						else begin
+							ff_state <= c_state_issue_dst_read;
+						end
+					end
+					else if( ff_src_reuse_hit ) begin
+						ff_src_color <= ff_prev_src_color;
+						if( ff_exec_rop == c_rop_put ) begin
+							ff_dst_color <= 16'd0;
+							ff_write_pending <= 1'b1;
+							ff_state <= c_state_issue_write;
+						end
+						else begin
+							ff_state <= c_state_issue_dst_read;
+						end
+					end
+					else begin
+						ff_state <= c_state_issue_src_req;
+					end
+				end
+
+				c_state_issue_src_req: begin
+					if( ff_sdram_valid && sdram_ready ) begin
+						ff_state <= c_state_wait_src_read;
 					end
 				end
 
 				c_state_wait_src_read: begin
 					if( sdram_rdata_valid ) begin
 						ff_src_color <= sdram_rdata;
+						ff_prev_src_address <= ff_cur_src_address;
+						ff_prev_src_color <= sdram_rdata;
+						ff_prev_src_valid <= 1'b1;
 						if( ff_exec_rop == c_rop_put ) begin
 							ff_dst_color <= 16'd0;
+							ff_write_pending <= 1'b1;
 							ff_state <= c_state_issue_write;
 						end
 						else begin
@@ -385,7 +523,7 @@ module graphic_processor2 (
 				end
 
 				c_state_issue_dst_read: begin
-					if( ff_sdram_ready_d ) begin
+					if( ff_sdram_valid && sdram_ready ) begin
 						ff_state <= c_state_wait_dst_read;
 					end
 				end
@@ -393,36 +531,39 @@ module graphic_processor2 (
 				c_state_wait_dst_read: begin
 					if( sdram_rdata_valid ) begin
 						ff_dst_color <= sdram_rdata;
+						ff_write_pending <= 1'b1;
 						ff_state <= c_state_issue_write;
 					end
 				end
 
 				c_state_issue_write: begin
-					if( ff_sdram_ready_d ) begin
+					if( !ff_write_pending || (ff_sdram_valid && sdram_ready) ) begin
+						ff_write_pending <= 1'b0;
 						if( (ff_cur_dx + 16'd1) < ff_clipped_dwidth ) begin
-							if( (ff_src_x_error + ff_clipped_swidth) >= ff_clipped_dwidth ) begin
-								ff_src_x_error <= (ff_src_x_error + ff_clipped_swidth) - ff_clipped_dwidth;
-								ff_src_x_offset <= ff_src_x_offset + 16'd1;
+							if( (ff_src_x_error + ff_scale_x_step_rem) >= ff_clipped_dwidth ) begin
+								ff_src_x_error <= (ff_src_x_error + ff_scale_x_step_rem) - ff_clipped_dwidth;
+								ff_src_x_offset <= ff_src_x_offset + ff_scale_x_step_base + 16'd1;
 							end
 							else begin
-								ff_src_x_error <= ff_src_x_error + ff_clipped_swidth;
+								ff_src_x_error <= ff_src_x_error + ff_scale_x_step_rem;
+								ff_src_x_offset <= ff_src_x_offset + ff_scale_x_step_base;
 							end
 							ff_cur_dx <= ff_cur_dx + 16'd1;
 							ff_state <= c_state_issue_src_read;
 						end
 						else if( (ff_cur_dy + 16'd1) < ff_clipped_dheight ) begin
+							if( (ff_src_y_error + ff_scale_y_step_rem) >= ff_clipped_dheight ) begin
+								ff_src_y_error <= (ff_src_y_error + ff_scale_y_step_rem) - ff_clipped_dheight;
+								ff_src_y_offset <= ff_src_y_offset + ff_scale_y_step_base + 16'd1;
+							end
+							else begin
+								ff_src_y_error <= ff_src_y_error + ff_scale_y_step_rem;
+								ff_src_y_offset <= ff_src_y_offset + ff_scale_y_step_base;
+							end
 							ff_cur_dx <= 16'd0;
 							ff_cur_dy <= ff_cur_dy + 16'd1;
 							ff_src_x_offset <= 16'd0;
 							ff_src_x_error <= 16'd0;
-							if( (ff_src_y_error + ff_clipped_sheight) >= ff_clipped_dheight ) begin
-								ff_src_y_error <= (ff_src_y_error + ff_clipped_sheight) - ff_clipped_dheight;
-								ff_src_y_offset <= ff_src_y_offset + 16'd1;
-								ff_src_row_address <= ff_src_row_address + 22'd1024;
-							end
-							else begin
-								ff_src_y_error <= ff_src_y_error + ff_clipped_sheight;
-							end
 							ff_state <= c_state_issue_src_read;
 						end
 						else begin
@@ -434,7 +575,7 @@ module graphic_processor2 (
 
 				c_state_issue_flush: begin
 					if( ff_flush_pending ) begin
-						if( ff_sdram_ready_d ) begin
+						if( ff_sdram_valid && sdram_ready ) begin
 							ff_flush_pending <= 1'b0;
 							ff_state <= c_state_idle;
 						end
@@ -463,7 +604,8 @@ module graphic_processor2 (
 			reg_dwidth				<= 16'd0;
 			reg_dheight				<= 16'd0;
 			reg_rop					<= c_rop_put;
-			reg_vram_address		<= 22'd0;
+			reg_vram_src_address	<= 22'd0;
+			reg_vram_dst_address	<= 22'd0;
 
 			ff_bus_rdata			<= 16'd0;
 			ff_bus_rdata_valid		<= 1'b0;
@@ -482,8 +624,10 @@ module graphic_processor2 (
 				5'h06: reg_dwidth <= bus_wdata;
 				5'h07: reg_dheight <= bus_wdata;
 				5'h08: reg_rop <= bus_wdata;
-				5'h0A: reg_vram_address[15:1] <= bus_wdata[15:1];
-				5'h0B: reg_vram_address[22:16] <= bus_wdata[6:0];
+				5'h0A: reg_vram_src_address[16:1] <= bus_wdata;
+				5'h0B: reg_vram_src_address[22:17] <= bus_wdata[5:0];
+				5'h0C: reg_vram_dst_address[16:1] <= bus_wdata;
+				5'h0D: reg_vram_dst_address[22:17] <= bus_wdata[5:0];
 				default: begin
 					// do nothing
 				end
@@ -502,8 +646,10 @@ module graphic_processor2 (
 				5'h07:		ff_bus_rdata <= reg_dheight;
 				5'h08:		ff_bus_rdata <= reg_rop;
 				5'h09:		ff_bus_rdata <= { 15'd0, ff_busy };
-				5'h0A:		ff_bus_rdata <= { reg_vram_address[15:1], 1'b0 };
-				5'h0B:		ff_bus_rdata <= { 9'd0, reg_vram_address[22:16] };
+				5'h0A:		ff_bus_rdata <= reg_vram_src_address[16:1];
+				5'h0B:		ff_bus_rdata <= { 10'd0, reg_vram_src_address[22:17] };
+				5'h0C:		ff_bus_rdata <= reg_vram_dst_address[16:1];
+				5'h0D:		ff_bus_rdata <= { 10'd0, reg_vram_dst_address[22:17] };
 				default:	ff_bus_rdata <= 16'd0;
 				endcase
 				ff_bus_rdata_valid <= 1'b1;
@@ -524,7 +670,10 @@ module graphic_processor2 (
 		else if( ff_state == c_state_issue_src_read && (ff_clipped_swidth == 16'd0 || ff_clipped_sheight == 16'd0 || ff_clipped_dwidth == 16'd0 || ff_clipped_dheight == 16'd0) ) begin
 			ff_busy <= 1'b0;
 		end
-		else if( ff_state == c_state_issue_write && ff_sdram_ready_d && !((ff_cur_dx + 16'd1) < ff_clipped_dwidth) && !((ff_cur_dy + 16'd1) < ff_clipped_dheight) ) begin
+		else if( ff_state == c_state_issue_write && !((ff_cur_dx + 16'd1) < ff_clipped_dwidth) && !((ff_cur_dy + 16'd1) < ff_clipped_dheight) ) begin
+			ff_busy <= 1'b0;
+		end
+		else if( ff_state == c_state_issue_flush && ff_flush_pending ) begin
 			ff_busy <= 1'b0;
 		end
 	end
@@ -540,7 +689,10 @@ module graphic_processor2 (
 			ff_exec_dwidth			<= 16'd0;
 			ff_exec_dheight			<= 16'd0;
 			ff_exec_rop				<= c_rop_put;
-			ff_exec_base_address	<= 22'd0;
+			ff_scale_x_expand		<= 1'b0;
+			ff_scale_y_expand		<= 1'b0;
+			ff_exec_src_base_address	<= 22'd0;
+			ff_exec_dst_base_address	<= 22'd0;
 		end
 		else if( bus_cs && bus_valid && bus_write && bus_address == 5'h09 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
 			ff_exec_sx				<= reg_sx;
@@ -552,7 +704,10 @@ module graphic_processor2 (
 			ff_exec_dwidth			<= reg_dwidth;
 			ff_exec_dheight			<= reg_dheight;
 			ff_exec_rop				<= reg_rop;
-			ff_exec_base_address	<= reg_vram_address;
+			ff_scale_x_expand		<= (reg_dwidth >= reg_swidth);
+			ff_scale_y_expand		<= (reg_dheight >= reg_sheight);
+			ff_exec_src_base_address	<= reg_vram_src_address;
+			ff_exec_dst_base_address	<= reg_vram_dst_address;
 		end
 	end
 
@@ -569,59 +724,42 @@ module graphic_processor2 (
 			ff_sdram_flush			<= 1'b0;
 		end
 		else begin
+			if( ff_sdram_valid && sdram_ready ) begin
+				ff_sdram_valid <= 1'b0;
+			end
+			ff_sdram_flush			<= 1'b0;
 			case( ff_state )
-			c_state_issue_src_read: begin
+			c_state_issue_src_req: begin
 				if( !ff_sdram_valid ) begin
-					ff_sdram_address		<= ff_src_row_address + ff_src_x_offset;
+					ff_sdram_address		<= ff_exec_src_base_address + (ff_exec_sx + $signed({1'b0, ff_src_x_offset})) + ({ 6'd0, (ff_exec_sy + $signed({1'b0, ff_src_y_offset})) } << 10);
 					ff_sdram_write			<= 1'b0;
 					ff_sdram_wdata			<= 16'd0;
-					ff_sdram_flush			<= 1'b0;
 					ff_sdram_valid			<= 1'b1;
-				end
-				else if( ff_sdram_ready_d ) begin
-					ff_sdram_valid			<= 1'b0;
 				end
 			end
 
 			c_state_issue_dst_read: begin
 				if( !ff_sdram_valid ) begin
-					ff_sdram_address		<= ff_cur_dst_address;
+					ff_sdram_address		<= ff_exec_dst_base_address + (ff_exec_dx + $signed({1'b0, ff_cur_dx})) + ({ 6'd0, (ff_exec_dy + $signed({1'b0, ff_cur_dy})) } << 10);
 					ff_sdram_write			<= 1'b0;
 					ff_sdram_wdata			<= 16'd0;
-					ff_sdram_flush			<= 1'b0;
 					ff_sdram_valid			<= 1'b1;
-				end
-				else if( ff_sdram_ready_d ) begin
-					ff_sdram_valid			<= 1'b0;
 				end
 			end
 
 			c_state_issue_write: begin
-				if( !ff_sdram_valid ) begin
-					ff_sdram_address		<= ff_cur_dst_address;
+				if( ff_write_pending && !ff_sdram_valid ) begin
+					ff_sdram_address		<= ff_exec_dst_base_address + (ff_exec_dx + $signed({1'b0, ff_cur_dx})) + ({ 6'd0, (ff_exec_dy + $signed({1'b0, ff_cur_dy})) } << 10);
 					ff_sdram_write			<= 1'b1;
-					ff_sdram_wdata			<= f_apply_rop( ff_exec_rop, ff_src_color, ff_dst_color );
-					ff_sdram_flush			<= 1'b0;
+					ff_sdram_wdata			<= f_apply_rop(ff_exec_rop, ff_src_color, ff_dst_color);
 					ff_sdram_valid			<= 1'b1;
-				end
-				else if( ff_sdram_ready_d ) begin
-					ff_sdram_valid			<= 1'b0;
 				end
 			end
 
 			c_state_issue_flush: begin
-				if( ff_flush_pending ) begin
-					if( !ff_sdram_valid ) begin
-						ff_sdram_address		<= 22'd0;
-						ff_sdram_write			<= 1'b0;
-						ff_sdram_wdata			<= 16'd0;
-						ff_sdram_flush			<= 1'b1;
-						ff_sdram_valid			<= 1'b1;
-					end
-					else if( ff_sdram_ready_d ) begin
-						ff_sdram_valid			<= 1'b0;
-						ff_sdram_flush			<= 1'b0;
-					end
+				if( ff_flush_pending && !ff_sdram_valid ) begin
+					ff_sdram_flush			<= 1'b1;
+					ff_sdram_valid			<= 1'b1;
 				end
 			end
 

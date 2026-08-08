@@ -85,8 +85,8 @@ module bus_arbiter (
 	reg					ff_read_stall;
 	reg					ff_ready;
 	reg					ff_pending_valid;
-	reg	[22:1]		ff_pending_address;
-	reg	[15:0]		ff_pending_wdata;
+	reg	[22:1]			ff_pending_address;
+	reg	[15:0]			ff_pending_wdata;
 	reg					ff_pending_write;
 	reg					ff_pending_flush;
 	wire				w_active;
