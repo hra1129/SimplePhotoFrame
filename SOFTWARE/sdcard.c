@@ -50,7 +50,7 @@ static void sd_dummy_clocks(uint32_t count) {
 
 static bool sd_wait_ready(uint32_t timeout_ms) {
     absolute_time_t deadline = make_timeout_time_ms(timeout_ms);
-    while (absolute_time_diff_us(get_absolute_time(), deadline) < 0) {
+    while (absolute_time_diff_us(get_absolute_time(), deadline) > 0) {
         if (spi_txrx(0xff) == 0xff) {
             return true;
         }
@@ -80,7 +80,7 @@ static int sd_rcvr_datablock(uint8_t *buff, uint32_t len) {
 
     do {
         token = spi_txrx(0xff);
-    } while (token == 0xff && absolute_time_diff_us(get_absolute_time(), deadline) < 0);
+    } while (token == 0xff && absolute_time_diff_us(get_absolute_time(), deadline) > 0);
 
     if (token != 0xfe) {
         return 0;
@@ -193,7 +193,7 @@ DSTATUS disk_initialize(BYTE pdrv) {
 
         if (ocr[2] == 0x01 && ocr[3] == 0xaa) {
             absolute_time_t deadline = make_timeout_time_ms(1000);
-            while (absolute_time_diff_us(get_absolute_time(), deadline) < 0) {
+            while (absolute_time_diff_us(get_absolute_time(), deadline) > 0) {
                 res = sd_send_cmd(0x80 + 41, 1u << 30);
                 printf("[SD] ACMD41(HCS) -> 0x%02x\n", res);
                 if (res == 0) {
@@ -227,7 +227,7 @@ DSTATUS disk_initialize(BYTE pdrv) {
 
         {
             absolute_time_t deadline = make_timeout_time_ms(1000);
-            while (absolute_time_diff_us(get_absolute_time(), deadline) < 0) {
+            while (absolute_time_diff_us(get_absolute_time(), deadline) > 0) {
                 res = sd_send_cmd(cmd, 0);
                 printf("[SD] init cmd 0x%02x -> 0x%02x\n", cmd, res);
                 if (res == 0) {

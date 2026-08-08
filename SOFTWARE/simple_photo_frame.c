@@ -139,27 +139,26 @@ int main() {
 	}
 	vram_flush();
 
+	display_enable( true );
 	while (1) {
-//		if( sdcard_init_and_mount() ) {
-//			break;
-//		}
-//		printf("SD card mount failed.\n");
 
 		button_state = button_get();
 		if( button_state & SW_A ) {
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			printf( "Button A pressed.\n" );
-			display_enable( false );
-			r = rand() & 31;
-			g = rand() & 63;
-			b = rand() & 31;
-			display_set_fill_color( DISPLAY_RGB( r, g, b ) );
-			printf( "Fill color: R=%d, G=%d, B=%d\n", r, g, b );
+			if( sdcard_init_and_mount() ) {
+				printf("SD card mount succeeded.\n");
+				sdcard_print_root_directory();
+			}
+			else {
+				printf("SD card mount failed.\n");
+			}
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_B ) {
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			printf( "Button B pressed.\n" );
-			display_enable( true );
+			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_U ) {
 			printf( "Button Up pressed.\n" );
@@ -189,11 +188,6 @@ int main() {
 		do {
 			button_state = button_get();
 		} while( button_state != 0 );
-	}
-
-	while( 1 ) {
-		sdcard_print_root_directory();
-		sleep_ms(1000);
 	}
 	return 0;
 }
