@@ -69,6 +69,7 @@ module tb ();
 	wire	[4:0]	lcd_r;
 	wire	[5:0]	lcd_g;
 	wire	[4:0]	lcd_b;
+	wire			lcd_bl;
 
 	reg				p_valid;
 	wire			p_ready;
@@ -80,6 +81,9 @@ module tb ();
 	display_timing_generator u_dut (
 		.clk		( clk		),
 		.reset		( reset		),
+		.p_valid	( p_valid	),
+		.p_ready	( p_ready	),
+		.p_data		( p_data	),
 		.lcd_ck		( lcd_ck	),
 		.lcd_hs		( lcd_hs	),
 		.lcd_vs		( lcd_vs	),
@@ -88,9 +92,7 @@ module tb ();
 		.lcd_r		( lcd_r		),
 		.lcd_g		( lcd_g		),
 		.lcd_b		( lcd_b		),
-		.p_valid	( p_valid	),
-		.p_ready	( p_ready	),
-		.p_data		( p_data	)
+		.lcd_bl		( lcd_bl	)
 	);
 
 	// -----------------------------------------------------------------------

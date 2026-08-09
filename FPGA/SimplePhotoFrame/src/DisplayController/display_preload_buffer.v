@@ -73,25 +73,25 @@ module display_preload_buffer #(
 );
 	// -------------------------------------------------------------------------
 	//	書き込みポインタ / 読み出しポインタ
-	//	bit[11:1]: SRAM アドレス, bit[0]: SRAM0/1 選択
+	//	bit[10:1]: SRAM アドレス, bit[0]: SRAM0/1 選択
 	// -------------------------------------------------------------------------
-	reg		[11:0]	ff_wr_ptr;					/* synthesis syn_preserve = 1 */	// {wrap, addr[10:0]}　偶奇で SRAM0/1 を選択
-	reg		[11:0]	ff_wr_ptr_c1;				/* synthesis syn_preserve = 1 */
-	reg		[11:0]	ff_rd_ptr;					// 同上
+	reg		[10:0]	ff_wr_ptr;						/* synthesis syn_preserve = 1 */	// {wrap, addr[9:0]}	偶奇で SRAM0/1 を選択
+	reg		[10:0]	ff_wr_ptr_c1;				/* synthesis syn_preserve = 1 */
+	reg		[10:0]	ff_rd_ptr;					// 同上
 	reg		[11:0]	ff_count;
 
 	// wr_ptr は SRAM0/1 を交互にカウント → 合計インデックス
 	// 偶数インデックス → SRAM0、奇数インデックス → SRAM1
 	// addr[10:0] = インデックス >> 1
-	wire	[11:0]	w_wr_ptr_next	= (ff_wr_ptr == 12'd4095) ? 12'd0 : ff_wr_ptr + 12'd1;
-	wire	[11:0]	w_rd_ptr_next	= (ff_rd_ptr == 12'd4095) ? 12'd0 : ff_rd_ptr + 12'd1;
+	wire	[10:0]	w_wr_ptr_next	= (ff_wr_ptr == 11'd2047) ? 11'd0 : ff_wr_ptr + 11'd1;
+	wire	[10:0]	w_rd_ptr_next	= (ff_rd_ptr == 11'd2047) ? 11'd0 : ff_rd_ptr + 11'd1;
 
 	// 蓄積ワード数。ff_rd_ptr 由来の減算経路が広がりやすいため、占有量は専用レジスタで保持する。
 	wire	[11:0]	w_count			= ff_count;
-	localparam	[11:0]	c_in_ready_max_count	= 12'd3500;	// initial charge release point
-	localparam	[11:0]	c_nearly_full_high	= 12'd3500;	// reserve headroom for request-stop propagation delay
-	localparam	[11:0]	c_nearly_full_low	= 12'd3400;	// hysteresis release point
-	localparam	[11:0]	c_burst_safe_count	= 12'd4087;	// require free >= 8 words before starting a new burst
+	localparam	[11:0]	c_in_ready_max_count	= 12'd1791;					// initial charge release point
+	localparam	[11:0]	c_nearly_full_high		= c_in_ready_max_count;		// reserve headroom for request-stop propagation delay
+	localparam	[11:0]	c_nearly_full_low		= 12'd1023;					// hysteresis release point
+	localparam	[11:0]	c_burst_safe_count		= 12'd2039;					// require free >= 8 words before starting a new burst
 	wire			w_initial_charge_done	= (w_count >= c_in_ready_max_count);
 
 	// 上流へ停止が伝わるまでの遅延と、停止不能な進行中burstを吸収できるよう、
@@ -101,14 +101,14 @@ module display_preload_buffer #(
 	wire			w_wr_en;
 	wire			w_clear_fifo;
 	wire			w_rearm_initial_charge;
-	wire			w_nearly_full_set	= (w_count > c_nearly_full_high);
-	wire			w_nearly_full_clr	= (w_count <= c_nearly_full_low);
+	wire			w_nearly_full_set		= (w_count > c_nearly_full_high);
+	wire			w_nearly_full_clr		= (w_count <= c_nearly_full_low);
 
-	assign			w_clear_fifo = clear && (c_clear_flush_fifo != 0);
-	assign			w_rearm_initial_charge = clear && (c_clear_rearm_initial_charge != 0);
+	assign			w_clear_fifo			= clear && (c_clear_flush_fifo != 0);
+	assign			w_rearm_initial_charge	= clear && (c_clear_rearm_initial_charge != 0);
 
 	// 本来の FIFO FULL 信号。in_ready はこれを使って制御。
-	wire			w_full			= (w_count == 12'd4095);
+	wire			w_full					= (w_count == 12'd2047);
 
 	// forward declaration (defined in read-control section)
 	wire			w_do_read;
@@ -199,7 +199,7 @@ module display_preload_buffer #(
 	// -------------------------------------------------------------------------
 	assign			w_wr_en			= in_valid & w_in_ready;
 	wire			w_wr_sram_sel	= ff_wr_ptr_c1[0];		// 0: SRAM0, 1: SRAM1
-	wire	[10:0]	w_wr_addr		= ff_wr_ptr_c1[11:1];
+	wire	[9:0]	w_wr_addr		= ff_wr_ptr_c1[10:1];
 
 	wire			w_sram0_we		= w_wr_en & ~w_wr_sram_sel;
 	wire			w_sram1_we		= w_wr_en &  w_wr_sram_sel;
@@ -243,7 +243,7 @@ module display_preload_buffer #(
 	reg				ff_out1_valid;
 
 	wire			w_rd_sram_sel	= ff_rd_ptr[0];
-	wire	[10:0]	w_rd_addr		= ff_rd_ptr[11:1];
+	wire	[9:0]	w_rd_addr		= ff_rd_ptr[10:1];
 
 	// 読み出し可能 = データが存在 & 初期チャージ完了
 	wire			w_data_exist	= (w_count != 12'd0) & ~ff_initial_charge;
@@ -297,8 +297,8 @@ module display_preload_buffer #(
 	// 同一 SRAM に同一サイクルで書き込みと読み出しが重なるケースは稀だが、
 	// 書き込み優先（we=1 のとき書き込みアドレスを使用）とする。
 
-	wire	[10:0]	w_sram0_addr	= w_sram0_we ? w_wr_addr : w_rd_addr;
-	wire	[10:0]	w_sram1_addr	= w_sram1_we ? w_wr_addr : w_rd_addr;
+	wire	[9:0]	w_sram0_addr	= w_sram0_we ? w_wr_addr : w_rd_addr;
+	wire	[9:0]	w_sram1_addr	= w_sram1_we ? w_wr_addr : w_rd_addr;
 
 	display_single_port_ram u_sram0 (
 		.clk		( clk			),

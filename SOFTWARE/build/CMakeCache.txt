@@ -172,7 +172,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=simple_photo_frame
+CMAKE_PROJECT_NAME:STATIC=simple_photo_frame_test
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/arm-none-eabi-ranlib
@@ -356,6 +356,15 @@ simple_photo_frame_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 simple_photo_frame_SOURCE_DIR:STATIC=/mnt/c/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/SOFTWARE
+
+//Value Computed by CMake
+simple_photo_frame_test_BINARY_DIR:STATIC=/mnt/c/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/SOFTWARE/build
+
+//Value Computed by CMake
+simple_photo_frame_test_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+simple_photo_frame_test_SOURCE_DIR:STATIC=/mnt/c/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/SOFTWARE
 
 
 ########################

@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.13...3.27)
 include(pico_sdk_import.cmake)
 
 project(simple_photo_frame)
+project(simple_photo_frame_test)
 
 # initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
@@ -35,3 +36,30 @@ pico_enable_stdio_uart(simple_photo_frame 0)
 
 # create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(simple_photo_frame)
+
+# -----------------------------------------------------------------------------
+add_executable(simple_photo_frame_test
+	simple_photo_frame_test.c
+	sdcard.c
+	fpga_io.c
+	vram_accessor.c
+	display_controller.c
+	button.c
+	usa_fpga.c
+	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ff.c
+	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffunicode.c
+)
+
+target_include_directories(simple_photo_frame_test PRIVATE
+	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source
+)
+
+# Add pico_stdlib library which aggregates commonly used features
+target_link_libraries(simple_photo_frame_test pico_stdlib hardware_spi pico_cyw43_arch_none)
+
+# enable usb output, disable uart output
+pico_enable_stdio_usb(simple_photo_frame_test 1)
+pico_enable_stdio_uart(simple_photo_frame_test 0)
+
+# create map/bin/hex/uf2 file in addition to ELF.
+pico_add_extra_outputs(simple_photo_frame_test)

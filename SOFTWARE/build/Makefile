@@ -130,6 +130,19 @@ simple_photo_frame/fast:
 .PHONY : simple_photo_frame/fast
 
 #=============================================================================
+# Target rules for targets named simple_photo_frame_test
+
+# Build rule for target.
+simple_photo_frame_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 simple_photo_frame_test
+.PHONY : simple_photo_frame_test
+
+# fast build rule for target.
+simple_photo_frame_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/build
+.PHONY : simple_photo_frame_test/fast
+
+#=============================================================================
 # Target rules for targets named bs2_default
 
 # Build rule for target.
@@ -200,6 +213,7 @@ button.o: button.c.o
 # target to build an object file
 button.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/button.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/button.c.o
 .PHONY : button.c.o
 
 button.i: button.c.i
@@ -208,6 +222,7 @@ button.i: button.c.i
 # target to preprocess a source file
 button.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/button.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/button.c.i
 .PHONY : button.c.i
 
 button.s: button.c.s
@@ -216,6 +231,7 @@ button.s: button.c.s
 # target to generate assembly for a file
 button.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/button.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/button.c.s
 .PHONY : button.c.s
 
 display_controller.o: display_controller.c.o
@@ -224,6 +240,7 @@ display_controller.o: display_controller.c.o
 # target to build an object file
 display_controller.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/display_controller.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/display_controller.c.o
 .PHONY : display_controller.c.o
 
 display_controller.i: display_controller.c.i
@@ -232,6 +249,7 @@ display_controller.i: display_controller.c.i
 # target to preprocess a source file
 display_controller.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/display_controller.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/display_controller.c.i
 .PHONY : display_controller.c.i
 
 display_controller.s: display_controller.c.s
@@ -240,6 +258,7 @@ display_controller.s: display_controller.c.s
 # target to generate assembly for a file
 display_controller.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/display_controller.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/display_controller.c.s
 .PHONY : display_controller.c.s
 
 fpga_io.o: fpga_io.c.o
@@ -248,6 +267,7 @@ fpga_io.o: fpga_io.c.o
 # target to build an object file
 fpga_io.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/fpga_io.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.o
 .PHONY : fpga_io.c.o
 
 fpga_io.i: fpga_io.c.i
@@ -256,6 +276,7 @@ fpga_io.i: fpga_io.c.i
 # target to preprocess a source file
 fpga_io.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/fpga_io.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.i
 .PHONY : fpga_io.c.i
 
 fpga_io.s: fpga_io.c.s
@@ -264,6 +285,7 @@ fpga_io.s: fpga_io.c.s
 # target to generate assembly for a file
 fpga_io.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/fpga_io.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.s
 .PHONY : fpga_io.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
@@ -272,6 +294,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.i
@@ -280,6 +303,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.s
@@ -288,6 +312,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
@@ -296,6 +321,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.o
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.i
@@ -304,6 +330,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.i
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.s
@@ -312,6 +339,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.s
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
@@ -320,6 +348,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.i
@@ -328,6 +357,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.s
@@ -336,6 +366,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
@@ -344,6 +375,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stat
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.i
@@ -352,6 +384,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stat
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.s
@@ -360,6 +393,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stat
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
@@ -368,6 +402,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.i
@@ -376,6 +411,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.s
@@ -384,6 +420,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
@@ -392,6 +429,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.i
@@ -400,6 +438,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.s
@@ -408,6 +447,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
@@ -416,6 +456,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/aud
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.i
@@ -424,6 +465,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/aud
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.s
@@ -432,6 +474,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/aud
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
@@ -440,6 +483,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_d
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.i
@@ -448,6 +492,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_d
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.s
@@ -456,6 +501,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_d
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
@@ -464,6 +510,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_d
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.i
@@ -472,6 +519,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_d
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.s
@@ -480,6 +528,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_d
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
@@ -488,6 +537,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_r
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
@@ -496,6 +546,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_r
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
@@ -504,6 +555,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_r
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
@@ -512,6 +564,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_d
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.i
@@ -520,6 +573,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_d
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.s
@@ -528,6 +582,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_d
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
@@ -536,6 +591,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.i
@@ -544,6 +600,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.s
@@ -552,6 +609,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
@@ -560,6 +618,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_d
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.i
@@ -568,6 +627,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_d
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.s
@@ -576,6 +636,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_d
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
@@ -584,6 +645,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_r
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
@@ -592,6 +654,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_r
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
@@ -600,6 +663,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_r
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
@@ -608,6 +672,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_d
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.i
@@ -616,6 +681,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_d
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.s
@@ -624,6 +690,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_d
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
@@ -632,6 +699,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/us
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
@@ -640,6 +708,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/us
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
@@ -648,6 +717,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/us
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
@@ -656,6 +726,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/ve
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.i
@@ -664,6 +735,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/ve
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.s
@@ -672,6 +744,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/ve
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
@@ -680,6 +753,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/vid
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.i
@@ -688,6 +762,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/vid
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.s
@@ -696,6 +771,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/vid
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
@@ -704,6 +780,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fif
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.i
@@ -712,6 +789,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fif
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.s
@@ -720,6 +798,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fif
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
@@ -728,6 +807,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.o: 
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.i
@@ -736,6 +816,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.i: 
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.s
@@ -744,6 +825,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.s: 
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
@@ -752,6 +834,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_con
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.i
@@ -760,6 +843,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_con
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.s
@@ -768,6 +852,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_con
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
@@ -776,6 +861,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspbe
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
@@ -784,6 +870,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspbe
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
@@ -792,6 +879,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspbe
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
@@ -800,6 +888,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspbe
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
@@ -808,6 +897,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspbe
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
@@ -816,6 +906,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspbe
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
@@ -824,6 +915,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.o: mnt/c/U
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.i
@@ -832,6 +924,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.i: mnt/c/U
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.s
@@ -840,6 +933,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.s: mnt/c/U
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
@@ -848,6 +942,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.i
@@ -856,6 +951,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.s
@@ -864,6 +960,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
@@ -872,6 +969,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_s
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.i
@@ -880,6 +978,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_s
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.s
@@ -888,6 +987,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_s
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
@@ -896,6 +996,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.i
@@ -904,6 +1005,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.s
@@ -912,6 +1014,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
@@ -920,6 +1023,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.o: m
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.i
@@ -928,6 +1032,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.i: m
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.s
@@ -936,6 +1041,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.s: m
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
@@ -944,6 +1050,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.o: mnt
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.i
@@ -952,6 +1059,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.i: mnt
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.s
@@ -960,6 +1068,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.s: mnt
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
@@ -968,6 +1077,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.o: mn
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.i
@@ -976,6 +1086,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.i: mn
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.s
@@ -984,6 +1095,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.s: mn
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
@@ -992,6 +1104,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_he
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.i
@@ -1000,6 +1113,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_he
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.s
@@ -1008,6 +1122,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_he
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
@@ -1016,6 +1131,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.o
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.i
@@ -1024,6 +1140,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.i
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.s
@@ -1032,6 +1149,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.s
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
@@ -1040,6 +1158,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.o: m
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.i
@@ -1048,6 +1167,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.i: m
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.s
@@ -1056,6 +1176,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.s: m
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
@@ -1064,6 +1185,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.o: m
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.i
@@ -1072,6 +1194,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.i: m
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.s
@@ -1080,6 +1203,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.s: m
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
@@ -1088,6 +1212,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platfo
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.i
@@ -1096,6 +1221,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platfo
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.s
@@ -1104,6 +1230,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platfo
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
@@ -1112,6 +1239,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lo
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.i
@@ -1120,6 +1248,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lo
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.s
@@ -1128,6 +1257,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lo
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
@@ -1136,6 +1266,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.i
@@ -1144,6 +1275,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.s
@@ -1152,6 +1284,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
@@ -1160,6 +1293,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.i
@@ -1168,6 +1302,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.s
@@ -1176,6 +1311,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
@@ -1184,6 +1320,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.i
@@ -1192,6 +1329,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.s
@@ -1200,6 +1338,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
@@ -1208,6 +1347,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_excepti
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.i
@@ -1216,6 +1356,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_excepti
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.s
@@ -1224,6 +1365,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_excepti
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
@@ -1232,6 +1374,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/f
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.i
@@ -1240,6 +1383,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/f
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.s
@@ -1248,6 +1392,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/f
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
@@ -1256,6 +1401,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gp
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.i
@@ -1264,6 +1410,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gp
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s
@@ -1272,6 +1419,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gp
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
@@ -1280,6 +1428,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.i
@@ -1288,6 +1437,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.s
@@ -1296,6 +1446,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.o
@@ -1304,6 +1455,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
@@ -1312,6 +1464,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.i
@@ -1320,6 +1473,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.s
@@ -1328,6 +1482,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
@@ -1336,6 +1491,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.i
@@ -1344,6 +1500,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.s
@@ -1352,6 +1509,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
@@ -1360,6 +1518,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.i
@@ -1368,6 +1527,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.s
@@ -1376,6 +1536,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
@@ -1384,6 +1545,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sy
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.i
@@ -1392,6 +1554,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sy
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.s
@@ -1400,6 +1563,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sy
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
@@ -1408,6 +1572,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_sp
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
@@ -1416,6 +1581,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_sp
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
@@ -1424,6 +1590,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_sp
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
@@ -1432,6 +1599,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/t
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.i
@@ -1440,6 +1608,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/t
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.s
@@ -1448,6 +1617,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/t
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
@@ -1456,6 +1626,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/t
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.i
@@ -1464,6 +1635,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/t
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.s
@@ -1472,6 +1644,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/t
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
@@ -1480,6 +1653,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/ua
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.i
@@ -1488,6 +1662,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/ua
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.s
@@ -1496,6 +1671,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/ua
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
@@ -1504,6 +1680,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vr
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.i
@@ -1512,6 +1689,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vr
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.s
@@ -1520,6 +1698,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vr
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
@@ -1528,6 +1707,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdo
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.i
@@ -1536,6 +1716,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdo
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.s
@@ -1544,6 +1725,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdo
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
@@ -1552,6 +1734,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cac
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.i
@@ -1560,6 +1743,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cac
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.s
@@ -1568,6 +1752,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cac
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
@@ -1576,6 +1761,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xo
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.i
@@ -1584,6 +1770,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xo
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.s
@@ -1592,6 +1779,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xo
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
@@ -1600,6 +1788,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_conte
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.i
@@ -1608,6 +1797,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_conte
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s
@@ -1616,6 +1806,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_conte
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
@@ -1624,6 +1815,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_conte
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.i
@@ -1632,6 +1824,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_conte
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.s
@@ -1640,6 +1833,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_conte
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
@@ -1648,6 +1842,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atom
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.i
@@ -1656,6 +1851,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atom
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.s
@@ -1664,6 +1860,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atom
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
@@ -1672,6 +1869,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
@@ -1680,6 +1878,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/boo
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.i
@@ -1688,6 +1887,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/boo
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.s
@@ -1696,6 +1896,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/boo
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
@@ -1704,6 +1905,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/boo
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.i
@@ -1712,6 +1914,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/boo
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.s
@@ -1720,6 +1923,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/boo
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
@@ -1728,6 +1932,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interf
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.i
@@ -1736,6 +1941,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interf
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.s
@@ -1744,6 +1950,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interf
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
@@ -1752,6 +1959,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.o
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
@@ -1760,6 +1968,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.i
@@ -1768,6 +1977,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.s
@@ -1776,6 +1986,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
@@ -1784,6 +1995,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.i
@@ -1792,6 +2004,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.s
@@ -1800,6 +2013,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
@@ -1808,6 +2022,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.i
@@ -1816,6 +2031,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.s
@@ -1824,6 +2040,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
@@ -1832,6 +2049,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.i
@@ -1840,6 +2058,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.s
@@ -1848,6 +2067,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
@@ -1856,6 +2076,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.i
@@ -1864,6 +2085,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.s
@@ -1872,6 +2094,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
@@ -1880,6 +2103,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.i
@@ -1888,6 +2112,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.s
@@ -1896,6 +2121,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
@@ -1904,6 +2130,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.i
@@ -1912,6 +2139,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.s
@@ -1920,6 +2148,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
@@ -1928,6 +2157,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.i
@@ -1936,6 +2166,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.s
@@ -1944,6 +2175,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
@@ -1952,6 +2184,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.i
@@ -1960,6 +2193,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.s
@@ -1968,6 +2202,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_drive
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
@@ -1976,6 +2211,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/div
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.i
@@ -1984,6 +2220,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/div
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.s
@@ -1992,6 +2229,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/div
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
@@ -2000,6 +2238,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
@@ -2008,6 +2247,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
@@ -2016,6 +2256,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
@@ -2024,6 +2265,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.i
@@ -2032,6 +2274,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.s
@@ -2040,6 +2283,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
@@ -2048,6 +2292,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/doub
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
@@ -2056,6 +2301,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
@@ -2064,6 +2310,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
@@ -2072,6 +2319,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
@@ -2080,6 +2328,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.i
@@ -2088,6 +2337,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.s
@@ -2096,6 +2346,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
@@ -2104,6 +2355,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
@@ -2112,6 +2364,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
@@ -2120,6 +2373,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.i
@@ -2128,6 +2382,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.s
@@ -2136,6 +2391,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
@@ -2144,6 +2400,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
@@ -2152,6 +2409,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/mall
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.i
@@ -2160,6 +2418,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/mall
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.s
@@ -2168,6 +2427,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/mall
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
@@ -2176,6 +2436,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_co
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.i
@@ -2184,6 +2445,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_co
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.s
@@ -2192,6 +2454,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_co
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
@@ -2200,6 +2463,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_pa
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.i
@@ -2208,6 +2472,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_pa
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.s
@@ -2216,6 +2481,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_pa
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
@@ -2224,6 +2490,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/prin
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.i
@@ -2232,6 +2499,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/prin
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.s
@@ -2240,6 +2508,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/prin
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
@@ -2248,6 +2517,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/run
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.i
@@ -2256,6 +2526,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/run
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.s
@@ -2264,6 +2535,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/run
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
@@ -2272,6 +2544,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.i
@@ -2280,6 +2553,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.s
@@ -2288,6 +2562,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
@@ -2296,6 +2571,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
@@ -2304,6 +2580,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
@@ -2312,6 +2589,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
@@ -2320,6 +2598,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
@@ -2328,6 +2607,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
@@ -2336,6 +2616,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_ini
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
@@ -2344,6 +2625,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_bi
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
@@ -2352,6 +2634,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_bi
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
@@ -2360,6 +2643,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_bi
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
@@ -2368,6 +2652,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.i
@@ -2376,6 +2661,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.s
@@ -2384,6 +2670,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
@@ -2392,6 +2679,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/r
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.i
@@ -2400,6 +2688,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/r
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.s
@@ -2408,6 +2697,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/r
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
@@ -2416,6 +2706,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/s
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
@@ -2424,6 +2715,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/s
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
@@ -2432,6 +2724,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/s
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
@@ -2440,6 +2733,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/s
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
@@ -2448,6 +2742,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/s
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
@@ -2456,6 +2751,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/s
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
@@ -2464,6 +2760,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdl
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.i
@@ -2472,6 +2769,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdl
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.s
@@ -2480,6 +2778,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdl
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
@@ -2488,6 +2787,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/u
 # target to build an object file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.i: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.i
@@ -2496,6 +2796,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/u
 # target to preprocess a source file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.i
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.i
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.s: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s
@@ -2504,6 +2805,7 @@ mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/u
 # target to generate assembly for a file
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.s
 
 sdcard.o: sdcard.c.o
@@ -2512,6 +2814,7 @@ sdcard.o: sdcard.c.o
 # target to build an object file
 sdcard.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/sdcard.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/sdcard.c.o
 .PHONY : sdcard.c.o
 
 sdcard.i: sdcard.c.i
@@ -2520,6 +2823,7 @@ sdcard.i: sdcard.c.i
 # target to preprocess a source file
 sdcard.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/sdcard.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/sdcard.c.i
 .PHONY : sdcard.c.i
 
 sdcard.s: sdcard.c.s
@@ -2528,6 +2832,7 @@ sdcard.s: sdcard.c.s
 # target to generate assembly for a file
 sdcard.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/sdcard.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/sdcard.c.s
 .PHONY : sdcard.c.s
 
 simple_photo_frame.o: simple_photo_frame.c.o
@@ -2554,12 +2859,37 @@ simple_photo_frame.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.s
 .PHONY : simple_photo_frame.c.s
 
+simple_photo_frame_test.o: simple_photo_frame_test.c.o
+.PHONY : simple_photo_frame_test.o
+
+# target to build an object file
+simple_photo_frame_test.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/simple_photo_frame_test.c.o
+.PHONY : simple_photo_frame_test.c.o
+
+simple_photo_frame_test.i: simple_photo_frame_test.c.i
+.PHONY : simple_photo_frame_test.i
+
+# target to preprocess a source file
+simple_photo_frame_test.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/simple_photo_frame_test.c.i
+.PHONY : simple_photo_frame_test.c.i
+
+simple_photo_frame_test.s: simple_photo_frame_test.c.s
+.PHONY : simple_photo_frame_test.s
+
+# target to generate assembly for a file
+simple_photo_frame_test.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/simple_photo_frame_test.c.s
+.PHONY : simple_photo_frame_test.c.s
+
 usa_fpga.o: usa_fpga.c.o
 .PHONY : usa_fpga.o
 
 # target to build an object file
 usa_fpga.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/usa_fpga.c.o
 .PHONY : usa_fpga.c.o
 
 usa_fpga.i: usa_fpga.c.i
@@ -2568,6 +2898,7 @@ usa_fpga.i: usa_fpga.c.i
 # target to preprocess a source file
 usa_fpga.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/usa_fpga.c.i
 .PHONY : usa_fpga.c.i
 
 usa_fpga.s: usa_fpga.c.s
@@ -2576,6 +2907,7 @@ usa_fpga.s: usa_fpga.c.s
 # target to generate assembly for a file
 usa_fpga.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/usa_fpga.c.s
 .PHONY : usa_fpga.c.s
 
 vram_accessor.o: vram_accessor.c.o
@@ -2584,6 +2916,7 @@ vram_accessor.o: vram_accessor.c.o
 # target to build an object file
 vram_accessor.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/vram_accessor.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/vram_accessor.c.o
 .PHONY : vram_accessor.c.o
 
 vram_accessor.i: vram_accessor.c.i
@@ -2592,6 +2925,7 @@ vram_accessor.i: vram_accessor.c.i
 # target to preprocess a source file
 vram_accessor.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/vram_accessor.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/vram_accessor.c.i
 .PHONY : vram_accessor.c.i
 
 vram_accessor.s: vram_accessor.c.s
@@ -2600,6 +2934,7 @@ vram_accessor.s: vram_accessor.c.s
 # target to generate assembly for a file
 vram_accessor.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/vram_accessor.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/vram_accessor.c.s
 .PHONY : vram_accessor.c.s
 
 # Help Target
@@ -2616,6 +2951,7 @@ help:
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
 	@echo "... simple_photo_frame"
+	@echo "... simple_photo_frame_test"
 	@echo "... button.o"
 	@echo "... button.i"
 	@echo "... button.s"
@@ -2911,6 +3247,9 @@ help:
 	@echo "... simple_photo_frame.o"
 	@echo "... simple_photo_frame.i"
 	@echo "... simple_photo_frame.s"
+	@echo "... simple_photo_frame_test.o"
+	@echo "... simple_photo_frame_test.i"
+	@echo "... simple_photo_frame_test.s"
 	@echo "... usa_fpga.o"
 	@echo "... usa_fpga.i"
 	@echo "... usa_fpga.s"

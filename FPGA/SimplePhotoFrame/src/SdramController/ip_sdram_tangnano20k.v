@@ -55,7 +55,7 @@
 //-----------------------------------------------------------------------------
 
 module ip_sdram #(
-	parameter		FREQ = 108_000_000	//	Hz
+	parameter		FREQ = 81_000_000	//	Hz
 ) (
 	input				reset,
 	input				clk,				//	108MHz
@@ -124,9 +124,6 @@ module ip_sdram #(
 	localparam CLOCK_TIME		= 1_000_000_000 / FREQ;		// nsec
 	localparam TIMER_COUNT		= 300_000 / CLOCK_TIME;		// clock
 	localparam TIMER_BITS		= $clog2(TIMER_COUNT + 1);
-	localparam REFRESH_COUNT	= 15_000 / CLOCK_TIME;		// clock
-	localparam REFRESH_BITS		= $clog2(REFRESH_COUNT + 1);
-	localparam REFRESH_NONE		= 10_000 / CLOCK_TIME;		// clock
 
 	reg		[ 4:0]				ff_main_state;
 	reg		[TIMER_BITS-1:0]	ff_main_timer;

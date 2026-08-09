@@ -93,12 +93,15 @@ module bus_selector (
 	reg				ff_read_stall;
 	reg				ff_write_stall;
 	reg				ff_ready;
+	reg				ff_rr_turn;
+	reg		[5:0]	ff_cache_cooldown;
 	reg		[2:0]	ff_read_count;
 	reg		[2:0]	ff_write_count;
 	reg				ff_read_seen_busy;
 	reg				ff_read_data_started;
 	reg				ff_write_seen_busy;
 	wire			w_request_valid;
+	wire			w_cache_request_valid;
 	wire			w_active;
 	wire	[0:0]	w_selected_bus;
 	wire			w_selected_bus_write;
@@ -106,11 +109,14 @@ module bus_selector (
 	wire			w_selected_bus_read;
 	wire			w_output_bus;
 	//	display または cache からのリクエストを受理するかどうかを決定する
-	assign w_request_valid				= (sdram_display_address_valid | sdram_cache_address_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
+	assign w_cache_request_valid			= sdram_cache_address_valid & (sdram_cache_refresh | (ff_cache_cooldown == 6'd0));
+	assign w_request_valid				= (sdram_display_address_valid | w_cache_request_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
 	//	さらに、SDRAM Controller が受理可能かどうかを考慮して、active 信号を生成する
 	assign w_active						= w_request_valid & sdram_address_ready;
-	//	Display を常に優先し、Display 要求がなく Cache 要求がある場合のみ Cache を選択する。
-	assign w_selected_bus				= !sdram_display_address_valid && sdram_cache_address_valid;
+	//	Display / Cache が同時に valid のときは、受理ごとに交互に選択する。
+	assign w_selected_bus				= (sdram_display_address_valid && sdram_cache_address_valid)
+										? ff_rr_turn
+										: w_cache_request_valid;
 
 	assign w_selected_bus_write			= w_selected_bus ? sdram_cache_write       : 1'b0;
 	assign w_selected_bus_refresh		= w_selected_bus ? sdram_cache_refresh     : 1'b0;
@@ -120,10 +126,22 @@ module bus_selector (
 	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_grant_bus	<= 1'd0;
+			ff_rr_turn		<= 1'b0;
+			ff_cache_cooldown	<= 6'd0;
 		end
 		else begin
 			if( w_active ) begin
 			ff_grant_bus	<= w_selected_bus;
+			ff_rr_turn		<= ~w_selected_bus;
+				if( w_selected_bus ) begin
+					ff_cache_cooldown <= 6'd32;
+				end
+				else begin
+					ff_cache_cooldown <= 6'd0;
+				end
+			end
+			else if( ff_cache_cooldown != 6'd0 ) begin
+				ff_cache_cooldown <= ff_cache_cooldown - 6'd1;
 			end
 		end
 	end

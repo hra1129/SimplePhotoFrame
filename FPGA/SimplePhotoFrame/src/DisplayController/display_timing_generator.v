@@ -59,7 +59,7 @@ module display_timing_generator (
 	input			reset,
 	// Pixel input (valid/ready handshake, RGB565 format)
 	//   p_data[15:11] = R[4:0]
-	//   p_data[10: 5] = G[5:0]  (G[0] is discarded; lcd_g[0] is fixed 0)
+	//   p_data[10: 5] = G[5:0]
 	//   p_data[ 4: 0] = B[4:0]
 	input			p_valid,
 	output			p_ready,
@@ -71,7 +71,7 @@ module display_timing_generator (
 	output			lcd_de,
 	output			frame_end,
 	output	[4:0]	lcd_r,
-	output	[5:0]	lcd_g,		// bit0 is fixed 0
+	output	[5:0]	lcd_g,
 	output	[4:0]	lcd_b,
 	output			lcd_bl
 );
@@ -101,6 +101,10 @@ module display_timing_generator (
 	// Register declarations
 	// -------------------------------------------------------------------------
 	reg			ff_lcd_ck;
+	reg			ff_h_de;
+	reg			ff_v_de;
+	reg			ff_hs;
+	reg			ff_vs;
 	reg			ff_ck_phase;
 	reg [10:0]	ff_h_counter;
 	reg [9:0]	ff_v_counter;
@@ -109,8 +113,7 @@ module display_timing_generator (
 	// Active video area / pixel handshake
 	// -------------------------------------------------------------------------
 	// w_de: high while counters are in the active video region
-	wire w_de = ( ff_h_counter >  H_BP_END     ) && ( ff_h_counter <= H_ACTIVE_END ) &&
-	            ( ff_v_counter >  V_BP_END     ) && ( ff_v_counter <= V_ACTIVE_END );
+	wire w_de = ff_h_de && ff_v_de;
 
 	// p_ready: asserted during the low phase of lcd_ck inside active area.
 	//          The upstream module must hold p_data stable until the handshake.
@@ -120,10 +123,10 @@ module display_timing_generator (
 	wire w_stall = p_ready && !p_valid;
 
 	// -------------------------------------------------------------------------
-	// lcd_ck: 4-divider of 108MHz -> 27MHz  (stalls when pixel data is missing)
+	// lcd_ck: 4-divider of 81MHz -> 20.25MHz  (stalls when pixel data is missing)
 	// -------------------------------------------------------------------------
 
-	always @( posedge clk or posedge reset ) begin
+	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_ck_phase <= 1'b0;
 			ff_lcd_ck <= 1'b0;
@@ -145,7 +148,7 @@ module display_timing_generator (
 	// Horizontal counter (11bit)
 	// Increments on every lcd_ck rising edge
 	// -------------------------------------------------------------------------
-	always @( posedge clk or posedge reset ) begin
+	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_h_counter <= 11'd0;
 		end
@@ -163,7 +166,7 @@ module display_timing_generator (
 	// Vertical counter (10bit)
 	// Increments at the end of each horizontal line
 	// -------------------------------------------------------------------------
-	always @( posedge clk or posedge reset ) begin
+	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_v_counter <= 10'd0;
 		end
@@ -180,11 +183,79 @@ module display_timing_generator (
 	// -------------------------------------------------------------------------
 	// Timing output signals
 	// -------------------------------------------------------------------------
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_h_de <= 1'b0;
+		end
+		else if( w_lcd_ck_rise ) begin
+			if( ff_h_counter == H_ACTIVE_END ) begin
+				ff_h_de <= 1'b0;
+			end
+			else if( ff_h_counter == H_BP_END ) begin
+				ff_h_de <= 1'b1;
+			end
+			else begin
+				//	hold
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_v_de <= 1'b0;
+		end
+		else if( w_lcd_ck_rise && ( ff_h_counter == H_TOTAL ) ) begin
+			if( ff_v_counter == V_ACTIVE_END ) begin
+				ff_v_de <= 1'b0;
+			end
+			else if( ff_v_counter == V_BP_END ) begin
+				ff_v_de <= 1'b1;
+			end
+			else begin
+				//	hold
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_hs <= 1'b0;
+		end
+		else if( w_lcd_ck_rise ) begin
+			if( ff_h_counter == H_TOTAL ) begin
+				ff_hs <= 1'b0;
+			end
+			else if( ff_h_counter == H_SYNC_END ) begin
+				ff_hs <= 1'b1;
+			end
+			else begin
+				//	hold
+			end
+		end
+	end
+
+	always @( posedge clk ) begin
+		if( reset ) begin
+			ff_vs <= 1'b0;
+		end
+		else if( w_lcd_ck_rise && ( ff_h_counter == H_TOTAL ) ) begin
+			if( ff_v_counter == V_TOTAL ) begin
+				ff_vs <= 1'b0;
+			end
+			else if( ff_v_counter == V_SYNC_END ) begin
+				ff_vs <= 1'b1;
+			end
+			else begin
+				//	hold
+			end
+		end
+	end
+
 	// lcd_hs: negative logic (low = sync active)
-	assign lcd_hs = ( ff_h_counter > H_SYNC_END );
+	assign lcd_hs = ff_hs;
 
 	// lcd_vs: negative logic (low = sync active)
-	assign lcd_vs = ( ff_v_counter > V_SYNC_END );
+	assign lcd_vs = ff_vs;
 
 	// lcd_de: high during active video area
 	assign lcd_de = w_de;
