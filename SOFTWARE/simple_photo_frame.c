@@ -33,6 +33,7 @@
 #include "button.h"
 #include "pico/cyw43_arch.h"
 #include "ff.h"
+#include "lcd_console.h"
 
 #define PHOTO_MAX_FILES      128
 #define PHOTO_PATH_MAX       128
@@ -198,14 +199,14 @@ static bool load_photo_file_list( void ) {
 
 	fr = f_opendir( &dir, "/photo" );
 	if( fr != FR_OK ) {
-		printf( "f_opendir(/photo) failed: %d\n", fr );
+		lcd_printf( "f_opendir(/photo) failed: %d\n", fr );
 		return false;
 	}
 
 	while( 1 ) {
 		fr = f_readdir( &dir, &fno );
 		if( fr != FR_OK ) {
-			printf( "f_readdir(/photo) failed: %d\n", fr );
+			lcd_printf( "f_readdir(/photo) failed: %d\n", fr );
 			break;
 		}
 		if( fno.fname[0] == '\0' ) {
@@ -234,7 +235,7 @@ static bool load_photo_file_list( void ) {
 	}
 
 	if( g_photo_count <= 0 ) {
-		printf( "No JPEG file found in /photo.\n" );
+		lcd_printf( "No JPEG file found in /photo.\n" );
 		return false;
 	}
 
@@ -242,7 +243,7 @@ static bool load_photo_file_list( void ) {
 		g_photo_index = 0;
 	}
 
-	printf( "Photo list loaded: %d files\n", g_photo_count );
+	lcd_printf( "Photo list loaded: %d files\n", g_photo_count );
 	return true;
 }
 
@@ -263,8 +264,8 @@ static bool display_jpeg_on_vram( const char *path ) {
 	ctx.offset_y = (uint16_t)((PHOTO_VIEW_HEIGHT - ctx.dst_height) / 2);
 	ctx.frame_address = PHOTO_FRAME_ADDRESS;
 
-	printf( "Display JPEG: %s\n", path );
-	printf( "  source=%ux%u, fitted=%ux%u, offset=(%u,%u)\n",
+	lcd_printf( "Display JPEG: %s\n", path );
+	lcd_printf( "  source=%ux%u, fitted=%ux%u, offset=(%u,%u)\n",
 		src_width,
 		src_height,
 		ctx.dst_width,
@@ -301,14 +302,14 @@ static bool show_next_photo( void ) {
 		g_photo_index = (g_photo_index + 1) % g_photo_count;
 
 		if( display_jpeg_on_vram( path ) ) {
-			printf( "Displayed [%d/%d]: %s\n", index + 1, g_photo_count, path );
+			lcd_printf( "Displayed [%d/%d]: %s\n", index + 1, g_photo_count, path );
 			return true;
 		}
 
-		printf( "Skip unreadable JPEG: %s\n", path );
+		lcd_printf( "Skip unreadable JPEG: %s\n", path );
 	}
 
-	printf( "No decodable JPEG in /photo.\n" );
+	lcd_printf( "No decodable JPEG in /photo.\n" );
 	return false;
 }
 
@@ -318,22 +319,22 @@ void vram_test( void ) {
 	uint16_t data;
 
 	//	テストパターンを描画
-	printf( "VRAM test: writing test pattern...\n" );
+	lcd_printf( "VRAM test: writing test pattern...\n" );
 	display_set_frame_address( 0 );
 	vram_set_address( 0 );
 	for( address = 0; address < (1024 * 480); address++ ) {
 		vram_burst_write( address & 0xFFFF );
 	}
 	//	テストパターンを再度読み出してチェック
-	printf( "VRAM test: verifying test pattern...\n" );
+	lcd_printf( "VRAM test: verifying test pattern...\n" );
 	vram_set_address( 0 );
 	for( address = 0; address < (1024 * 480); address++ ) {
 		data = vram_burst_read();
 		if( data != (address & 0xFFFF) ) {
-			printf( "VRAM test2 failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
+			lcd_printf( "VRAM test2 failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
 		}
 	}
-	printf( "VRAM test completed.\n" );
+	lcd_printf( "VRAM test completed.\n" );
 }
 
 // ---------------------------------------------------------
@@ -350,7 +351,7 @@ void boxfill_test( void ) {
 		y = rand() % 480;
 		w = rand() % 200 + 1;
 		h = rand() % 200 + 1;
-		printf( "Boxfill test: filling box at (%d, %d)-step(%d, %d) with color %04X\n", x, y, w, h, color );
+		lcd_printf( "Boxfill test: filling box at (%d, %d)-step(%d, %d) with color %04X\n", x, y, w, h, color );
 		graphic1_fill_rectangle( x, y, w, h, color, C_ROP_PUT );
 
 	}
@@ -391,55 +392,49 @@ int main() {
 	fpga_io_init();
 	cyw43_arch_init();
 	sleep_ms(3000);
+	lcd_console_init();
 
-	//	テストパターンを描画
-	vram_set_address( 0 );
-	for( y = 0; y < 480; y++ ) {
-		for( x = 0; x < 1024; x++ ) {
-			r = ((x + y) & 63) >> 1;
-			g = ((x + y) & 63);
-			b = ((x + y) & 63) >> 1;
-			vram_burst_write( DISPLAY_RGB( r, g, b ) );
-		}
-	}
-	vram_flush();
-
+	//	表示を初期化
+	graphic1_set_frame_address( 0 );
+	graphic1_fill_rectangle( 0, 0, 800, 480, DISPLAY_RGB( 0, 0, 0 ), C_ROP_PUT );
 	display_enable( true );
-	while (1) {
+	lcd_printf( "Simple Photo Frame\n" );
+	lcd_printf( "Press Button A to mount SD card and list photos.\n" );
 
+	while (1) {
 		button_state = button_get();
 		if( button_state & SW_A ) {
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			printf( "Button A pressed.\n" );
+			lcd_printf( "Button A pressed.\n" );
 			if( sdcard_init_and_mount() ) {
-				printf("SD card mount succeeded.\n");
+				lcd_printf("SD card mount succeeded.\n");
 				sdcard_print_root_directory();
 			}
 			else {
-				printf("SD card mount failed.\n");
+				lcd_printf("SD card mount failed.\n");
 			}
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_B ) {
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			printf( "Button B pressed.\n" );
+			lcd_printf( "Button B pressed.\n" );
 			if( sdcard_init_and_mount() ) {
-				printf( "SD card mount succeeded and showing next photo.\n" );
+				lcd_printf( "SD card mount succeeded and showing next photo.\n" );
 				(void)show_next_photo();
 			}
 			else {
-				printf( "SD card mount failed.\n" );
+				lcd_printf( "SD card mount failed.\n" );
 			}
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_U ) {
-			printf( "Button Up pressed.\n" );
+			lcd_printf( "Button Up pressed.\n" );
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			vram_test();
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_D ) {
-			printf( "Button Down pressed.\n" );
+			lcd_printf( "Button Down pressed.\n" );
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
 
@@ -448,13 +443,13 @@ int main() {
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_L ) {
-			printf( "Button Left pressed.\n" );
+			lcd_printf( "Button Left pressed.\n" );
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			boxfill_test();
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
 		}
 		else if( button_state & SW_R ) {
-			printf( "Button Right pressed.\n" );
+			lcd_printf( "Button Right pressed.\n" );
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 			resizer_test();
 			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);

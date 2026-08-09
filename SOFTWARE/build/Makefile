@@ -261,6 +261,33 @@ display_controller.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/display_controller.c.s
 .PHONY : display_controller.c.s
 
+font.o: font.c.o
+.PHONY : font.o
+
+# target to build an object file
+font.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/font.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/font.c.o
+.PHONY : font.c.o
+
+font.i: font.c.i
+.PHONY : font.i
+
+# target to preprocess a source file
+font.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/font.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/font.c.i
+.PHONY : font.c.i
+
+font.s: font.c.s
+.PHONY : font.s
+
+# target to generate assembly for a file
+font.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/font.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/font.c.s
+.PHONY : font.c.s
+
 fpga_io.o: fpga_io.c.o
 .PHONY : fpga_io.o
 
@@ -314,6 +341,33 @@ jpeg_decoder.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.s
 .PHONY : jpeg_decoder.c.s
+
+lcd_console.o: lcd_console.c.o
+.PHONY : lcd_console.o
+
+# target to build an object file
+lcd_console.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/lcd_console.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/lcd_console.c.o
+.PHONY : lcd_console.c.o
+
+lcd_console.i: lcd_console.c.i
+.PHONY : lcd_console.i
+
+# target to preprocess a source file
+lcd_console.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/lcd_console.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/lcd_console.c.i
+.PHONY : lcd_console.c.i
+
+lcd_console.s: lcd_console.c.s
+.PHONY : lcd_console.s
+
+# target to generate assembly for a file
+lcd_console.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/lcd_console.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/lcd_console.c.s
+.PHONY : lcd_console.c.s
 
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o
@@ -3009,12 +3063,18 @@ help:
 	@echo "... display_controller.o"
 	@echo "... display_controller.i"
 	@echo "... display_controller.s"
+	@echo "... font.o"
+	@echo "... font.i"
+	@echo "... font.s"
 	@echo "... fpga_io.o"
 	@echo "... fpga_io.i"
 	@echo "... fpga_io.s"
 	@echo "... jpeg_decoder.o"
 	@echo "... jpeg_decoder.i"
 	@echo "... jpeg_decoder.s"
+	@echo "... lcd_console.o"
+	@echo "... lcd_console.i"
+	@echo "... lcd_console.s"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.i"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.s"

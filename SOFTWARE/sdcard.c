@@ -6,6 +6,7 @@
 #include "ff.h"
 #include "diskio.h"
 #include "sdcard.h"
+#include "lcd_console.h"
 
 #define SD_SPI spi1
 #define SD_PIN_MISO 8
@@ -161,7 +162,7 @@ DSTATUS disk_initialize(BYTE pdrv) {
         return STA_NOINIT;
     }
 
-    printf("[SD] disk_initialize start\n");
+    lcd_printf("[SD] disk_initialize start\n");
     sd_spi_init_once();
     spi_set_baudrate(SD_SPI, SD_SPI_SLOW_HZ);
     sd_cs_deselect();
@@ -170,7 +171,7 @@ DSTATUS disk_initialize(BYTE pdrv) {
     res = 0xff;
     for (int i = 0; i < 20; ++i) {
         res = sd_send_cmd(0, 0);
-        printf("[SD] CMD0 try %d -> 0x%02x\n", i + 1, res);
+        lcd_printf("[SD] CMD0 try %d -> 0x%02x\n", i + 1, res);
         if (res == 1) {
             break;
         }
@@ -178,45 +179,45 @@ DSTATUS disk_initialize(BYTE pdrv) {
     }
     if (res != 1) {
         g_status = STA_NOINIT;
-        printf("[SD] disk_initialize failed\n");
+        lcd_printf("[SD] disk_initialize failed\n");
         return g_status;
     }
 
     res = sd_send_cmd(8, 0x1aa);
-    printf("[SD] CMD8 -> 0x%02x\n", res);
+    lcd_printf("[SD] CMD8 -> 0x%02x\n", res);
     if (res == 1) {
         ocr[0] = spi_txrx(0xff);
         ocr[1] = spi_txrx(0xff);
         ocr[2] = spi_txrx(0xff);
         ocr[3] = spi_txrx(0xff);
-        printf("[SD] CMD8 R7 = %02x %02x %02x %02x\n", ocr[0], ocr[1], ocr[2], ocr[3]);
+        lcd_printf("[SD] CMD8 R7 = %02x %02x %02x %02x\n", ocr[0], ocr[1], ocr[2], ocr[3]);
 
         if (ocr[2] == 0x01 && ocr[3] == 0xaa) {
             absolute_time_t deadline = make_timeout_time_ms(1000);
             while (absolute_time_diff_us(get_absolute_time(), deadline) > 0) {
                 res = sd_send_cmd(0x80 + 41, 1u << 30);
-                printf("[SD] ACMD41(HCS) -> 0x%02x\n", res);
+                lcd_printf("[SD] ACMD41(HCS) -> 0x%02x\n", res);
                 if (res == 0) {
                     break;
                 }
             }
 
             res = sd_send_cmd(58, 0);
-            printf("[SD] CMD58 -> 0x%02x\n", res);
+            lcd_printf("[SD] CMD58 -> 0x%02x\n", res);
             if (res == 0) {
                 ocr[0] = spi_txrx(0xff);
                 ocr[1] = spi_txrx(0xff);
                 ocr[2] = spi_txrx(0xff);
                 ocr[3] = spi_txrx(0xff);
-                printf("[SD] OCR = %02x %02x %02x %02x\n", ocr[0], ocr[1], ocr[2], ocr[3]);
+                lcd_printf("[SD] OCR = %02x %02x %02x %02x\n", ocr[0], ocr[1], ocr[2], ocr[3]);
                 ty = (ocr[0] & 0x40) ? (CT_SD2 | CT_BLOCK) : CT_SD2;
             }
         } else {
-            printf("[SD] CMD8 response mismatch\n");
+            lcd_printf("[SD] CMD8 response mismatch\n");
         }
     } else {
         res = sd_send_cmd(0x80 + 41, 0);
-        printf("[SD] ACMD41(legacy) probe -> 0x%02x\n", res);
+        lcd_printf("[SD] ACMD41(legacy) probe -> 0x%02x\n", res);
         if (res <= 1) {
             ty = CT_SD1;
             cmd = 0x80 + 41;
@@ -229,7 +230,7 @@ DSTATUS disk_initialize(BYTE pdrv) {
             absolute_time_t deadline = make_timeout_time_ms(1000);
             while (absolute_time_diff_us(get_absolute_time(), deadline) > 0) {
                 res = sd_send_cmd(cmd, 0);
-                printf("[SD] init cmd 0x%02x -> 0x%02x\n", cmd, res);
+                lcd_printf("[SD] init cmd 0x%02x -> 0x%02x\n", cmd, res);
                 if (res == 0) {
                     break;
                 }
@@ -247,10 +248,10 @@ DSTATUS disk_initialize(BYTE pdrv) {
     if (ty) {
         g_status &= (DSTATUS)~STA_NOINIT;
         spi_set_baudrate(SD_SPI, SD_SPI_FAST_HZ);
-        printf("[SD] disk_initialize success, card_type=0x%02x\n", ty);
+        lcd_printf("[SD] disk_initialize success, card_type=0x%02x\n", ty);
     } else {
         g_status = STA_NOINIT;
-        printf("[SD] disk_initialize failed\n");
+        lcd_printf("[SD] disk_initialize failed\n");
     }
 
     return g_status;
@@ -354,16 +355,16 @@ bool sdcard_init_and_mount(void) {
     FRESULT fr;
     DSTATUS status;
 
-    printf("[SD] mount start\n");
+    lcd_printf("[SD] mount start\n");
     status = disk_initialize(0);
-    printf("[SD] disk_initialize status=0x%02x\n", status);
+    lcd_printf("[SD] disk_initialize status=0x%02x\n", status);
     if (status & STA_NOINIT) {
-        printf("[SD] mount aborted before f_mount\n");
+        lcd_printf("[SD] mount aborted before f_mount\n");
         return false;
     }
 
     fr = f_mount(&g_fs, "", 1);
-    printf("[SD] f_mount -> %d\n", fr);
+    lcd_printf("[SD] f_mount -> %d\n", fr);
     g_mounted = (fr == FR_OK);
     return g_mounted;
 }
@@ -374,20 +375,20 @@ void sdcard_print_root_directory(void) {
     FILINFO fno;
 
     if (!g_mounted) {
-        printf("SD not mounted.\n");
+        lcd_printf("SD not mounted.\n");
         return;
     }
 
     fr = f_opendir(&dir, "/");
     if (fr != FR_OK) {
-        printf("f_opendir failed: %d\n", fr);
+        lcd_printf("f_opendir failed: %d\n", fr);
         return;
     }
 
     while (1) {
         fr = f_readdir(&dir, &fno);
         if (fr != FR_OK) {
-            printf("f_readdir failed: %d\n", fr);
+            lcd_printf("f_readdir failed: %d\n", fr);
             break;
         }
         if (fno.fname[0] == '\0') {
@@ -395,9 +396,9 @@ void sdcard_print_root_directory(void) {
         }
 
         if (fno.fattrib & AM_DIR) {
-            printf("%s/\n", fno.fname);
+            lcd_printf("%s/\n", fno.fname);
         } else {
-            printf("%s\n", fno.fname);
+            lcd_printf("%s\n", fno.fname);
         }
     }
 
