@@ -288,6 +288,33 @@ fpga_io.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.s
 .PHONY : fpga_io.c.s
 
+jpeg_decoder.o: jpeg_decoder.c.o
+.PHONY : jpeg_decoder.o
+
+# target to build an object file
+jpeg_decoder.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+.PHONY : jpeg_decoder.c.o
+
+jpeg_decoder.i: jpeg_decoder.c.i
+.PHONY : jpeg_decoder.i
+
+# target to preprocess a source file
+jpeg_decoder.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.i
+.PHONY : jpeg_decoder.c.i
+
+jpeg_decoder.s: jpeg_decoder.c.s
+.PHONY : jpeg_decoder.s
+
+# target to generate assembly for a file
+jpeg_decoder.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.s
+.PHONY : jpeg_decoder.c.s
+
 mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o: mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
 .PHONY : mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o
 
@@ -2883,12 +2910,38 @@ simple_photo_frame_test.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/simple_photo_frame_test.c.s
 .PHONY : simple_photo_frame_test.c.s
 
+tjpgd.o: tjpgd.c.o
+.PHONY : tjpgd.o
+
+# target to build an object file
+tjpgd.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/tjpgd.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+.PHONY : tjpgd.c.o
+
+tjpgd.i: tjpgd.c.i
+.PHONY : tjpgd.i
+
+# target to preprocess a source file
+tjpgd.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/tjpgd.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.i
+.PHONY : tjpgd.c.i
+
+tjpgd.s: tjpgd.c.s
+.PHONY : tjpgd.s
+
+# target to generate assembly for a file
+tjpgd.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/tjpgd.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.s
+.PHONY : tjpgd.c.s
+
 usa_fpga.o: usa_fpga.c.o
 .PHONY : usa_fpga.o
 
 # target to build an object file
 usa_fpga.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/usa_fpga.c.o
 .PHONY : usa_fpga.c.o
 
@@ -2897,7 +2950,6 @@ usa_fpga.i: usa_fpga.c.i
 
 # target to preprocess a source file
 usa_fpga.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/usa_fpga.c.i
 .PHONY : usa_fpga.c.i
 
@@ -2906,7 +2958,6 @@ usa_fpga.s: usa_fpga.c.s
 
 # target to generate assembly for a file
 usa_fpga.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame.dir/build.make CMakeFiles/simple_photo_frame.dir/usa_fpga.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_photo_frame_test.dir/build.make CMakeFiles/simple_photo_frame_test.dir/usa_fpga.c.s
 .PHONY : usa_fpga.c.s
 
@@ -2961,6 +3012,9 @@ help:
 	@echo "... fpga_io.o"
 	@echo "... fpga_io.i"
 	@echo "... fpga_io.s"
+	@echo "... jpeg_decoder.o"
+	@echo "... jpeg_decoder.i"
+	@echo "... jpeg_decoder.s"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.o"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.i"
 	@echo "... mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.s"
@@ -3250,6 +3304,9 @@ help:
 	@echo "... simple_photo_frame_test.o"
 	@echo "... simple_photo_frame_test.i"
 	@echo "... simple_photo_frame_test.s"
+	@echo "... tjpgd.o"
+	@echo "... tjpgd.i"
+	@echo "... tjpgd.s"
 	@echo "... usa_fpga.o"
 	@echo "... usa_fpga.i"
 	@echo "... usa_fpga.s"

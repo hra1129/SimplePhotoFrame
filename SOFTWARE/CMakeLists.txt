@@ -14,11 +14,12 @@ pico_sdk_init()
 add_executable(simple_photo_frame
 	simple_photo_frame.c
 	sdcard.c
+	jpeg_decoder.c
+	tjpgd.c
 	fpga_io.c
 	vram_accessor.c
 	display_controller.c
 	button.c
-	usa_fpga.c
 	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ff.c
 	${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffunicode.c
 )
@@ -41,6 +42,8 @@ pico_add_extra_outputs(simple_photo_frame)
 add_executable(simple_photo_frame_test
 	simple_photo_frame_test.c
 	sdcard.c
+	jpeg_decoder.c
+	tjpgd.c
 	fpga_io.c
 	vram_accessor.c
 	display_controller.c

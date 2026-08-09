@@ -182,6 +182,59 @@ Discarded input sections
  .bss           0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/sdcard.c.o
  .text.disk_ioctl
                 0x00000000      0x13c CMakeFiles/simple_photo_frame_test.dir/sdcard.c.o
+ .text          0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .data          0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .bss           0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .text.jpeg_output_func
+                0x00000000       0x2c CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .text.jpeg_input_func
+                0x00000000       0x34 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .rodata.jpeg_probe_file.str1.4
+                0x00000000       0x41 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .text.jpeg_probe_file
+                0x00000000       0xa0 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .rodata.jpeg_decode_file.str1.4
+                0x00000000       0x20 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .text.jpeg_decode_file
+                0x00000000       0xe4 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_info    0x00000000      0xe62 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_abbrev  0x00000000      0x2c0 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_loclists
+                0x00000000      0x665 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_aranges
+                0x00000000       0x38 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_rnglists
+                0x00000000       0x4b CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_line    0x00000000      0x3ec CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_str     0x00000000      0x6c1 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .debug_frame   0x00000000       0xcc CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .ARM.attributes
+                0x00000000       0x38 CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+ .text          0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .data          0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .bss           0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .text.bitext   0x00000000       0xb8 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .text.jd_prepare
+                0x00000000      0x690 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .text.jd_decomp
+                0x00000000      0xebc CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .rodata.Ipsf   0x00000000       0x80 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .rodata.Zig    0x00000000       0x40 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_info    0x00000000     0x1770 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_abbrev  0x00000000      0x38b CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_loclists
+                0x00000000     0x31b5 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_aranges
+                0x00000000       0x30 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_rnglists
+                0x00000000      0x255 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_line    0x00000000     0x2503 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_str     0x00000000      0x3d2 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .debug_frame   0x00000000       0xa4 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
+ .ARM.attributes
+                0x00000000       0x38 CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
  .text          0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.o
  .data          0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.o
  .bss           0x00000000        0x0 CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.o
@@ -5017,6 +5070,8 @@ LOAD /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.mai
                 0x00000001                        ASSERT (((__embedded_block_end - __logical_binary_start) <= 0x1000), Embedded block must be in first 4096 bytes of the binary)
 LOAD CMakeFiles/simple_photo_frame_test.dir/simple_photo_frame_test.c.o
 LOAD CMakeFiles/simple_photo_frame_test.dir/sdcard.c.o
+LOAD CMakeFiles/simple_photo_frame_test.dir/jpeg_decoder.c.o
+LOAD CMakeFiles/simple_photo_frame_test.dir/tjpgd.c.o
 LOAD CMakeFiles/simple_photo_frame_test.dir/fpga_io.c.o
 LOAD CMakeFiles/simple_photo_frame_test.dir/vram_accessor.c.o
 LOAD CMakeFiles/simple_photo_frame_test.dir/display_controller.c.o
