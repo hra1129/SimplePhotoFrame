@@ -79,7 +79,7 @@ module display_timing_generator (
 	// -------------------------------------------------------------------------
 	// Parameters
 	// -------------------------------------------------------------------------
-	// Horizontal (unit: pixel = 1 lcd_ck cycle = 4 clocks @ 108MHz)
+	// Horizontal (unit: pixel = 1 lcd_ck cycle = 4 clocks @ 81MHz)
 	//   sync+BP:    0..24   (25 pixels total; sync=20px, remaining BP=5px, negative logic during 0..19)
 	//   active :   25..824  (800 pixels)
 	//   FP     :  825..899  (75 pixels)  total 900
