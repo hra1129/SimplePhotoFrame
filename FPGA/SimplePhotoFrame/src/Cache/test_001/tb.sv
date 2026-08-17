@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module tb;
-	localparam real CLK_HALF_NS						= 1000_000_000 / 108_000_000 / 2;   // 108MHz
+	localparam real CLK_HALF_NS						= 1000_000_000 / 81_000_000 / 2;   // 81MHz
 	localparam integer TIMEOUT_CYCLES				= 5000;
 	localparam integer REFRESH_INTERVAL_CYCLES_TB	= 80;
 
@@ -96,7 +96,7 @@ module tb;
 		.sdram_rdata		( ip_sdram_rdata ),
 		.sdram_rdata_valid	( ip_sdram_rdata_valid ) );
 
-	ip_sdram #( .FREQ(108_000_000) ) u_sdram_ctrl ( .reset				( reset ),
+	ip_sdram #( .FREQ(81_000_000) ) u_sdram_ctrl ( .reset				( reset ),
 		.clk				( clk ),
 		.clk_sdram			( clk_sdram ),
 		.sdram_init_busy	( sdram_init_busy ),

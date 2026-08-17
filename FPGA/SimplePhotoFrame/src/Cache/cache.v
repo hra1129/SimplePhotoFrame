@@ -170,7 +170,8 @@ module cache (
 	reg				ff_sdram_wdata_valid;
 
 	reg				ff_line_oe_n;
-	reg				ff_line_we_n;
+	reg				ff_line0_we_n;
+	reg				ff_line1_we_n;
 	reg	[6:0]		ff_line_address;
 	reg		[17:0]	ff_line0_wdata;
 	reg		[17:0]	ff_line1_wdata;
@@ -296,8 +297,8 @@ module cache (
 		.reset			( reset				),
 		.clk			( clk				),
 		.oe_n			( ff_line_oe_n		),
-		.we_n			( ff_line_we_n		),
-		.address	( ff_line_address	),
+		.we_n			( ff_line0_we_n	),
+		.address		( ff_line_address	),
 		.wdata			( ff_line0_wdata	),
 		.rdata			( w_line0_rdata		)
 	);
@@ -306,8 +307,8 @@ module cache (
 		.reset			( reset				),
 		.clk			( clk				),
 		.oe_n			( ff_line_oe_n		),
-		.we_n			( ff_line_we_n		),
-		.address	( ff_line_address	),
+		.we_n			( ff_line1_we_n	),
+		.address		( ff_line_address	),
 		.wdata			( ff_line1_wdata	),
 		.rdata			( w_line1_rdata		)
 	);
@@ -354,7 +355,8 @@ module cache (
 			ff_sdram_wdata_mask <= 4'hF;
 			ff_sdram_wdata_valid <= 1'b0;
 			ff_line_oe_n <= 1'b1;
-			ff_line_we_n <= 1'b1;
+			ff_line0_we_n <= 1'b1;
+			ff_line1_we_n <= 1'b1;
 			ff_line_address <= 7'd0;
 			ff_line0_wdata <= 18'd0;
 			ff_line1_wdata <= 18'd0;
@@ -392,7 +394,8 @@ module cache (
 		else begin
 			ff_bus_rdata_valid <= 1'b0;
 			ff_line_oe_n <= 1'b1;
-			ff_line_we_n <= 1'b1;
+			ff_line0_we_n <= 1'b1;
+			ff_line1_we_n <= 1'b1;
 			ff_sdram_valid <= 1'b0;
 			ff_sdram_wdata_valid <= 1'b0;
 			ff_sdram_refresh <= 1'b0;
@@ -442,7 +445,19 @@ module cache (
 					if( ff_lookup_any_hit ) begin
 						ff_selected_way <= ff_lookup_hit_way;
 						ff_selected_prio <= ff_tag_prio[ff_lookup_hit_way];
-						ff_state <= c_state_write_hit_line_req;
+						ff_line_address <= fn_line_addr( ff_lookup_hit_way, ff_word_index );
+						if( ff_half_select ) begin
+							ff_line1_wdata <= { 1'b1, 1'b1, ff_req_wdata };
+							ff_line1_we_n <= 1'b0;
+						end
+						else begin
+							ff_line0_wdata <= { 1'b1, 1'b1, ff_req_wdata };
+							ff_line0_we_n <= 1'b0;
+						end
+						ff_commit_set_valid <= 1'b1;
+						ff_commit_set_dirty <= 1'b1;
+						ff_commit_keep_dirty <= 1'b0;
+						ff_state <= c_state_prepare_tag_commit;
 					end
 					else begin
 						ff_selected_way <= ff_lookup_repl_way;
@@ -552,7 +567,8 @@ module cache (
 					ff_line0_wdata <= { 1'b1, 1'b1, ff_req_wdata };
 					ff_line1_wdata <= ff_line1_read;
 				end
-				ff_line_we_n <= 1'b0;
+				ff_line0_we_n <= 1'b0;
+				ff_line1_we_n <= 1'b0;
 				ff_commit_set_valid <= 1'b1;
 				ff_commit_set_dirty <= 1'b1;
 				ff_commit_keep_dirty <= 1'b0;
@@ -563,18 +579,18 @@ module cache (
 				ff_line_address <= fn_line_addr( ff_selected_way, ff_alloc_clear_index );
 				ff_line0_wdata <= 18'd0;
 				ff_line1_wdata <= 18'd0;
-				ff_line_we_n <= 1'b0;
-				ff_state <= c_state_alloc_clear_commit;
-			end
-
-			c_state_alloc_clear_commit: begin
+				ff_line0_we_n <= 1'b0;
+				ff_line1_we_n <= 1'b0;
 				if( ff_alloc_clear_index == 3'd7 ) begin
-					ff_state <= c_state_write_miss_line_commit;
+					ff_state <= c_state_alloc_clear_commit;
 				end
 				else begin
 					ff_alloc_clear_index <= ff_alloc_clear_index + 3'd1;
-					ff_state <= c_state_alloc_clear_req;
 				end
+			end
+
+			c_state_alloc_clear_commit: begin
+				ff_state <= c_state_write_miss_line_commit;
 			end
 
 			c_state_write_miss_line_commit: begin
@@ -587,7 +603,8 @@ module cache (
 					ff_line0_wdata <= { 1'b1, 1'b1, ff_req_wdata };
 					ff_line1_wdata <= 18'd0;
 				end
-				ff_line_we_n <= 1'b0;
+				ff_line0_we_n <= 1'b0;
+				ff_line1_we_n <= 1'b0;
 				ff_commit_set_valid <= 1'b1;
 				ff_commit_set_dirty <= 1'b1;
 				ff_commit_keep_dirty <= 1'b0;
@@ -657,7 +674,10 @@ module cache (
 				end
 				else begin
 					ff_prescan_index <= ff_prescan_index + 3'd1;
-					ff_state <= c_state_prescan_req;
+					ff_line_address <= fn_line_addr( ff_selected_way, ff_prescan_index + 3'd1 );
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_prescan_wait;
 				end
 			end
 
@@ -687,7 +707,8 @@ module cache (
 						ff_line_address <= fn_line_addr( ff_selected_way, ff_burst_count );
 						ff_line0_wdata <= (!ff_refill_partial || !ff_prescan_valid0_bits[ff_burst_count]) ? { 1'b1, 1'b0, sdram_rdata[15:0] } : ff_prescan_line0_word[ff_burst_count];
 						ff_line1_wdata <= (!ff_refill_partial || !ff_prescan_valid1_bits[ff_burst_count]) ? { 1'b1, 1'b0, sdram_rdata[31:16] } : ff_prescan_line1_word[ff_burst_count];
-						ff_line_we_n <= 1'b0;
+						ff_line0_we_n <= 1'b0;
+						ff_line1_we_n <= 1'b0;
 					end
 					if( ff_burst_count == ff_word_index ) begin
 						if( ff_half_select )
@@ -805,7 +826,10 @@ module cache (
 				end
 				else begin
 					ff_evict_index <= ff_evict_index + 3'd1;
-					ff_state <= c_state_evict_line_req;
+					ff_line_address <= fn_line_addr( ff_selected_way, ff_evict_index + 3'd1 );
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b0;
+					ff_state <= c_state_evict_line_wait;
 				end
 			end
 
