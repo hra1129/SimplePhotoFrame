@@ -42,6 +42,9 @@
 #define PHOTO_VIEW_HEIGHT    480
 #define VRAM_STRIDE_WORDS    1024
 
+#define DISPLAY_FRAME_ADDRESS0		(1024 * 480 * 0)
+#define DISPLAY_FRAME_ADDRESS1		(1024 * 480 * 1)
+#define JPEG_LOAD_FRAME_ADDRESS		(1024 * 480 * 2)
 typedef struct {
 	uint16_t src_width;
 	uint16_t src_height;
@@ -189,6 +192,11 @@ static void clear_photo_frame( uint32_t frame_address ) {
 }
 
 // ---------------------------------------------------------
+//	フォトフレームのJPEGファイルリストを読み込む
+//	/photoディレクトリ内のJPEGファイルを検索し、
+//	g_photo_pathsに格納する
+//	戻り値: true=JPEGファイルが見つかった, false=JPEGファイルが見つからなかった
+// ---------------------------------------------------------
 static bool load_photo_file_list( void ) {
 	FRESULT fr;
 	DIR dir;
@@ -199,14 +207,12 @@ static bool load_photo_file_list( void ) {
 
 	fr = f_opendir( &dir, "/photo" );
 	if( fr != FR_OK ) {
-		lcd_printf( "f_opendir(/photo) failed: %d\n", fr );
 		return false;
 	}
 
 	while( 1 ) {
 		fr = f_readdir( &dir, &fno );
 		if( fr != FR_OK ) {
-			lcd_printf( "f_readdir(/photo) failed: %d\n", fr );
 			break;
 		}
 		if( fno.fname[0] == '\0' ) {
@@ -219,7 +225,6 @@ static bool load_photo_file_list( void ) {
 			}
 		}
 	}
-
 	(void)f_closedir( &dir );
 
 	for( i = 0; i < g_photo_count; i++ ) {
@@ -235,20 +240,17 @@ static bool load_photo_file_list( void ) {
 	}
 
 	if( g_photo_count <= 0 ) {
-		lcd_printf( "No JPEG file found in /photo.\n" );
 		return false;
 	}
 
 	if( g_photo_index >= g_photo_count ) {
 		g_photo_index = 0;
 	}
-
-	lcd_printf( "Photo list loaded: %d files\n", g_photo_count );
 	return true;
 }
 
 // ---------------------------------------------------------
-static bool display_jpeg_on_vram( const char *path ) {
+static bool display_jpeg_on_vram( const char *path, uint32_t frame_address ) {
 	jpeg_render_context_t ctx;
 	uint16_t src_width;
 	uint16_t src_height;
@@ -262,16 +264,7 @@ static bool display_jpeg_on_vram( const char *path ) {
 	ctx.src_height = src_height;
 	ctx.offset_x = (uint16_t)((PHOTO_VIEW_WIDTH - ctx.dst_width) / 2);
 	ctx.offset_y = (uint16_t)((PHOTO_VIEW_HEIGHT - ctx.dst_height) / 2);
-	ctx.frame_address = PHOTO_FRAME_ADDRESS;
-
-	lcd_printf( "Display JPEG: %s\n", path );
-	lcd_printf( "  source=%ux%u, fitted=%ux%u, offset=(%u,%u)\n",
-		src_width,
-		src_height,
-		ctx.dst_width,
-		ctx.dst_height,
-		ctx.offset_x,
-		ctx.offset_y );
+	ctx.frame_address = frame_address;
 
 	clear_photo_frame( ctx.frame_address );
 	if( !jpeg_decode_file( path, 0, jpeg_render_callback, &ctx, NULL, NULL ) ) {
@@ -284,7 +277,7 @@ static bool display_jpeg_on_vram( const char *path ) {
 }
 
 // ---------------------------------------------------------
-static bool show_next_photo( void ) {
+static bool show_next_photo( uint32_t frame_address ) {
 	int attempt;
 
 	if( g_photo_count <= 0 ) {
@@ -301,15 +294,13 @@ static bool show_next_photo( void ) {
 		path = g_photo_paths[index];
 		g_photo_index = (g_photo_index + 1) % g_photo_count;
 
-		if( display_jpeg_on_vram( path ) ) {
-			lcd_printf( "Displayed [%d/%d]: %s\n", index + 1, g_photo_count, path );
+		if( display_jpeg_on_vram( path, frame_address ) ) {
+			//	Displayed: path
 			return true;
 		}
-
-		lcd_printf( "Skip unreadable JPEG: %s\n", path );
+		//	Skip unreadable JPEG: path
 	}
-
-	lcd_printf( "No decodable JPEG in /photo.\n" );
+	//	No decodable JPEG in /photo.
 	return false;
 }
 
@@ -409,74 +400,88 @@ void opening_animation( void ) {
 	display_wait_complete();
 	display_enable( true );
 
+	lcd_set_pos( 11, 11 );
 	lcd_printf( "Simple Photo Frame\n" );
+}
+
+// ---------------------------------------------------------
+void check_press_button( uint8_t button_code ) {
+
+	while( (button_get() & button_code) == 0 ) {
+		// Wait for the button to be pressed
+	}
+	while( (button_get() & button_code) != 0 ) {
+		// Wait for the button to be released
+	}
+}
+
+// ---------------------------------------------------------
+void try_mount_sdcard( void ) {
+
+	while( !sdcard_init_and_mount() ) {
+		lcd_set_pos( 3, 13 );
+		lcd_printf( "Insert memory card and push A button.\n" );
+		check_press_button( SW_A );
+		lcd_set_pos( 3, 13 );
+		lcd_printf( "                                     \n" );
+		sleep_ms( 100 );
+	}
+}
+
+// ---------------------------------------------------------
+void check_sdcard( void ) {
+	bool file_list_loaded = false;
+
+	do {
+		try_mount_sdcard();
+		file_list_loaded = load_photo_file_list();
+		if( !file_list_loaded ) {
+			lcd_set_pos( 3, 13 );
+			lcd_printf( "    No photo found in /photo.        \n" );
+			check_press_button( SW_A );
+			lcd_set_pos( 3, 13 );
+			lcd_printf( "                                     \n" );
+		}
+	} while( !file_list_loaded );
+
+	lcd_set_pos( 3, 13 );
+	lcd_printf( "        Load 1st image.           \n" );
 }
 
 // ---------------------------------------------------------
 int main() {
 	int r, g, b, x, y;
 	uint8_t button_state;
+	uint8_t display_frame_no = 0;
+	uint8_t draw_frame_no = 1;
+	const uint32_t frame_addresses[2] = { DISPLAY_FRAME_ADDRESS0, DISPLAY_FRAME_ADDRESS1 };
 
 	initialization();
 	opening_animation();
+	check_sdcard();
+
 
 	while (1) {
-		button_state = button_get();
-		if( button_state & SW_A ) {
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			lcd_printf( "Button A pressed.\n" );
-			if( sdcard_init_and_mount() ) {
-				lcd_printf("SD card mount succeeded.\n");
-				sdcard_print_root_directory();
-			}
-			else {
-				lcd_printf("SD card mount failed.\n");
-			}
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-		}
-		else if( button_state & SW_B ) {
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			lcd_printf( "Button B pressed.\n" );
-			if( sdcard_init_and_mount() ) {
-				lcd_printf( "SD card mount succeeded and showing next photo.\n" );
-				(void)show_next_photo();
-			}
-			else {
-				lcd_printf( "SD card mount failed.\n" );
-			}
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-		}
-		else if( button_state & SW_U ) {
-			lcd_printf( "Button Up pressed.\n" );
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			vram_test();
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-		}
-		else if( button_state & SW_D ) {
-			lcd_printf( "Button Down pressed.\n" );
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+		//	時間計測開始
+		absolute_time_t measurement_start = get_absolute_time();
 
-
-
-
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-		}
-		else if( button_state & SW_L ) {
-			lcd_printf( "Button Left pressed.\n" );
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			boxfill_test();
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-		}
-		else if( button_state & SW_R ) {
-			lcd_printf( "Button Right pressed.\n" );
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-			resizer_test();
-			cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+		//	次の画像をデコードする
+		show_next_photo( JPEG_LOAD_FRAME_ADDRESS );
+		//	デコードした JPEG画像を次の表示フレームに描画
+		graphic2_set_source_frame_address( JPEG_LOAD_FRAME_ADDRESS );
+		graphic2_set_destination_frame_address( frame_addresses[draw_frame_no] );
+		graphic2_block_copy( 0, 0, 800, 480, 0, 0, 800, 480, C_ROP_PUT );
+		display_wait_complete();
+		//	時間が経過するのを待機する
+		while( absolute_time_diff_us( measurement_start, get_absolute_time() ) < 5000000 ) {
+			sleep_ms( 1 );
 		}
 
-		do {
-			button_state = button_get();
-		} while( button_state != 0 );
+		//	表示フレームを切り替える
+		display_frame_no = draw_frame_no;
+		display_set_frame_address( frame_addresses[display_frame_no] );
+		draw_frame_no ^= 1;
+		display_wait_frame_sync();
 	}
 	return 0;
 }

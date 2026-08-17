@@ -32,7 +32,7 @@
 #define SPI0_SCK_PIN  6
 #define SPI0_TX_PIN	  7
 #define SPI0_INTR_PIN 3
-#define SPI0_BAUDRATE (50 * 1000 * 1000)	// 50 MHz
+#define SPI0_BAUDRATE (70 * 1000 * 1000)	// 70 MHz
 #define FPGA_STARTUP_TIMEOUT_MS 10000
 
 // ---------------------------------------------------------
