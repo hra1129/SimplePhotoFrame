@@ -154,7 +154,7 @@ module display_address_generator (
 			reg_base_address <= 18'd0;
 			reg_register_address <= 3'd0;
 			reg_display_on <= 1'b0;
-			reg_fill_color <= { 5'd31, 6'd0, 5'd0 };	// 赤
+			reg_fill_color <= { 5'd31, 6'd63, 5'd31 };	// 白
 		end
 		else if( bus_cs && bus_valid && bus_ready && bus_write ) begin
 			case( bus_address )

@@ -383,27 +383,42 @@ void resizer_test( void ) {
 }
 
 // ---------------------------------------------------------
-int main() {
-	int r, g, b, x, y;
-	uint8_t button_state;
+void initialization( void ) {
 
 	stdio_init_all();
 	button_init();
 	cyw43_arch_init();
 	fpga_io_init();
 	lcd_console_init();
+}
 
-	//	表示を初期化
+// ---------------------------------------------------------
+void opening_animation( void ) {
+	int i;
+	uint16_t color;
+
+	display_set_frame_address( 0 );
 	graphic1_set_frame_address( 0 );
 	graphic1_fill_rectangle( 0, 0, 800, 480, DISPLAY_RGB( 0, 0, 0 ), C_ROP_PUT );
-	display_wait_complete();
 
+	for( i = 63; i >= 0; i-- ) {
+		display_set_fill_color( DISPLAY_RGB( i >> 1, i, i >> 1 ) );
+		sleep_ms( 50 );
+		display_wait_frame_sync();
+	}
+	display_wait_complete();
 	display_enable( true );
+
 	lcd_printf( "Simple Photo Frame\n" );
-	lcd_printf( "Press Button A to mount SD card and list photos.\n" );
-	lcd_printf( "0123456789\n" );
-	lcd_printf( "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n" );
-	lcd_printf( "abcdefghijklmnopqrstuvwxyz\n" );
+}
+
+// ---------------------------------------------------------
+int main() {
+	int r, g, b, x, y;
+	uint8_t button_state;
+
+	initialization();
+	opening_animation();
 
 	while (1) {
 		button_state = button_get();

@@ -1,7 +1,7 @@
 //
 //Written by GowinSynthesis
 //Tool Version "V1.9.12.03 (64-bit)"
-//Mon Aug 17 13:47:51 2026
+//Mon Aug 17 15:05:26 2026
 
 //Source file index table:
 //file0 "\C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/BusArbiter/bus_arbiter.v"
@@ -6974,82 +6974,82 @@ defparam n662_s1.INIT=16'h7000;
     .CE(n644_3),
     .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_10_s0 (
+  DFFSE reg_fill_color_10_s0 (
     .Q(fill_color[10]),
     .D(w_bus_io_wdata[10]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_9_s0 (
+  DFFSE reg_fill_color_9_s0 (
     .Q(fill_color[9]),
     .D(w_bus_io_wdata[9]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_8_s0 (
+  DFFSE reg_fill_color_8_s0 (
     .Q(fill_color[8]),
     .D(w_bus_io_wdata[8]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_7_s0 (
+  DFFSE reg_fill_color_7_s0 (
     .Q(fill_color[7]),
     .D(w_bus_io_wdata[7]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_6_s0 (
+  DFFSE reg_fill_color_6_s0 (
     .Q(fill_color[6]),
     .D(w_bus_io_wdata[6]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_5_s0 (
+  DFFSE reg_fill_color_5_s0 (
     .Q(fill_color[5]),
     .D(w_bus_io_wdata[5]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_4_s0 (
+  DFFSE reg_fill_color_4_s0 (
     .Q(fill_color[4]),
     .D(w_bus_io_wdata[4]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_3_s0 (
+  DFFSE reg_fill_color_3_s0 (
     .Q(fill_color[3]),
     .D(w_bus_io_wdata[3]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_2_s0 (
+  DFFSE reg_fill_color_2_s0 (
     .Q(fill_color[2]),
     .D(w_bus_io_wdata[2]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_1_s0 (
+  DFFSE reg_fill_color_1_s0 (
     .Q(fill_color[1]),
     .D(w_bus_io_wdata[1]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
-  DFFRE reg_fill_color_0_s0 (
+  DFFSE reg_fill_color_0_s0 (
     .Q(fill_color[0]),
     .D(w_bus_io_wdata[0]),
     .CLK(sysclk),
     .CE(n644_3),
-    .RESET(ff_reset_display) 
+    .SET(ff_reset_display) 
 );
   DFFRE reg_frame_end_wait_s0 (
     .Q(reg_frame_end_wait),
