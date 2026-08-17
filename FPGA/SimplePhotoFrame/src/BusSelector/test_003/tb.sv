@@ -299,6 +299,33 @@ module tb;
 	end
 	endtask
 
+	task automatic wait_sdram_read_issue(
+		input [22:5] addr,
+		output integer issue_cycle
+	);
+		integer timeout;
+	begin
+		issue_cycle = -1;
+		timeout = 0;
+		if( sel_sdram_address_valid && sel_sdram_address_ready && !sel_sdram_write && !sel_sdram_refresh && (sel_sdram_address == addr) ) begin
+			issue_cycle = sim_cycle;
+		end
+		while( timeout < TIMEOUT_CYCLES ) begin
+			if( issue_cycle < 0 ) begin
+				@(posedge clk);
+				if( sel_sdram_address_valid && sel_sdram_address_ready && !sel_sdram_write && !sel_sdram_refresh && (sel_sdram_address == addr) ) begin
+					issue_cycle = sim_cycle;
+				end
+			end
+			else begin
+				break;
+			end
+			timeout = timeout + 1;
+		end
+		check( timeout < TIMEOUT_CYCLES, "SDRAM read issue timeout" );
+	end
+	endtask
+
 	task automatic cache_write_burst(
 		input [22:5] addr,
 		input [7:0] id
@@ -540,10 +567,12 @@ module tb;
 	);
 		integer display_done_cycle;
 		integer cache_accept_cycle;
+		integer cache_issue_cycle;
 		integer display_accept_cycle;
 	begin
 		display_done_cycle = -1;
 		cache_accept_cycle = -1;
+		cache_issue_cycle = -1;
 		display_accept_cycle = -1;
 		fork
 			begin
@@ -553,11 +582,12 @@ module tb;
 			begin
 				wait_cycles(delay_cycles);
 				issue_cache_request_track(cache_addr, 1'b0, 1'b0, cache_accept_cycle);
+				wait_sdram_read_issue(cache_addr, cache_issue_cycle);
 				expect_cache_read_burst(cache_id);
 			end
 		join
-		check( cache_accept_cycle > display_done_cycle,
-			$sformatf("cache read accepted before display read finished at delay=%0d", delay_cycles) );
+		check( cache_issue_cycle > display_done_cycle,
+			$sformatf("cache read issued before display read finished at delay=%0d", delay_cycles) );
 	end
 	endtask
 
@@ -630,10 +660,12 @@ module tb;
 		integer cache_accept_cycle;
 		integer cache_done_cycle;
 		integer display_accept_cycle;
+		integer display_issue_cycle;
 	begin
 		cache_accept_cycle = -1;
 		cache_done_cycle = -1;
 		display_accept_cycle = -1;
+		display_issue_cycle = -1;
 		fork
 			begin
 				issue_cache_request_track(cache_addr, 1'b0, 1'b0, cache_accept_cycle);
@@ -645,11 +677,12 @@ module tb;
 				end
 				wait_cycles(delay_cycles);
 				issue_display_read_track(display_addr, display_accept_cycle);
+				wait_sdram_read_issue(display_addr, display_issue_cycle);
 				expect_display_read_burst(display_id);
 			end
 		join
-		check( display_accept_cycle > cache_done_cycle,
-			$sformatf("display read accepted before cache read finished at delay=%0d", delay_cycles) );
+		check( display_issue_cycle > cache_done_cycle,
+			$sformatf("display read issued before cache read finished at delay=%0d", delay_cycles) );
 	end
 	endtask
 

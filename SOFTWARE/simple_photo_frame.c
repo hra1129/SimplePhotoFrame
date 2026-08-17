@@ -389,9 +389,8 @@ int main() {
 
 	stdio_init_all();
 	button_init();
-	fpga_io_init();
 	cyw43_arch_init();
-	sleep_ms(5000);
+	fpga_io_init();
 	lcd_console_init();
 
 	//	表示を初期化

@@ -21,6 +21,8 @@ if not "%ERRORLEVEL%"=="0" goto :error
 vsim -c -t 1ps tb -do "run -all; quit -f"
 if not "%ERRORLEVEL%"=="0" goto :error
 
+if exist transcript move /Y transcript log.txt >nul
+
 popd
 exit /b 0
 

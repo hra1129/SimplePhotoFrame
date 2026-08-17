@@ -100,9 +100,18 @@ module bus_selector (
 	reg				ff_read_seen_busy;
 	reg				ff_read_data_started;
 	reg				ff_write_seen_busy;
+	reg				ff_prefetch_valid;
+	reg				ff_prefetch_bus;
+	reg	[22:5]	ff_prefetch_address;
 	wire			w_request_valid;
 	wire			w_cache_request_valid;
 	wire			w_active;
+	wire			w_prefetch_issue;
+	wire			w_prefetch_capture;
+	wire			w_prefetch_display_valid;
+	wire			w_prefetch_cache_valid;
+	wire			w_prefetch_selected_bus;
+	wire			w_active_bus;
 	wire	[0:0]	w_selected_bus;
 	wire			w_selected_bus_write;
 	wire			w_selected_bus_refresh;
@@ -112,7 +121,7 @@ module bus_selector (
 	assign w_cache_request_valid			= sdram_cache_address_valid & (sdram_cache_refresh | (ff_cache_cooldown == 6'd0));
 	assign w_request_valid				= (sdram_display_address_valid | w_cache_request_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
 	//	さらに、SDRAM Controller が受理可能かどうかを考慮して、active 信号を生成する
-	assign w_active						= w_request_valid & sdram_address_ready;
+	assign w_active						= (w_request_valid || w_prefetch_issue) & sdram_address_ready;
 	//	Display / Cache が同時に valid のときは、受理ごとに交互に選択する。
 	assign w_selected_bus				= (sdram_display_address_valid && sdram_cache_address_valid)
 										? ff_rr_turn
@@ -122,6 +131,14 @@ module bus_selector (
 	assign w_selected_bus_refresh		= w_selected_bus ? sdram_cache_refresh     : 1'b0;
 	assign w_selected_bus_read			= !w_selected_bus_write & !w_selected_bus_refresh;
 	assign w_output_bus					= (ff_read_stall || ff_write_stall) ? ff_grant_bus : w_selected_bus;
+	assign w_prefetch_display_valid		= sdram_display_address_valid;
+	assign w_prefetch_cache_valid		= sdram_cache_address_valid && !sdram_cache_write && !sdram_cache_refresh && (ff_cache_cooldown == 6'd0);
+	assign w_prefetch_selected_bus		= (w_prefetch_display_valid && w_prefetch_cache_valid)
+										? ff_rr_turn
+										: w_prefetch_cache_valid;
+	assign w_prefetch_capture			= ff_read_stall && ff_read_data_started && !ff_prefetch_valid && (w_prefetch_display_valid || w_prefetch_cache_valid);
+	assign w_prefetch_issue				= ff_prefetch_valid && !ff_read_stall && !ff_write_stall;
+	assign w_active_bus					= w_prefetch_issue ? ff_prefetch_bus : w_selected_bus;
 
 	always @( posedge clk ) begin
 		if( reset ) begin
@@ -131,9 +148,9 @@ module bus_selector (
 		end
 		else begin
 			if( w_active ) begin
-			ff_grant_bus	<= w_selected_bus;
-			ff_rr_turn		<= ~w_selected_bus;
-				if( w_selected_bus ) begin
+			ff_grant_bus	<= w_active_bus;
+			ff_rr_turn		<= ~w_active_bus;
+				if( w_active_bus ) begin
 					ff_cache_cooldown <= 6'd32;
 				end
 				else begin
@@ -157,9 +174,17 @@ module bus_selector (
 			ff_read_seen_busy <= 1'b0;
 			ff_read_data_started <= 1'b0;
 			ff_write_seen_busy <= 1'b0;
+			ff_prefetch_valid <= 1'b0;
+			ff_prefetch_bus <= 1'b0;
+			ff_prefetch_address <= 18'd0;
 		end
 		else if( !ff_ready ) begin
 			if( ff_read_stall ) begin
+				if( w_prefetch_capture ) begin
+					ff_prefetch_valid <= 1'b1;
+					ff_prefetch_bus <= w_prefetch_selected_bus;
+					ff_prefetch_address <= w_prefetch_selected_bus ? sdram_cache_address : sdram_display_address;
+				end
 				if( !sdram_address_ready ) begin
 					ff_read_seen_busy <= 1'b1;
 				end
@@ -206,6 +231,14 @@ module bus_selector (
 					ff_write_seen_busy	<= 1'b0;
 				end
 			end
+			else if( w_prefetch_issue && sdram_address_ready ) begin
+				ff_prefetch_valid		<= 1'b0;
+				ff_read_stall			<= 1'b1;
+				ff_read_bus				<= ff_prefetch_bus;
+				ff_read_count			<= 3'd0;
+				ff_read_seen_busy		<= 1'b0;
+				ff_read_data_started	<= 1'b0;
+			end
 			else if( sdram_address_ready ) begin
 				ff_ready	<= 1'b1;
 			end
@@ -214,7 +247,7 @@ module bus_selector (
 			ff_ready <= 1'b0;
 			if( w_selected_bus_read ) begin
 				ff_read_stall			<= 1'b1;
-				ff_read_bus				<= w_selected_bus;
+				ff_read_bus				<= w_active_bus;
 				ff_read_count			<= 3'd0;
 				ff_read_seen_busy		<= 1'b0;
 				ff_read_data_started	<= 1'b0;
@@ -233,16 +266,18 @@ module bus_selector (
 	assign sdram_display_rdata_valid	= !ff_read_bus ? sdram_rdata_valid : 1'b0;
 	assign sdram_cache_rdata_valid		=  ff_read_bus ? sdram_rdata_valid : 1'b0;
 
-	assign sdram_display_address_ready	= (!w_selected_bus && sdram_display_address_valid) ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
-	assign sdram_cache_address_ready	=  (w_selected_bus && sdram_cache_address_valid) ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0;
+	assign sdram_display_address_ready	= ((!w_selected_bus && sdram_display_address_valid) ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0)
+										| (w_prefetch_capture && !w_prefetch_selected_bus);
+	assign sdram_cache_address_ready	= ((w_selected_bus && sdram_cache_address_valid) ? (ff_ready & !ff_read_stall & !ff_write_stall & sdram_address_ready) : 1'b0)
+										| (w_prefetch_capture && w_prefetch_selected_bus);
 
-	assign sdram_address_valid			= w_request_valid;
-	assign sdram_address				= w_output_bus ? sdram_cache_address     : sdram_display_address;
-	assign sdram_write					= w_output_bus ? sdram_cache_write       : 1'b0;
-	assign sdram_refresh				= w_output_bus ? sdram_cache_refresh     : 1'b0;
-	assign sdram_wdata					= w_output_bus ? sdram_cache_wdata       : 32'd0;
-	assign sdram_wdata_mask				= w_output_bus ? sdram_cache_wdata_mask  : 4'd0;
-	assign sdram_wdata_valid			= w_output_bus ? sdram_cache_wdata_valid : 1'b0;
+	assign sdram_address_valid			= w_request_valid || w_prefetch_issue;
+	assign sdram_address				= w_prefetch_issue ? ff_prefetch_address : (w_output_bus ? sdram_cache_address : sdram_display_address);
+	assign sdram_write					= w_prefetch_issue ? 1'b0 : (w_output_bus ? sdram_cache_write : 1'b0);
+	assign sdram_refresh				= w_prefetch_issue ? 1'b0 : (w_output_bus ? sdram_cache_refresh : 1'b0);
+	assign sdram_wdata					= w_prefetch_issue ? 32'd0 : (w_output_bus ? sdram_cache_wdata : 32'd0);
+	assign sdram_wdata_mask				= w_prefetch_issue ? 4'd0 : (w_output_bus ? sdram_cache_wdata_mask : 4'd0);
+	assign sdram_wdata_valid			= w_prefetch_issue ? 1'b0 : (w_output_bus ? sdram_cache_wdata_valid : 1'b0);
 endmodule
 
 

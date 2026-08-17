@@ -123,9 +123,8 @@ int main() {
 
 	stdio_init_all();
 	button_init();
-	fpga_io_init();
 	cyw43_arch_init();
-	sleep_ms(3000);
+	fpga_io_init();
 
 	//	テストパターンを描画
 	vram_set_address( 0 );

@@ -33,6 +33,40 @@
 #define SPI0_TX_PIN	  7
 #define SPI0_INTR_PIN 3
 #define SPI0_BAUDRATE (50 * 1000 * 1000)	// 50 MHz
+#define FPGA_STARTUP_TIMEOUT_MS 10000
+
+// ---------------------------------------------------------
+static bool fpga_probe_started( void ) {
+	uint8_t tx = 0xFF;
+	uint8_t rx = 0xFF;
+
+	gpio_put( SPI0_CSN_PIN, 0 );
+	spi_write_read_blocking( SPI0_PORT, &tx, &rx, 1 );
+	gpio_put( SPI0_CSN_PIN, 1 );
+
+	return rx != 0xFF;
+}
+
+// ---------------------------------------------------------
+static bool fpga_wait_started( void ) {
+	absolute_time_t timeout_time;
+	uint32_t consecutive_responses = 0;
+
+	timeout_time = make_timeout_time_ms( FPGA_STARTUP_TIMEOUT_MS );
+	while( !time_reached( timeout_time ) ) {
+		if( fpga_probe_started() ) {
+			consecutive_responses++;
+			if( consecutive_responses >= 2 ) {
+				return true;
+			}
+		}
+		else {
+			consecutive_responses = 0;
+		}
+		sleep_ms( 1 );
+	}
+	return false;
+}
 
 // ---------------------------------------------------------
 void fpga_io_init( void ) {
@@ -48,6 +82,8 @@ void fpga_io_init( void ) {
 	// INTR は入力
 	gpio_init( SPI0_INTR_PIN );
 	gpio_set_dir( SPI0_INTR_PIN, GPIO_IN );
+	// FPGA起動待ちシーケンス
+	(void)fpga_wait_started();
 }
 
 // ---------------------------------------------------------

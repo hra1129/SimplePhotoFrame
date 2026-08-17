@@ -494,9 +494,22 @@ module tb;
 		sdram_cache_write = 1'b0;
 		sdram_cache_refresh = 1'b0;
 		sdram_cache_address_valid = 1'b1;
-		wait_accept( 1'b0, 1'b1 );
-		cache_accept_cycle = dbg_cycle;
+		timeout = 0;
+		while( !sdram_cache_address_ready && timeout < TIMEOUT_CYCLES ) begin
+			step();
+			timeout = timeout + 1;
+		end
+		check( timeout < TIMEOUT_CYCLES, "cache read prefetch accept timeout" );
+		check( sdram_address_valid === 1'b0, "cache read prefetch must be accepted before downstream issue" );
 		sdram_cache_address_valid = 1'b0;
+		timeout = 0;
+		while( !(sdram_address_valid && (sdram_address == 18'h03333)) && timeout < TIMEOUT_CYCLES ) begin
+			step();
+			timeout = timeout + 1;
+		end
+		check( timeout < TIMEOUT_CYCLES, "prefetched cache read issue timeout" );
+		check( sdram_cache_address_ready === 1'b0, "cache ready must stay low while prefetched read is issued" );
+		cache_accept_cycle = dbg_cycle;
 		for( i = 0; i < BURST_WORDS; i = i + 1 ) begin
 			wait_rdata();
 			step();
