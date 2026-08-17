@@ -441,6 +441,25 @@ module tb;
 		check_eq16(mem[calc_addr(base_addr, 16'd300, 16'd91)], apply_rop(ROP_XOR, 16'h5020, 16'h0A10), "XOR scale p2");
 		check_eq16(mem[calc_addr(base_addr, 16'd301, 16'd91)], apply_rop(ROP_XOR, 16'h5022, 16'h0A11), "XOR scale p3");
 
+		$display("[TB] TEST4: PUT within offscreen VRAM columns");
+		prepare_rect_data(base_addr, 16'd800, 16'd200, 16'd4, 16'd2, 16'h6000);
+		prepare_rect_data(base_addr, 16'd1000, 16'd100, 16'd4, 16'd2, 16'h0200);
+		bus_write_reg(5'h00, 16'd800);
+		bus_write_reg(5'h01, 16'd200);
+		bus_write_reg(5'h02, 16'd4);
+		bus_write_reg(5'h03, 16'd2);
+		bus_write_reg(5'h04, 16'd1000);
+		bus_write_reg(5'h05, 16'd100);
+		bus_write_reg(5'h06, 16'd4);
+		bus_write_reg(5'h07, 16'd2);
+		bus_write_reg(5'h08, ROP_PUT);
+
+		timeout = flush_accept_count;
+		bus_write_reg(5'h09, 16'h0001);
+		wait_exec_done();
+		wait_flush_accept(timeout);
+		check_scaled_rect_put(16'd800, 16'd200, 16'd4, 16'd2, 16'd1000, 16'd100, 16'd4, 16'd2);
+
 		bus_read_reg(5'h09, status_data);
 		check_eq16(status_data, 16'h0000, "STATUS idle after complete");
 

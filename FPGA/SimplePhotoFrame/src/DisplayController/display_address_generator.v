@@ -75,7 +75,7 @@ module display_address_generator (
 	output			sdram_address_valid,
 	input			sdram_address_ready
 );
-	localparam		IMG_WIDTH	= 800 / 16;	//	表示対象ピクセル数/バーストリードワード数
+	localparam		IMG_WIDTH	= 800 / 16;		//	表示対象ピクセル数/バーストリードワード数
 	localparam		VRAM_STRIDE	= 1024 / 16;	//	VRAM 1ラインのバーストワード数
 	localparam		IMG_HEIGHT	= 480;
 	localparam		BURST_WORDS	= 8;

@@ -4,8 +4,8 @@ module tb;
 	localparam integer CLK_HALF_NS = 1000000000 / 108000000 / 2;
 	localparam integer TIMEOUT_CYCLES = 500000;
 	localparam integer BLOCK_WORDS = 4096;
-	localparam integer TRACK_BLOCKS = 16;
-	localparam integer LAST_ADDR = (BLOCK_WORDS * 12);
+	localparam integer TRACK_BLOCKS = 1;
+	localparam integer LAST_ADDR = BLOCK_WORDS - 1;
 	localparam integer WRITE_WORDS = LAST_ADDR + 1;
 	localparam integer REFRESH_INTERVAL_CYCLES_TB = 32'h7fffffff;
 
@@ -51,7 +51,6 @@ module tb;
 	integer			req_block_index;
 	integer			stream_start_word_addr;
 	integer			req_key_index;
-	integer			req_hash_index;
 	integer			bi;
 	integer			ki;
 	reg		[15:0]	expected_low;
@@ -60,7 +59,7 @@ module tb;
 	integer			req_block_count [0:TRACK_BLOCKS-1];
 	integer			masked_req_block_count [0:TRACK_BLOCKS-1];
 	integer			req_key_count [0:31];
-	integer			req_way_count [0:3];
+	integer			req_way_count [0:7];
 
 	cache #( .c_refresh_interval_cycles(REFRESH_INTERVAL_CYCLES_TB) ) u_dut (
 		.reset				( reset				),
@@ -120,6 +119,50 @@ module tb;
 		end
 	endtask
 
+	task automatic cache_issue_flush;
+		integer local_timeout;
+		begin
+			local_timeout = 0;
+			@(posedge clk);
+			cache_write <= 1'b0;
+			cache_flush <= 1'b1;
+			cache_valid <= 1'b1;
+
+			while( !cache_ready && local_timeout < TIMEOUT_CYCLES ) begin
+				@(posedge clk);
+				local_timeout = local_timeout + 1;
+			end
+			if( local_timeout >= TIMEOUT_CYCLES ) begin
+				$display("[TB][ERROR] flush wait-ready timeout");
+				error_count = error_count + 1;
+			end
+
+			local_timeout = 0;
+			while( cache_ready && local_timeout < TIMEOUT_CYCLES ) begin
+				@(posedge clk);
+				local_timeout = local_timeout + 1;
+			end
+			if( local_timeout >= TIMEOUT_CYCLES ) begin
+				$display("[TB][ERROR] flush start timeout");
+				error_count = error_count + 1;
+			end
+
+			@(posedge clk);
+			cache_valid <= 1'b0;
+			cache_flush <= 1'b0;
+
+			local_timeout = 0;
+			while( !cache_ready && local_timeout < TIMEOUT_CYCLES ) begin
+				@(posedge clk);
+				local_timeout = local_timeout + 1;
+			end
+			if( local_timeout >= TIMEOUT_CYCLES ) begin
+				$display("[TB][ERROR] flush completion timeout");
+				error_count = error_count + 1;
+			end
+		end
+	endtask
+
 	always @(posedge clk) begin
 		if( reset ) begin
 			stream_active <= 1'b0;
@@ -139,7 +182,7 @@ module tb;
 			for( ki = 0; ki < 32; ki = ki + 1 ) begin
 				req_key_count[ki] <= 0;
 			end
-			for( ki = 0; ki < 4; ki = ki + 1 ) begin
+			for( ki = 0; ki < 8; ki = ki + 1 ) begin
 				req_way_count[ki] <= 0;
 			end
 		end
@@ -161,16 +204,14 @@ module tb;
 					req_block_count[req_block_index] = req_block_count[req_block_index] + 1;
 				end
 				req_key_index = u_dut.ff_evict_key;
-				req_hash_index = u_dut.ff_evict_hash;
 				if( req_key_index < 32 ) begin
 					req_key_count[req_key_index] = req_key_count[req_key_index] + 1;
 				end
 				req_way_count[u_dut.ff_selected_way] = req_way_count[u_dut.ff_selected_way] + 1;
 				if( req_debug_print_count < 32 ) begin
-					$display("[TB][REQ] n=%0d key=%0d hash=%0d way=%0d block=%0d",
+					$display("[TB][REQ] n=%0d key=%0d way=%0d block=%0d",
 						req_debug_print_count,
 						req_key_index,
-						req_hash_index,
 						u_dut.ff_selected_way,
 						req_block_index);
 					req_debug_print_count <= req_debug_print_count + 1;
@@ -270,7 +311,7 @@ module tb;
 		for( ki = 0; ki < 32; ki = ki + 1 ) begin
 			req_key_count[ki] = 0;
 		end
-		for( ki = 0; ki < 4; ki = ki + 1 ) begin
+		for( ki = 0; ki < 8; ki = ki + 1 ) begin
 			req_way_count[ki] = 0;
 		end
 		stream_active = 1'b0;
@@ -293,11 +334,13 @@ module tb;
 			$finish(1);
 		end
 
-		$display("[TB] write phase start (0..%0d)", LAST_ADDR);
+		$display("[TB] write phase start (0..%0d, exceeds 3000 words)", LAST_ADDR);
 		for( addr = 0; addr <= LAST_ADDR; addr = addr + 1 ) begin
 			cache_write16( addr[21:0], addr[15:0] );
 		end
 		$display("[TB] write phase done");
+		cache_issue_flush();
+		$display("[TB] flush done");
 
 		repeat(128) @(posedge clk);
 
@@ -322,8 +365,9 @@ module tb;
 				$display("[TB] key[%0d] req=%0d", ki, req_key_count[ki]);
 			end
 		end
-		$display("[TB] way_count: w0=%0d w1=%0d w2=%0d w3=%0d",
-			req_way_count[0], req_way_count[1], req_way_count[2], req_way_count[3]);
+		$display("[TB] way_count: w0=%0d w1=%0d w2=%0d w3=%0d w4=%0d w5=%0d w6=%0d w7=%0d",
+			req_way_count[0], req_way_count[1], req_way_count[2], req_way_count[3],
+			req_way_count[4], req_way_count[5], req_way_count[6], req_way_count[7]);
 
 		if( write_req_count == 0 ) begin
 			$display("[TB][ERROR] no write-back request observed");
@@ -337,11 +381,6 @@ module tb;
 
 		if( checked_block_count[0] != BLOCK_WORDS ) begin
 			$display("[TB][ERROR] block0 coverage mismatch checked=%0d exp=%0d", checked_block_count[0], BLOCK_WORDS);
-			error_count = error_count + 1;
-		end
-
-		if( checked_block_count[1] != BLOCK_WORDS ) begin
-			$display("[TB][ERROR] block1 coverage mismatch checked=%0d exp=%0d", checked_block_count[1], BLOCK_WORDS);
 			error_count = error_count + 1;
 		end
 

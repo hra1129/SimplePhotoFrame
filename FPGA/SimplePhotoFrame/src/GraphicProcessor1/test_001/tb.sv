@@ -267,7 +267,7 @@ module tb;
 		wait_bus_ready();
 
 		$display("[TB] TEST1: register readback");
-		bus_write_reg(5'h00, 16'd798);
+		bus_write_reg(5'h00, 16'd1022);
 		bus_write_reg(5'h01, 16'd478);
 		bus_write_reg(5'h02, 16'd5);
 		bus_write_reg(5'h03, 16'd5);
@@ -276,27 +276,27 @@ module tb;
 		bus_write_reg(5'h07, {1'b0, base_addr[15:1]});
 		bus_write_reg(5'h08, {9'd0, base_addr[22:16]});
 
-		bus_read_reg(5'h00, read_data); check_eq16(read_data, 16'd798, "SX readback");
+		bus_read_reg(5'h00, read_data); check_eq16(read_data, 16'd1022, "SX readback");
 		bus_read_reg(5'h01, read_data); check_eq16(read_data, 16'd478, "SY readback");
 		bus_read_reg(5'h02, read_data); check_eq16(read_data, 16'd5, "WIDTH readback");
 		bus_read_reg(5'h03, read_data); check_eq16(read_data, 16'd5, "HEIGHT readback");
 		bus_read_reg(5'h04, read_data); check_eq16(read_data, 16'hF800, "COLOR readback");
 		bus_read_reg(5'h05, read_data); check_eq16(read_data, ROP_PUT, "ROP readback");
 
-		prepare_rect_data(base_addr, 16'd796, 16'd476, 16'd6, 16'd6, 16'h0100);
+		prepare_rect_data(base_addr, 16'd1020, 16'd476, 16'd6, 16'd6, 16'h0100);
 
-		$display("[TB] TEST2: EXEC PUT with clipping at screen edge");
+		$display("[TB] TEST2: EXEC PUT with clipping at VRAM edge");
 		timeout = flush_accept_count;
 		bus_write_reg(5'h06, 16'h0001);
 		wait_exec_done();
 		wait_flush_accept(timeout);
 
-		check_eq16(mem[calc_addr(base_addr, 16'd798, 16'd478)], 16'hF800, "PUT p0");
-		check_eq16(mem[calc_addr(base_addr, 16'd799, 16'd478)], 16'hF800, "PUT p1");
-		check_eq16(mem[calc_addr(base_addr, 16'd798, 16'd479)], 16'hF800, "PUT p2");
-		check_eq16(mem[calc_addr(base_addr, 16'd799, 16'd479)], 16'hF800, "PUT p3");
-		check_eq16(mem[calc_addr(base_addr, 16'd797, 16'd478)], 16'h0121, "left neighbor unchanged");
-		check_eq16(mem[calc_addr(base_addr, 16'd798, 16'd477)], 16'h0112, "upper neighbor unchanged");
+		check_eq16(mem[calc_addr(base_addr, 16'd1022, 16'd478)], 16'hF800, "PUT p0");
+		check_eq16(mem[calc_addr(base_addr, 16'd1023, 16'd478)], 16'hF800, "PUT p1");
+		check_eq16(mem[calc_addr(base_addr, 16'd1022, 16'd479)], 16'hF800, "PUT p2");
+		check_eq16(mem[calc_addr(base_addr, 16'd1023, 16'd479)], 16'hF800, "PUT p3");
+		check_eq16(mem[calc_addr(base_addr, 16'd1021, 16'd478)], 16'h0121, "left neighbor unchanged");
+		check_eq16(mem[calc_addr(base_addr, 16'd1022, 16'd477)], 16'h0112, "upper neighbor unchanged");
 
 		$display("[TB] TEST3: EXEC XOR read-modify-write");
 		bus_write_reg(5'h00, 16'd10);

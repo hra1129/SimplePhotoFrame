@@ -295,9 +295,9 @@ module graphic_processor1 (
 			else begin
 				if( bus_cs && bus_valid && bus_write && bus_address == 5'h06 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
 					//	start トリガーによる初期設定
-					ff_clipped_sx <= f_clip_start( reg_sx, 16'd800 );
+					ff_clipped_sx <= f_clip_start( reg_sx, 16'd1024 );
 					ff_clipped_sy <= f_clip_start( reg_sy, 16'd480 );
-					ff_clipped_width <= f_clip_size( reg_sx, reg_width, 16'd800 );
+					ff_clipped_width <= f_clip_size( reg_sx, reg_width, 16'd1024 );
 					ff_clipped_height <= f_clip_size( reg_sy, reg_height, 16'd480 );
 
 					ff_busy <= 1'b1;

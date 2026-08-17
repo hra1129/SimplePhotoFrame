@@ -391,15 +391,20 @@ int main() {
 	button_init();
 	fpga_io_init();
 	cyw43_arch_init();
-	sleep_ms(3000);
+	sleep_ms(5000);
 	lcd_console_init();
 
 	//	表示を初期化
 	graphic1_set_frame_address( 0 );
 	graphic1_fill_rectangle( 0, 0, 800, 480, DISPLAY_RGB( 0, 0, 0 ), C_ROP_PUT );
+	display_wait_complete();
+
 	display_enable( true );
 	lcd_printf( "Simple Photo Frame\n" );
 	lcd_printf( "Press Button A to mount SD card and list photos.\n" );
+	lcd_printf( "0123456789\n" );
+	lcd_printf( "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n" );
+	lcd_printf( "abcdefghijklmnopqrstuvwxyz\n" );
 
 	while (1) {
 		button_state = button_get();

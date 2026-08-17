@@ -184,7 +184,7 @@ module graphic_processor2 (
 		input signed [15:0] x;
 		input signed [15:0] y;
 	begin
-		f_in_visible = (x >= 16'sd0) && (x < 16'sd800) && (y >= 16'sd0) && (y < 16'sd480);
+			f_in_visible = (x >= 16'sd0) && (x < 16'sd1024) && (y >= 16'sd0) && (y < 16'sd480);
 	end
 	endfunction
 

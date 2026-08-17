@@ -171,7 +171,7 @@ module cache (
 
 	reg				ff_line_oe_n;
 	reg				ff_line_we_n;
-	reg		[6:0]	ff_line_address;
+	reg	[6:0]		ff_line_address;
 	reg		[17:0]	ff_line0_wdata;
 	reg		[17:0]	ff_line1_wdata;
 	wire	[17:0]	w_line0_rdata;
@@ -556,7 +556,7 @@ module cache (
 				ff_commit_set_valid <= 1'b1;
 				ff_commit_set_dirty <= 1'b1;
 				ff_commit_keep_dirty <= 1'b0;
-				ff_state <= c_state_prepare_tag_commit;
+				ff_state <= c_state_tag_commit;
 			end
 
 			c_state_alloc_clear_req: begin
