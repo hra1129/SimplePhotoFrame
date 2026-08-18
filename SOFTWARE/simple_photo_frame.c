@@ -45,6 +45,7 @@
 #define DISPLAY_FRAME_ADDRESS0		(1024 * 480 * 0)
 #define DISPLAY_FRAME_ADDRESS1		(1024 * 480 * 1)
 #define JPEG_LOAD_FRAME_ADDRESS		(1024 * 480 * 2)
+#define BACK_BUFFER_FRAME_ADDRESS	(1024 * 480 * 3)
 typedef struct {
 	uint16_t src_width;
 	uint16_t src_height;
@@ -58,6 +59,9 @@ typedef struct {
 static char g_photo_paths[PHOTO_MAX_FILES][PHOTO_PATH_MAX];
 static int g_photo_count = 0;
 static int g_photo_index = 0;
+static uint8_t g_display_frame_no = 0;
+static uint8_t g_draw_frame_no = 1;
+static const uint32_t g_frame_addresses[2] = { DISPLAY_FRAME_ADDRESS0, DISPLAY_FRAME_ADDRESS1 };
 
 // ---------------------------------------------------------
 static bool has_jpeg_extension( const char *name ) {
@@ -133,6 +137,7 @@ static bool jpeg_render_callback(
 	uint16_t rect_width;
 	uint16_t src_y;
 	int32_t prev_dst_y;
+	int32_t prev_vram_address;
 
 	ctx = (jpeg_render_context_t *)user_data;
 	if( ctx == NULL || rgb565_pixels == NULL ) {
@@ -141,6 +146,7 @@ static bool jpeg_render_callback(
 
 	rect_width = (uint16_t)(right - left + 1);
 	prev_dst_y = -1;
+	prev_vram_address = -999;
 	for( src_y = top; src_y <= bottom; src_y++ ) {
 		uint16_t src_x;
 		uint16_t dst_y;
@@ -176,8 +182,17 @@ static bool jpeg_render_callback(
 			}
 			prev_dst_x = (int32_t)dst_x;
 
+			uint32_t vram_address;
+
 			pixel = src_line[src_x - left];
-			vram_write( dst_line_base + dst_x, pixel );
+			vram_address = dst_line_base + dst_x;
+			if( (int32_t)vram_address == prev_vram_address + 1 ) {
+				vram_burst_write( pixel );
+			}
+			else {
+				vram_write( vram_address, pixel );
+			}
+			prev_vram_address = (int32_t)vram_address;
 		}
 	}
 
@@ -272,7 +287,6 @@ static bool display_jpeg_on_vram( const char *path, uint32_t frame_address ) {
 	}
 
 	vram_flush();
-	display_set_frame_address( ctx.frame_address );
 	return true;
 }
 
@@ -302,75 +316,6 @@ static bool show_next_photo( uint32_t frame_address ) {
 	}
 	//	No decodable JPEG in /photo.
 	return false;
-}
-
-// ---------------------------------------------------------
-void vram_test( void ) {
-	int address;
-	uint16_t data;
-
-	//	テストパターンを描画
-	lcd_printf( "VRAM test: writing test pattern...\n" );
-	display_set_frame_address( 0 );
-	vram_set_address( 0 );
-	for( address = 0; address < (1024 * 480); address++ ) {
-		vram_burst_write( address & 0xFFFF );
-	}
-	//	テストパターンを再度読み出してチェック
-	lcd_printf( "VRAM test: verifying test pattern...\n" );
-	vram_set_address( 0 );
-	for( address = 0; address < (1024 * 480); address++ ) {
-		data = vram_burst_read();
-		if( data != (address & 0xFFFF) ) {
-			lcd_printf( "VRAM test2 failed at address %d: expected %04X, got %04X\n", address, address & 0xFFFF, data );
-		}
-	}
-	lcd_printf( "VRAM test completed.\n" );
-}
-
-// ---------------------------------------------------------
-void boxfill_test( void ) {
-	int i, x, y, w, h;
-	uint16_t color;
-
-	display_set_frame_address( 0 );
-	vram_set_address( 0 );
-	graphic1_set_frame_address( 0 );
-	for( i = 0; i < 10000; i++ ) {
-		color = rand() & 0xFFFF;
-		x = rand() % 1024;
-		y = rand() % 480;
-		w = rand() % 200 + 1;
-		h = rand() % 200 + 1;
-		lcd_printf( "Boxfill test: filling box at (%d, %d)-step(%d, %d) with color %04X\n", x, y, w, h, color );
-		graphic1_fill_rectangle( x, y, w, h, color, C_ROP_PUT );
-
-	}
-	vram_flush();
-}
-
-// ---------------------------------------------------------
-void resizer_test( void ) {
-	uint32_t src_address, dst_address;
-	int x, y, i, j;
-
-	display_set_frame_address( 0 );
-	graphic1_set_frame_address( 0 );
-	graphic1_fill_rectangle( 0, 0, 1024, 480, DISPLAY_RGB( 0, 12, 0 ), C_ROP_PUT );
-	graphic1_set_frame_address( 1024 * 480 * 1 );
-	graphic1_fill_rectangle( 0, 0, 1024, 480, DISPLAY_RGB( 0, 12, 0 ), C_ROP_PUT );
-
-	src_address = 1024 * 480 * 2;
-	dst_address = 1024 * 480 * 1;
-	graphic2_set_source_frame_address( src_address );
-	for( i = 0; i <= 800; i+=16 ) {
-		graphic2_set_destination_frame_address( dst_address );
-		graphic2_block_copy( 0, 0, 800, 480, 0, 0, i, i * 480 / 800, C_ROP_PUT );
-		display_wait_complete();
-		display_set_frame_address( dst_address );
-		display_wait_frame_sync();
-		dst_address = 1024 * 480 * 1 - dst_address;
-	}
 }
 
 // ---------------------------------------------------------
@@ -449,12 +394,92 @@ void check_sdcard( void ) {
 }
 
 // ---------------------------------------------------------
+//	左から右へスクロールして切り替わる
+void transition_swipe( void ) {
+	int x, y, i;
+	const int anime[] = {
+		0, 46, 92, 138, 184, 229, 273, 316, 359, 400, 439, 477, 514, 548, 581, 612, 641, 668, 692, 714, 734, 751, 766, 778, 787, 794, 798, 800 
+	};
+	const int anime_size = sizeof(anime) / sizeof(anime[0]);
+
+	//	現在の表示を BACK_BUFFER_FRAME_ADDRESS にコピーする
+	graphic2_set_source_frame_address( g_frame_addresses[g_display_frame_no] );
+	graphic2_set_destination_frame_address( BACK_BUFFER_FRAME_ADDRESS );
+	graphic2_block_copy( 0, 0, 800, 480, 0, 0, 800, 480, C_ROP_PUT );
+	display_wait_complete();
+	//	転送元を JPEGデコード結果、転送先を表示フレームに指定する
+	graphic2_set_source_frame_address( BACK_BUFFER_FRAME_ADDRESS );
+	graphic2_set_destination_frame_address( g_frame_addresses[g_draw_frame_no] );
+	graphic2_block_copy( 0, 0, 800, 480, 0, 0, 800, 480, C_ROP_PUT );
+	display_wait_complete();
+	//	スクロールアニメーション
+	for( y = 0; y < 480; y += 96 ) {
+		for( i = 0; i < anime_size; i++ ) {
+			x = anime[i];
+			//	x より左は新しい画像( JPEG_LOAD_FRAME_ADDRESS ), x より右は古い画像（ BACK_BUFFER_FRAME_ADDRESS )を描画する
+			graphic2_set_source_frame_address( JPEG_LOAD_FRAME_ADDRESS );
+			graphic2_block_copy( 800 - x, y, x, 96, 0, y, x, 96, C_ROP_PUT );
+			display_wait_complete();
+			graphic2_set_source_frame_address( BACK_BUFFER_FRAME_ADDRESS );
+			graphic2_block_copy( 0, y, 800 - x, 96, x, y, 800 - x, 96, C_ROP_PUT );
+			display_wait_complete();
+			display_set_frame_address( g_frame_addresses[g_draw_frame_no] );
+			display_wait_frame_sync();
+			g_display_frame_no = g_draw_frame_no;
+			g_draw_frame_no = ( g_draw_frame_no + 1 ) & 1;
+			graphic2_set_destination_frame_address( g_frame_addresses[g_draw_frame_no] );
+		}
+	}
+}
+
+// ---------------------------------------------------------
+//	小さなパネルのように見せかけて切り替わる
+void transition_panel( void ) {
+	int x, y, i, j, k, l, k_base;
+	const int step = 10;
+	const int next_step = 13;
+
+	//	転送元を JPEGデコード結果、転送先を表示フレームに指定する
+	graphic2_set_source_frame_address( JPEG_LOAD_FRAME_ADDRESS );
+	graphic2_set_destination_frame_address( g_frame_addresses[g_display_frame_no] );
+	//	パネルアニメーション
+	k = 50;
+	for( j = 0; j < 100; j+=step ) {
+		k_base = k;
+		for( i = 4; i <= 80; i+=4 ) {
+			k = k_base;
+			for( l = 0; l < step; l++ ) {
+				x = ( k % 10 ) * 80;
+				y = ( k / 10 ) * 48;
+				graphic2_block_copy( x, y, 80, 48, x, y, i, 48, C_ROP_PUT );
+				display_wait_complete();
+				k = ( k + next_step ) % 100; 
+			}
+			display_wait_frame_sync();
+		}
+		k_base = ( k_base + next_step * step ) % 100;
+	}
+}
+
+// ---------------------------------------------------------
+void transition_effect( void ) {
+	static int animation = 0;
+
+	switch( animation ) {
+	case 0:
+		transition_swipe();
+		break;
+	case 1:
+		transition_panel();
+		break;
+	}
+	animation = ( animation + 1 ) & 1;
+}
+
+// ---------------------------------------------------------
 int main() {
 	int r, g, b, x, y;
 	uint8_t button_state;
-	uint8_t display_frame_no = 0;
-	uint8_t draw_frame_no = 1;
-	const uint32_t frame_addresses[2] = { DISPLAY_FRAME_ADDRESS0, DISPLAY_FRAME_ADDRESS1 };
 
 	initialization();
 	opening_animation();
@@ -467,21 +492,13 @@ int main() {
 
 		//	次の画像をデコードする
 		show_next_photo( JPEG_LOAD_FRAME_ADDRESS );
-		//	デコードした JPEG画像を次の表示フレームに描画
-		graphic2_set_source_frame_address( JPEG_LOAD_FRAME_ADDRESS );
-		graphic2_set_destination_frame_address( frame_addresses[draw_frame_no] );
-		graphic2_block_copy( 0, 0, 800, 480, 0, 0, 800, 480, C_ROP_PUT );
-		display_wait_complete();
 		//	時間が経過するのを待機する
 		while( absolute_time_diff_us( measurement_start, get_absolute_time() ) < 5000000 ) {
 			sleep_ms( 1 );
 		}
 
 		//	表示フレームを切り替える
-		display_frame_no = draw_frame_no;
-		display_set_frame_address( frame_addresses[display_frame_no] );
-		draw_frame_no ^= 1;
-		display_wait_frame_sync();
+		transition_effect();
 	}
 	return 0;
 }
