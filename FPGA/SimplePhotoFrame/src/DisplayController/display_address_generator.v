@@ -76,9 +76,7 @@ module display_address_generator (
 	input			sdram_address_ready
 );
 	localparam		IMG_WIDTH	= 800 / 16;		//	表示対象ピクセル数/バーストリードワード数
-	localparam		VRAM_STRIDE	= 1024 / 16;	//	VRAM 1ラインのバーストワード数
 	localparam		IMG_HEIGHT	= 480;
-	localparam		BURST_WORDS	= 8;
 	localparam		[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_MAX = IMG_WIDTH - 1;
 	localparam		[$clog2(IMG_WIDTH)-1:0]		H_COUNTER_ONE = {{($clog2(IMG_WIDTH)-1){1'b0}}, 1'b1};
 	localparam		[$clog2(IMG_HEIGHT)-1:0]	V_COUNTER_MAX = IMG_HEIGHT - 1;
@@ -89,7 +87,6 @@ module display_address_generator (
 	reg				ff_ready;
 	reg				ff_rdata_valid;
 	reg		[22:5]	reg_base_address;
-	reg		[2:0]	reg_register_address;
 	reg				reg_display_on;
 	reg		[15:0]	reg_fill_color;
 	reg		[22:5]	ff_base_address;
@@ -112,6 +109,7 @@ module display_address_generator (
 	// ---------------------------------------------------------
 	always @(posedge clk) begin
 		if( reset ) begin
+			ff_ready <= 1'b0;
 			ff_rdata_valid <= 1'b0;
 		end
 		else if( sdram_init_busy ) begin
@@ -152,7 +150,6 @@ module display_address_generator (
 	always @(posedge clk) begin
 		if( reset ) begin
 			reg_base_address <= 18'd0;
-			reg_register_address <= 3'd0;
 			reg_display_on <= 1'b0;
 			reg_fill_color <= { 5'd31, 6'd63, 5'd31 };	// 白
 		end

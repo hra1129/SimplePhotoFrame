@@ -7,7 +7,7 @@ module tb #(
 	localparam integer IMG_WIDTH = 800 / 16;
 	localparam integer IMG_HEIGHT = 480;
 	localparam integer MAX_CYCLES = 12_000_000;
-	localparam [15:0] EXPECT_FILL_COLOR = 16'hF800;
+	localparam [15:0] EXPECT_FILL_COLOR = 16'hFFFF;
 	localparam integer SDRAM_READ_LATENCY = 4;
 	localparam integer SDRAM_BURST_WORDS = 8;
 	localparam [1:0] C_SDRAM_IDLE = 2'd0;
@@ -69,7 +69,7 @@ module tb #(
 
 	reg				captured_frame4_first_address;
 	reg		[22:5]	frame4_first_address;
-	reg				prev_timing_origin;
+	reg				prev_frame_end;
 
 	display_controller #(
 		.c_preload_clear_flush_fifo			( EXP_CLEAR_FLUSH_FIFO ),
@@ -243,7 +243,7 @@ module tb #(
 		checked_frame4 = 1'b0;
 		captured_frame4_first_address = 1'b0;
 		frame4_first_address = 18'd0;
-		prev_timing_origin = 1'b0;
+		prev_frame_end = 1'b0;
 		prev_preload_clear = 1'b0;
 		clear_followup_pending = 1'b0;
 
@@ -252,6 +252,16 @@ module tb #(
 
 		repeat(3) @(posedge clk);
 		reset = 1'b0;
+
+		// frame_count=1 starts immediately after reset; subsequent frames are
+		// counted on the internal frame_end pulse (fetch-side frame boundary),
+		// not on the display-output timing counter, since the address
+		// generator is expected to prefetch ahead of the LCD output position.
+		frame_count = 1;
+		$display("[TB] frame_start=%0d cycle=%0d ff_display_on=%0d",
+			frame_count,
+			cycle_count,
+			dut.display_address_generator.ff_display_on);
 
 		while( (frame_count < 4 || !checked_frame4 || !captured_frame4_first_address) && cycle_count < MAX_CYCLES ) begin
 			@(posedge clk);
@@ -274,26 +284,20 @@ module tb #(
 				frame_timing_accept_count = frame_timing_accept_count + 1;
 			end
 
-			if( (dut.display_timing_generator.ff_h_counter == 0) &&
-			    (dut.display_timing_generator.ff_v_counter == 0) ) begin
-				if( !prev_timing_origin ) begin
-					frame_count = frame_count + 1;
-					first_fifo_sample_count = 0;
-					frame_addr_accept_count = 0;
-					frame_sdram_accept_count = 0;
-					frame_preload_in_count = 0;
-					frame_preload_out_count = 0;
-					frame_timing_accept_count = 0;
-					$display("[TB] frame_start=%0d cycle=%0d ff_display_on=%0d",
-						frame_count,
-						cycle_count,
-						dut.display_address_generator.ff_display_on);
-				end
-				prev_timing_origin = 1'b1;
+			if( dut.display_timing_generator.frame_end && !prev_frame_end ) begin
+				frame_count = frame_count + 1;
+				first_fifo_sample_count = 0;
+				frame_addr_accept_count = 0;
+				frame_sdram_accept_count = 0;
+				frame_preload_in_count = 0;
+				frame_preload_out_count = 0;
+				frame_timing_accept_count = 0;
+				$display("[TB] frame_start=%0d cycle=%0d ff_display_on=%0d",
+					frame_count,
+					cycle_count,
+					dut.display_address_generator.ff_display_on);
 			end
-			else begin
-				prev_timing_origin = 1'b0;
-			end
+			prev_frame_end = dut.display_timing_generator.frame_end;
 
 			if( frame_count == 1 && !switched_to_on_in_frame1 &&
 			    dut.display_address_generator.w_valid &&

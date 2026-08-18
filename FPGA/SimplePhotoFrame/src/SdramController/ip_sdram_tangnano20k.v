@@ -132,7 +132,7 @@ module ip_sdram #(
 	reg							ff_sdr_ready;
 	reg							ff_do_main_state;
 	reg							ff_do_refresh;
-	reg						ff_refresh_second_pending;
+	reg							ff_refresh_second_pending;
 
 	reg		[ 3:0]				ff_sdr_command;
 	reg		[ 1:0]				ff_sdr_bank;
@@ -156,12 +156,9 @@ module ip_sdram #(
 	reg							ff_read_start_toggle_sync1_sdram;
 	reg							ff_read_start_toggle_sync2_sdram;
 	reg		[31:0]				ff_read_data_stage_sdram;
-	reg						ff_read_data_valid_stage_sdram;
+	reg							ff_read_data_valid_stage_sdram;
 	reg		[31:0]				ff_bus_rdata;
 	reg							ff_bus_rdata_valid;
-	reg		[ 2:0]				ff_write_burst_index;
-	reg		[31:0]				ff_write_burst_word;
-	reg		[ 3:0]				ff_write_burst_mask;
 	wire						w_busy;
 	reg							ff_initial_finish;
 	wire						w_accept_request;
@@ -563,15 +560,8 @@ module ip_sdram #(
 	always @( posedge clk ) begin
 		if( reset ) begin
 			ff_sdr_write_data		<= 32'dz;
-			ff_write_burst_index	<= 3'd0;
-			ff_write_burst_word		<= 32'd0;
-			ff_write_burst_mask		<= 4'd0;
 		end
 		else begin
-			ff_write_burst_index	<= 3'd0;
-			ff_write_burst_word		<= w_curr_write_data;
-			ff_write_burst_mask		<= w_curr_write_mask;
-
 			if( w_write_burst_phase ) begin
 				ff_sdr_write_data		<= w_curr_write_data;
 			end

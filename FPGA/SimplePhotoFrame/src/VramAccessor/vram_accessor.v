@@ -78,7 +78,6 @@ module vram_accessor (
 	input			sdram_rdata_valid
 );
 	reg		[22:1]	reg_vram_address;
-	reg		[15:0]	reg_vram_data;
 
 	reg		[15:0]	ff_bus_rdata;
 	reg				ff_bus_rdata_valid;
@@ -96,7 +95,6 @@ module vram_accessor (
 	always @( posedge clk ) begin
 		if( reset ) begin
 			reg_vram_address		<= 22'd0;
-			reg_vram_data			<= 16'd0;
 			ff_bus_rdata			<= 16'd0;
 			ff_bus_rdata_valid		<= 1'b0;
 			ff_sdram_address		<= 22'd0;
@@ -129,7 +127,6 @@ module vram_accessor (
 
 				if( ff_wait_rdata && sdram_rdata_valid ) begin
 					ff_wait_rdata			<= 1'b0;
-					reg_vram_data			<= sdram_rdata;
 					ff_bus_rdata			<= sdram_rdata;
 					ff_bus_rdata_valid		<= 1'b1;
 				end
@@ -144,7 +141,7 @@ module vram_accessor (
 							reg_vram_address[22:17] <= bus_wdata[5:0];
 						end
 						5'h02: begin
-							reg_vram_data <= bus_wdata;
+
 							ff_sdram_address		<= reg_vram_address;
 							ff_sdram_write			<= 1'b1;
 							ff_sdram_wdata			<= bus_wdata;

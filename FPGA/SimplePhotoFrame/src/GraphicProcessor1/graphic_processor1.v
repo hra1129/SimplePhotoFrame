@@ -109,20 +109,15 @@ module graphic_processor1 (
 
 	reg signed	[15:0]	ff_exec_sx;
 	reg signed	[15:0]	ff_exec_sy;
-	reg		[15:0]	ff_exec_width;
-	reg		[15:0]	ff_exec_height;
 	reg		[15:0]	ff_exec_color;
 	reg		[15:0]	ff_exec_rop;
 	reg		[22:1]	ff_exec_base_address;
 
-	reg		[15:0]	ff_clip_width;
-	reg		[15:0]	ff_clip_height;
 	reg		[15:0]	ff_cur_x;		/* synthesis syn_maxfan = 32 */
 	reg		[15:0]	ff_cur_y;		/* synthesis syn_maxfan = 32 */
 	reg		[22:1]	ff_row_start_address;
 	reg		[22:1]	ff_cur_address;
 
-	reg		[15:0]	ff_src_color;
 	reg		[15:0]	ff_dst_color;
 	reg				ff_pixel_setup_done;
 
@@ -270,13 +265,10 @@ module graphic_processor1 (
 			ff_state				<= c_state_idle;
 			ff_busy					<= 1'b0;
 
-			ff_clip_width			<= 16'd0;
-			ff_clip_height			<= 16'd0;
 			ff_cur_x				<= 16'd0;
 			ff_cur_y				<= 16'd0;
 			ff_row_start_address	<= 22'd0;
 			ff_cur_address			<= 22'd0;
-			ff_src_color			<= 16'd0;
 			ff_dst_color			<= 16'd0;
 			ff_pixel_setup_done		<= 1'b0;
 			ff_flush_pending		<= 1'b0;
@@ -321,7 +313,6 @@ module graphic_processor1 (
 				c_state_wait_read_data: begin
 					if( sdram_rdata_valid ) begin
 						ff_dst_color <= sdram_rdata;
-						ff_src_color <= ff_exec_color;
 						ff_state <= c_state_issue_write;
 					end
 				end
@@ -341,8 +332,6 @@ module graphic_processor1 (
 								ff_pixel_setup_done <= 1'b0;
 							end
 							else begin
-								ff_clip_width <= ff_clipped_width;
-								ff_clip_height <= ff_clipped_height;
 								ff_row_start_address <= ff_exec_base_address + ff_clipped_sx + ({ 6'd0, ff_clipped_sy } << 10);
 								ff_cur_address <= ff_exec_base_address + ff_clipped_sx + ({ 6'd0, ff_clipped_sy } << 10);
 								ff_cur_x <= 16'd0;
@@ -357,7 +346,7 @@ module graphic_processor1 (
 								end
 							end
 						end
-						else if( (ff_cur_x + 16'd1) < ff_clip_width ) begin
+						else if( (ff_cur_x + 16'd1) < ff_clipped_width ) begin
 							ff_cur_x <= ff_cur_x + 16'd1;
 							ff_cur_address <= ff_cur_address + 22'd1;
 							if( ff_exec_rop == c_rop_put ) begin
@@ -368,7 +357,7 @@ module graphic_processor1 (
 								ff_state <= c_state_issue_read;
 							end
 						end
-						else if( (ff_cur_y + 16'd1) < ff_clip_height ) begin
+						else if( (ff_cur_y + 16'd1) < ff_clipped_height ) begin
 							ff_cur_y <= ff_cur_y + 16'd1;
 							ff_cur_x <= 16'd0;
 							ff_row_start_address <= ff_row_start_address + 22'd1024;
@@ -491,8 +480,6 @@ module graphic_processor1 (
 		if( reset ) begin
 			ff_exec_sx				<= 16'd0;
 			ff_exec_sy				<= 16'd0;
-			ff_exec_width			<= 16'd0;
-			ff_exec_height			<= 16'd0;
 			ff_exec_color			<= 16'd0;
 			ff_exec_rop				<= c_rop_put;
 			ff_exec_base_address	<= 22'd0;
@@ -501,8 +488,6 @@ module graphic_processor1 (
 			if( bus_cs && bus_valid && bus_write && bus_address == 5'h06 && bus_wdata[0] && !ff_busy && !ff_flush_pending ) begin
 				ff_exec_sx <= reg_sx;
 				ff_exec_sy <= reg_sy;
-				ff_exec_width <= reg_width;
-				ff_exec_height <= reg_height;
 				ff_exec_color <= reg_color;
 				ff_exec_rop <= reg_rop;
 				ff_exec_base_address <= reg_vram_address;

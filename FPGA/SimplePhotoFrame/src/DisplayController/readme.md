@@ -70,7 +70,7 @@ VRAM の 1 行のストライドは 1024 pixels であり、表示幅 800 pixels
 | `0x01` | `BASE_ADDRESS_H` | W | `[5:0]` | `0x0000` | VRAM ベースアドレス bit `[22:17]` |
 | `0x02` | `DISPLAY_ON` | W | `[0]` | `0` | 画像表示の有効／無効 |
 | `0x03` | `SDRAM_INIT_BUSY` | R | `[0]` | - | `sdram_init_busy` の状態 |
-| `0x04` | `FILL_COLOR` | W | `[15:0]` | `0xF800` | 表示 OFF 時の RGB565 塗りつぶし色 |
+| `0x04` | `FILL_COLOR` | W | `[15:0]` | `0xFFFF` | 表示 OFF 時の RGB565 塗りつぶし色 |
 | `0x05` | `FRAME_END_WAIT` | R/W | `[0]` | `0` | フレーム境界待ち要求。フレーム終端で自動クリア |
 | `0x06`～`0x1F` | - | - | - | - | 未使用。書き込みは無視 |
 
@@ -119,7 +119,7 @@ bus_wdata[10: 5] = G[5:0]
 bus_wdata[ 4: 0] = B[4:0]
 ```
 
-`DISPLAY_ON = 0` のとき、内部の 32 bit データ経路には `{fill_color, fill_color}` として供給される。リセット値は `16'hF800`（赤）である。
+`DISPLAY_ON = 0` のとき、内部の 32 bit データ経路には `{fill_color, fill_color}` として供給される。リセット値は `16'hFFFF`（白）である。
 
 ### 4.6 `FRAME_END_WAIT` (`0x05`)
 
@@ -190,6 +190,6 @@ lcd_b = p_data[4:0]
 
 - `DISPLAY_ON` は OFF。
 - VRAM ベースアドレスは 0。
-- `FILL_COLOR` は RGB565 の赤（`16'hF800`）。
+- `FILL_COLOR` は RGB565 の白(`16'hFFFF`)。
 - LCD タイミングカウンタは水平 0、垂直 0 から開始する。
 - SDRAM 初期化中はバスアクセスを待機する。
