@@ -32,7 +32,6 @@
 // ----------------------------------------------------------------------------
 
 module cache_tag (
-	input				reset,
 	input				clk,
 	input				oe_n,
 	input				we_n,

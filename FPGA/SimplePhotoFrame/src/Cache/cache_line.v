@@ -32,7 +32,6 @@
 // ----------------------------------------------------------------------------
 
 module cache_line (
-	input				reset,
 	input				clk,
 	input				oe_n,
 	input				we_n,

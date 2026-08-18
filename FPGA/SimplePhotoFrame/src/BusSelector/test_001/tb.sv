@@ -45,8 +45,6 @@ module tb;
 	int				test_num;
 	int				error_count;
 	int				timeout;
-	integer			cache_accept_cycle;
-	integer			cache_reaccept_cycle;
 	integer			sdram_wait_count;
 	reg		[2:0]	sdram_read_count;
 	reg		[2:0]	sdram_write_count;
@@ -487,54 +485,6 @@ module tb;
 		sdram_cache_wdata_valid = 1'b0;
 		wait_accept( 1'b1, 1'b0 );
 		expect_sdram( 1'b1, 1'b0, 1'b0, 1'b0, 1'b1, 18'h01111, 32'd0, 4'h0, 1'b0 );
-		clear_requests();
-
-		start_test( "cache read/write requests are throttled for 32 cycles after acceptance" );
-		sdram_cache_address = 18'h03333;
-		sdram_cache_write = 1'b0;
-		sdram_cache_refresh = 1'b0;
-		sdram_cache_address_valid = 1'b1;
-		timeout = 0;
-		while( !sdram_cache_address_ready && timeout < TIMEOUT_CYCLES ) begin
-			step();
-			timeout = timeout + 1;
-		end
-		check( timeout < TIMEOUT_CYCLES, "cache read prefetch accept timeout" );
-		check( sdram_address_valid === 1'b0, "cache read prefetch must be accepted before downstream issue" );
-		sdram_cache_address_valid = 1'b0;
-		timeout = 0;
-		while( !(sdram_address_valid && (sdram_address == 18'h03333)) && timeout < TIMEOUT_CYCLES ) begin
-			step();
-			timeout = timeout + 1;
-		end
-		check( timeout < TIMEOUT_CYCLES, "prefetched cache read issue timeout" );
-		check( sdram_cache_address_ready === 1'b0, "cache ready must stay low while prefetched read is issued" );
-		cache_accept_cycle = dbg_cycle;
-		for( i = 0; i < BURST_WORDS; i = i + 1 ) begin
-			wait_rdata();
-			step();
-		end
-		sdram_cache_address = 18'h04444;
-		sdram_cache_address_valid = 1'b1;
-		while( !sdram_cache_address_ready && (dbg_cycle - cache_accept_cycle) <= 40 ) begin
-			step();
-		end
-		cache_reaccept_cycle = dbg_cycle;
-		check( sdram_cache_address_ready === 1'b1, "cache request was not accepted after cooldown" );
-		check( (cache_reaccept_cycle - cache_accept_cycle) >= 32, "cache request was accepted before 32-cycle cooldown elapsed" );
-		sdram_cache_address_valid = 1'b0;
-		for( i = 0; i < BURST_WORDS; i = i + 1 ) begin
-			wait_rdata();
-			step();
-		end
-
-		start_test( "cache refresh bypasses read/write cooldown" );
-		sdram_cache_address = 18'h05555;
-		sdram_cache_write = 1'b0;
-		sdram_cache_refresh = 1'b1;
-		sdram_cache_address_valid = 1'b1;
-		wait_accept( 1'b0, 1'b1 );
-		expect_sdram( 1'b0, 1'b1, 1'b0, 1'b1, 1'b1, 18'h05555, 32'd0, 4'h0, 1'b0 );
 		clear_requests();
 
 		$display("[TB] completed with %0d error(s)", error_count);

@@ -101,13 +101,11 @@ module bus_selector (
 	reg				ff_write_seen_busy;
 	reg				ff_prefetch_valid;
 	reg				ff_prefetch_bus;
-	reg	[22:5]	ff_prefetch_address;
+	reg		[22:5]	ff_prefetch_address;
 	wire			w_request_valid;
-	wire			w_cache_request_valid;
 	wire			w_active;
 	wire			w_prefetch_issue;
 	wire			w_prefetch_capture;
-	wire			w_prefetch_display_valid;
 	wire			w_prefetch_cache_valid;
 	wire			w_prefetch_selected_bus;
 	wire			w_active_bus;
@@ -117,25 +115,23 @@ module bus_selector (
 	wire			w_selected_bus_read;
 	wire			w_output_bus;
 	//	display または cache からのリクエストを受理するかどうかを決定する
-	assign w_cache_request_valid		= sdram_cache_address_valid;
-	assign w_request_valid				= (sdram_display_address_valid | w_cache_request_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
+	assign w_request_valid				= (sdram_display_address_valid | sdram_cache_address_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
 	//	さらに、SDRAM Controller が受理可能かどうかを考慮して、active 信号を生成する
 	assign w_active						= (w_request_valid || w_prefetch_issue) & sdram_address_ready;
 	//	Display / Cache が同時に valid のときは、受理ごとに交互に選択する。
 	assign w_selected_bus				= (sdram_display_address_valid && sdram_cache_address_valid)
 										? ff_rr_turn
-										: w_cache_request_valid;
+										: sdram_cache_address_valid;
 
 	assign w_selected_bus_write			= w_selected_bus ? sdram_cache_write       : 1'b0;
 	assign w_selected_bus_refresh		= w_selected_bus ? sdram_cache_refresh     : 1'b0;
 	assign w_selected_bus_read			= !w_selected_bus_write & !w_selected_bus_refresh;
 	assign w_output_bus					= (ff_read_stall || ff_write_stall) ? ff_grant_bus : w_selected_bus;
-	assign w_prefetch_display_valid		= sdram_display_address_valid;
 	assign w_prefetch_cache_valid		= sdram_cache_address_valid && !sdram_cache_write && !sdram_cache_refresh;
-	assign w_prefetch_selected_bus		= (w_prefetch_display_valid && w_prefetch_cache_valid)
+	assign w_prefetch_selected_bus		= (sdram_display_address_valid && w_prefetch_cache_valid)
 										? ff_rr_turn
 										: w_prefetch_cache_valid;
-	assign w_prefetch_capture			= ff_read_stall && ff_read_data_started && !ff_prefetch_valid && (w_prefetch_display_valid || w_prefetch_cache_valid);
+	assign w_prefetch_capture			= ff_read_stall && ff_read_data_started && !ff_prefetch_valid && (sdram_display_address_valid || w_prefetch_cache_valid);
 	assign w_prefetch_issue				= ff_prefetch_valid && !ff_read_stall && !ff_write_stall;
 	assign w_active_bus					= w_prefetch_issue ? ff_prefetch_bus : w_selected_bus;
 
@@ -154,37 +150,37 @@ module bus_selector (
 
 	always @( posedge clk ) begin
 		if( reset ) begin
-			ff_ready		<= 1'b0;
-			ff_read_bus		<= 1'd0;
-			ff_read_stall	<= 1'b0;
-			ff_write_stall	<= 1'b0;
-			ff_read_count	<= 3'd0;
-			ff_write_count	<= 3'd0;
-			ff_read_seen_busy <= 1'b0;
-			ff_read_data_started <= 1'b0;
-			ff_write_seen_busy <= 1'b0;
-			ff_prefetch_valid <= 1'b0;
-			ff_prefetch_bus <= 1'b0;
-			ff_prefetch_address <= 18'd0;
+			ff_ready				<= 1'b0;
+			ff_read_bus				<= 1'd0;
+			ff_read_stall			<= 1'b0;
+			ff_write_stall			<= 1'b0;
+			ff_read_count			<= 3'd0;
+			ff_write_count			<= 3'd0;
+			ff_read_seen_busy		<= 1'b0;
+			ff_read_data_started	<= 1'b0;
+			ff_write_seen_busy		<= 1'b0;
+			ff_prefetch_valid		<= 1'b0;
+			ff_prefetch_bus			<= 1'b0;
+			ff_prefetch_address		<= 18'd0;
 		end
 		else if( !ff_ready ) begin
 			if( ff_read_stall ) begin
 				if( w_prefetch_capture ) begin
-					ff_prefetch_valid <= 1'b1;
-					ff_prefetch_bus <= w_prefetch_selected_bus;
-					ff_prefetch_address <= w_prefetch_selected_bus ? sdram_cache_address : sdram_display_address;
+					ff_prefetch_valid	<= 1'b1;
+					ff_prefetch_bus		<= w_prefetch_selected_bus;
+					ff_prefetch_address	<= w_prefetch_selected_bus ? sdram_cache_address : sdram_display_address;
 				end
 				if( !sdram_address_ready ) begin
-					ff_read_seen_busy <= 1'b1;
+					ff_read_seen_busy	<= 1'b1;
 				end
 				if( sdram_rdata_valid ) begin
-					ff_read_data_started <= 1'b1;
+					ff_read_data_started 	<= 1'b1;
 					if( ff_read_count == c_read_burst_last ) begin
-						ff_ready		<= 1'b0;
-						ff_read_stall	<= 1'b0;
-						ff_read_count	<= 3'd0;
-						ff_read_seen_busy <= 1'b0;
-						ff_read_data_started <= 1'b0;
+						ff_ready				<= 1'b0;
+						ff_read_stall			<= 1'b0;
+						ff_read_count			<= 3'd0;
+						ff_read_seen_busy		<= 1'b0;
+						ff_read_data_started	<= 1'b0;
 					end
 					else begin
 						ff_read_count	<= ff_read_count + 3'd1;

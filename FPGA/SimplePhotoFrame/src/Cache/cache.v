@@ -64,9 +64,6 @@ module cache (
 	localparam [5:0] c_state_read_hit_line_req			= 6'd2;
 	localparam [5:0] c_state_read_hit_line_wait			= 6'd3;
 	localparam [5:0] c_state_read_hit_line_analyze		= 6'd4;
-	localparam [5:0] c_state_write_hit_line_req			= 6'd5;
-	localparam [5:0] c_state_write_hit_line_wait		= 6'd6;
-	localparam [5:0] c_state_write_hit_line_commit		= 6'd7;
 	localparam [5:0] c_state_prepare_tag_commit			= 6'd8;
 	localparam [5:0] c_state_tag_commit					= 6'd9;
 	localparam [5:0] c_state_finish_req					= 6'd10;
@@ -103,7 +100,6 @@ module cache (
 
 	reg		[22:1]	ff_req_address;
 	reg				ff_req_write;
-	reg				ff_req_flash;
 	reg		[15:0]	ff_req_wdata;
 
 	reg		[17:0]	ff_key;
@@ -117,7 +113,6 @@ module cache (
 	reg		[3:0]	ff_tag_prio [0:7];
 	reg				ff_tag_valid [0:7];
 	reg				ff_tag_dirty [0:7];
-	reg		[7:0]	ff_dirty_map;
 
 	reg		[17:0]	ff_line0_read;
 	reg		[17:0]	ff_line1_read;
@@ -294,7 +289,6 @@ module cache (
 	end
 
 	cache_line u_cache_line0 (
-		.reset			( reset				),
 		.clk			( clk				),
 		.oe_n			( ff_line_oe_n		),
 		.we_n			( ff_line0_we_n	),
@@ -304,7 +298,6 @@ module cache (
 	);
 
 	cache_line u_cache_line1 (
-		.reset			( reset				),
 		.clk			( clk				),
 		.oe_n			( ff_line_oe_n		),
 		.we_n			( ff_line1_we_n	),
@@ -320,7 +313,6 @@ module cache (
 			ff_refresh_pending <= 1'b0;
 			ff_req_address <= 22'd0;
 			ff_req_write <= 1'b0;
-			ff_req_flash <= 1'b0;
 			ff_req_wdata <= 16'd0;
 			ff_key <= 18'd0;
 			ff_word_index <= 3'd0;
@@ -367,7 +359,6 @@ module cache (
 			ff_lookup_hit_way <= 4'd0;
 			ff_lookup_repl_way <= 4'd0;
 			ff_lookup_repl_need_evict <= 1'b0;
-			ff_dirty_map <= 8'd0;
 			ff_evict_data0 <= 32'd0;
 			ff_evict_data1 <= 32'd0;
 			ff_evict_data2 <= 32'd0;
@@ -416,7 +407,6 @@ module cache (
 				else if( cache_valid ) begin
 					ff_req_address <= cache_address;
 					ff_req_write <= cache_write;
-					ff_req_flash <= cache_flush;
 					ff_req_wdata <= cache_wdata;
 					ff_key <= cache_address[22:5];
 					ff_word_index <= cache_address[4:2];
@@ -533,46 +523,10 @@ module cache (
 					ff_prescan_valid0_bits <= 8'd0;
 					ff_prescan_valid1_bits <= 8'd0;
 					ff_refill_partial <= 1'b1;
+					ff_line_oe_n <= 1'b0;
+					ff_ram_read_wait_phase <= 1'b0;
 					ff_state <= c_state_prescan_req;
 				end
-			end
-
-			c_state_write_hit_line_req: begin
-				ff_line_address <= fn_line_addr( ff_selected_way, ff_word_index );
-				ff_line_oe_n <= 1'b0;
-				ff_ram_read_wait_phase <= 1'b0;
-				ff_state <= c_state_write_hit_line_wait;
-			end
-
-			c_state_write_hit_line_wait: begin
-				if( !ff_ram_read_wait_phase ) begin
-					ff_line_oe_n <= 1'b0;
-					ff_ram_read_wait_phase <= 1'b1;
-				end
-				else begin
-					ff_line0_read <= w_line0_rdata;
-					ff_line1_read <= w_line1_rdata;
-					ff_ram_read_wait_phase <= 1'b0;
-					ff_state <= c_state_write_hit_line_commit;
-				end
-			end
-
-			c_state_write_hit_line_commit: begin
-				ff_line_address <= fn_line_addr( ff_selected_way, ff_word_index );
-				if( ff_half_select ) begin
-					ff_line0_wdata <= ff_line0_read;
-					ff_line1_wdata <= { 1'b1, 1'b1, ff_req_wdata };
-				end
-				else begin
-					ff_line0_wdata <= { 1'b1, 1'b1, ff_req_wdata };
-					ff_line1_wdata <= ff_line1_read;
-				end
-				ff_line0_we_n <= 1'b0;
-				ff_line1_we_n <= 1'b0;
-				ff_commit_set_valid <= 1'b1;
-				ff_commit_set_dirty <= 1'b1;
-				ff_commit_keep_dirty <= 1'b0;
-				ff_state <= c_state_tag_commit;
 			end
 
 			c_state_alloc_clear_req: begin
@@ -627,7 +581,6 @@ module cache (
 						ff_tag_prio[i] <= ff_tag_prio[i] - 4'd1;
 					end
 				end
-				ff_dirty_map[ff_selected_way] <= ff_commit_keep_dirty ? ff_tag_dirty[ff_selected_way] : ff_commit_set_dirty;
 				if( ff_req_write )
 					ff_state <= c_state_finish_req;
 				else
@@ -783,7 +736,6 @@ module cache (
 				ff_tag_prio[ff_flush_way] <= 4'd0;
 				ff_tag_valid[ff_flush_way] <= 1'b0;
 				ff_tag_dirty[ff_flush_way] <= 1'b0;
-				ff_dirty_map[ff_flush_way] <= 1'b0;
 				ff_flush_scan_index <= ff_flush_scan_index + 4'd1;
 				ff_flush_scan_remaining <= ff_flush_scan_remaining - 5'd1;
 				ff_state <= c_state_flush_find_dirty;
