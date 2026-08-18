@@ -94,7 +94,6 @@ module bus_selector (
 	reg				ff_write_stall;
 	reg				ff_ready;
 	reg				ff_rr_turn;
-	reg		[5:0]	ff_cache_cooldown;
 	reg		[2:0]	ff_read_count;
 	reg		[2:0]	ff_write_count;
 	reg				ff_read_seen_busy;
@@ -118,7 +117,7 @@ module bus_selector (
 	wire			w_selected_bus_read;
 	wire			w_output_bus;
 	//	display または cache からのリクエストを受理するかどうかを決定する
-	assign w_cache_request_valid			= sdram_cache_address_valid & (sdram_cache_refresh | (ff_cache_cooldown == 6'd0));
+	assign w_cache_request_valid		= sdram_cache_address_valid;
 	assign w_request_valid				= (sdram_display_address_valid | w_cache_request_valid) & ff_ready & !ff_read_stall & !ff_write_stall;
 	//	さらに、SDRAM Controller が受理可能かどうかを考慮して、active 信号を生成する
 	assign w_active						= (w_request_valid || w_prefetch_issue) & sdram_address_ready;
@@ -132,7 +131,7 @@ module bus_selector (
 	assign w_selected_bus_read			= !w_selected_bus_write & !w_selected_bus_refresh;
 	assign w_output_bus					= (ff_read_stall || ff_write_stall) ? ff_grant_bus : w_selected_bus;
 	assign w_prefetch_display_valid		= sdram_display_address_valid;
-	assign w_prefetch_cache_valid		= sdram_cache_address_valid && !sdram_cache_write && !sdram_cache_refresh && (ff_cache_cooldown == 6'd0);
+	assign w_prefetch_cache_valid		= sdram_cache_address_valid && !sdram_cache_write && !sdram_cache_refresh;
 	assign w_prefetch_selected_bus		= (w_prefetch_display_valid && w_prefetch_cache_valid)
 										? ff_rr_turn
 										: w_prefetch_cache_valid;
@@ -144,21 +143,11 @@ module bus_selector (
 		if( reset ) begin
 			ff_grant_bus	<= 1'd0;
 			ff_rr_turn		<= 1'b0;
-			ff_cache_cooldown	<= 6'd0;
 		end
 		else begin
 			if( w_active ) begin
-			ff_grant_bus	<= w_active_bus;
-			ff_rr_turn		<= ~w_active_bus;
-				if( w_active_bus ) begin
-					ff_cache_cooldown <= 6'd32;
-				end
-				else begin
-					ff_cache_cooldown <= 6'd0;
-				end
-			end
-			else if( ff_cache_cooldown != 6'd0 ) begin
-				ff_cache_cooldown <= ff_cache_cooldown - 6'd1;
+				ff_grant_bus	<= w_active_bus;
+				ff_rr_turn		<= ~w_active_bus;
 			end
 		end
 	end
