@@ -4,7 +4,6 @@ Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\BusSelector\bus_selector.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_line.v'
-Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_tag.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v'
 Undeclared symbol 'w_issue_accept', assumed default net type 'wire'("C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v":103)
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_controller.v'

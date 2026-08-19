@@ -18,10 +18,6 @@
             "Type": "verilog"
         },
         {
-            "Path": "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache_tag.v",
-            "Type": "verilog"
-        },
-        {
             "Path": "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/DisplayController/display_address_generator.v",
             "Type": "verilog"
         },

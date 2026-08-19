@@ -1,13 +1,5 @@
 [
     {
-        "InstFile": "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache_tag.v",
-        "InstLine": 34,
-        "InstName": "cache_tag",
-        "ModuleFile": "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/Cache/cache_tag.v",
-        "ModuleLine": 34,
-        "ModuleName": "cache_tag"
-    },
-    {
         "InstFile": "C:/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/FPGA/SimplePhotoFrame/src/SimplePhotoFrame.v",
         "InstLine": 6,
         "InstName": "simple_photo_frame",

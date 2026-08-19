@@ -12,27 +12,27 @@
   <Part Number>: GW2AR-LV18QN88C8/I7
   <Device>: GW2AR-18
   <Device Version>: C
-  <Created Time>:Tue Aug 18 19:08:58 2026
+  <Created Time>:Wed Aug 19 07:43:29 2026
 
 
 2. PnR Details
 
   Running placement:
-    Placement Phase 0: CPU time = 0h 0m 0.534s, Elapsed time = 0h 0m 0.534s
-    Placement Phase 1: CPU time = 0h 0m 0.315s, Elapsed time = 0h 0m 0.315s
+    Placement Phase 0: CPU time = 0h 0m 0.533s, Elapsed time = 0h 0m 0.533s
+    Placement Phase 1: CPU time = 0h 0m 0.309s, Elapsed time = 0h 0m 0.309s
     Placement Phase 2: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s
     Placement Phase 3: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
     Total Placement: CPU time = 0h 0m 4s, Elapsed time = 0h 0m 4s
  Running routing:
     Routing Phase 0: CPU time = 0h 0m 0.005s, Elapsed time = 0h 0m 0.005s
-    Routing Phase 1: CPU time = 0h 0m 0.203s, Elapsed time = 0h 0m 0.204s
+    Routing Phase 1: CPU time = 0h 0m 0.217s, Elapsed time = 0h 0m 0.218s
     Routing Phase 2: CPU time = 0h 0m 6s, Elapsed time = 0h 0m 6s
     Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
-    Total Routing: CPU time = 0h 0m 6s, Elapsed time = 0h 0m 6s
+    Total Routing: CPU time = 0h 0m 7s, Elapsed time = 0h 0m 7s
  Generate output files:
     CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
 
- Total Time and Memory Usage: CPU time = 0h 0m 11s, Elapsed time = 0h 0m 11s, Peak memory usage = 554MB
+ Total Time and Memory Usage: CPU time = 0h 0m 12s, Elapsed time = 0h 0m 12s, Peak memory usage = 566MB
 
 
 3. Resource Usage Summary
@@ -40,15 +40,15 @@
   --------------------------------------------------------------------------------
   Resources                   | Usage                               | Utilization
   --------------------------------------------------------------------------------
-  Logic                       | 5313/20736                          |  26%
-    --LUT,ALU,ROM16           | 5205(4282 LUT, 923 ALU, 0 ROM16)    | -
+  Logic                       | 5437/20736                          |  27%
+    --LUT,ALU,ROM16           | 5329(4415 LUT, 914 ALU, 0 ROM16)    | -
     --SSRAM(RAM16)            | 18                                  | -
-  Register                    | 2888/15915                          |  19%
+  Register                    | 2876/15915                          |  19%
     --Logic Register as Latch | 0/15552                             |  0%
-    --Logic Register as FF    | 2836/15552                          |  19%
+    --Logic Register as FF    | 2820/15552                          |  19%
     --I/O Register as Latch   | 0/363                               |  0%
-    --I/O Register as FF      | 52/363                              |  15%
-  CLS                         | 3810/10368                          |  37%
+    --I/O Register as FF      | 56/363                              |  16%
+  CLS                         | 3882/10368                          |  38%
   I/O Port                    | 42/66                               |  64%
   I/O Buf                     | 40                                  | -
     --Input Buf               | 4                                   | -
@@ -98,7 +98,7 @@
   ff_reset_sdram | PRIMARY        |  TR TL
   sysclk         | PRIMARY        |  TR TL BR BL
   O_sdram_clk_d  | PRIMARY        |  TR TL
-  serialclk      | PRIMARY        |  TR TL BR
+  serialclk      | PRIMARY        |  TR TL
   ff_reset_bus   | LW             |  -
   ff_reset_cache | LW             |  -
   ff_reset_vram  | LW             |  -
@@ -106,7 +106,7 @@
   ff_reset_gp2   | LW             |  -
   ff_reset_gp1   | LW             |  -
   ff_reset_spi   | LW             |  -
-  u_display_controller/n652_3| LW             |  -
+  u_display_controller/n652_5| LW             |  -
   ===========================================
 
 

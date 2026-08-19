@@ -105,12 +105,12 @@ module cache (
 	reg		[17:0]	ff_key;
 	reg		[2:0]	ff_word_index;
 	reg				ff_half_select;
-	reg		[3:0]	ff_selected_way;
-	reg		[3:0]	ff_selected_prio;
+	reg		[2:0]	ff_selected_way;
+	reg		[2:0]	ff_selected_priority;
 	reg				ff_refill_partial;
 
 	reg		[17:0]	ff_tag_key [0:7];
-	reg		[3:0]	ff_tag_prio [0:7];
+	reg		[2:0]	ff_tag_priority [0:7];
 	reg				ff_tag_valid [0:7];
 	reg				ff_tag_dirty [0:7];
 
@@ -127,8 +127,8 @@ module cache (
 	reg		[17:0]	ff_prescan_line0_word [0:7];
 	reg		[17:0]	ff_prescan_line1_word [0:7];
 
-	reg		[3:0]	ff_flush_way;
-	reg		[3:0]	ff_flush_scan_index;
+	reg		[2:0]	ff_flush_way;
+	reg		[2:0]	ff_flush_scan_index;
 	reg		[4:0]	ff_flush_scan_remaining;
 
 	reg		[17:0]	ff_evict_key;
@@ -177,23 +177,23 @@ module cache (
 	reg				ff_commit_set_dirty;
 	reg				ff_commit_keep_dirty;
 	reg				ff_lookup_any_hit;
-	reg		[3:0]	ff_lookup_hit_way;
-	reg		[3:0]	ff_lookup_repl_way;
+	reg		[2:0]	ff_lookup_hit_way;
+	reg		[2:0]	ff_lookup_repl_way;
 	reg				ff_lookup_repl_need_evict;
 
 	reg				w_any_hit;
-	reg		[3:0]	w_hit_way;
-	wire	[3:0]	w_repl_way;
+	reg		[2:0]	w_hit_way;
+	wire	[2:0]	w_repl_way;
 	wire			w_repl_need_evict;
 	integer			i;
 
 	wire	[17:0]	w_lookup_key = ff_key;
 
 	function [6:0] fn_line_addr;
-		input [3:0] way;
+		input [2:0] way;
 		input [2:0] word_index;
 		begin
-			fn_line_addr = { way, word_index };
+			fn_line_addr = { 1'b0, way, word_index };
 		end
 	endfunction
 
@@ -242,13 +242,13 @@ module cache (
 		end
 	endfunction
 
-	//	置換候補 {valid, prio[3:0], way[3:0]}。invalid way を最優先し、
+	//	置換候補 {valid, priority[2:0], way[2:0]}。invalid way を最優先し、
 	//	同格は左(小さいway番号)優先で元の直列scanと同じ選択結果になる。
-	function [8:0] fn_pick_repl;
-		input [8:0] a;
-		input [8:0] b;
+	function [6:0] fn_pick_repl;
+		input [6:0] a;
+		input [6:0] b;
 		begin
-			if( (!b[8] && a[8]) || ((b[8] == a[8]) && (b[7:4] < a[7:4])) ) begin
+			if( (!b[6] && a[6]) || ((b[6] == a[6]) && (b[5:3] < a[5:3])) ) begin
 				fn_pick_repl = b;
 			end
 			else begin
@@ -257,29 +257,29 @@ module cache (
 		end
 	endfunction
 
-	wire	[8:0]	w_repl_cand0 = { ff_tag_valid[0], (ff_tag_valid[0] ? ff_tag_prio[0] : 4'd0), 4'd0 };
-	wire	[8:0]	w_repl_cand1 = { ff_tag_valid[1], (ff_tag_valid[1] ? ff_tag_prio[1] : 4'd0), 4'd1 };
-	wire	[8:0]	w_repl_cand2 = { ff_tag_valid[2], (ff_tag_valid[2] ? ff_tag_prio[2] : 4'd0), 4'd2 };
-	wire	[8:0]	w_repl_cand3 = { ff_tag_valid[3], (ff_tag_valid[3] ? ff_tag_prio[3] : 4'd0), 4'd3 };
-	wire	[8:0]	w_repl_cand4 = { ff_tag_valid[4], (ff_tag_valid[4] ? ff_tag_prio[4] : 4'd0), 4'd4 };
-	wire	[8:0]	w_repl_cand5 = { ff_tag_valid[5], (ff_tag_valid[5] ? ff_tag_prio[5] : 4'd0), 4'd5 };
-	wire	[8:0]	w_repl_cand6 = { ff_tag_valid[6], (ff_tag_valid[6] ? ff_tag_prio[6] : 4'd0), 4'd6 };
-	wire	[8:0]	w_repl_cand7 = { ff_tag_valid[7], (ff_tag_valid[7] ? ff_tag_prio[7] : 4'd0), 4'd7 };
+	wire	[6:0]	w_repl_cand0 = { ff_tag_valid[0], (ff_tag_valid[0] ? ff_tag_priority[0] : 3'd0), 3'd0 };
+	wire	[6:0]	w_repl_cand1 = { ff_tag_valid[1], (ff_tag_valid[1] ? ff_tag_priority[1] : 3'd0), 3'd1 };
+	wire	[6:0]	w_repl_cand2 = { ff_tag_valid[2], (ff_tag_valid[2] ? ff_tag_priority[2] : 3'd0), 3'd2 };
+	wire	[6:0]	w_repl_cand3 = { ff_tag_valid[3], (ff_tag_valid[3] ? ff_tag_priority[3] : 3'd0), 3'd3 };
+	wire	[6:0]	w_repl_cand4 = { ff_tag_valid[4], (ff_tag_valid[4] ? ff_tag_priority[4] : 3'd0), 3'd4 };
+	wire	[6:0]	w_repl_cand5 = { ff_tag_valid[5], (ff_tag_valid[5] ? ff_tag_priority[5] : 3'd0), 3'd5 };
+	wire	[6:0]	w_repl_cand6 = { ff_tag_valid[6], (ff_tag_valid[6] ? ff_tag_priority[6] : 3'd0), 3'd6 };
+	wire	[6:0]	w_repl_cand7 = { ff_tag_valid[7], (ff_tag_valid[7] ? ff_tag_priority[7] : 3'd0), 3'd7 };
 
-	wire	[8:0]	w_repl_n01 = fn_pick_repl( w_repl_cand0, w_repl_cand1 );
-	wire	[8:0]	w_repl_n23 = fn_pick_repl( w_repl_cand2, w_repl_cand3 );
-	wire	[8:0]	w_repl_n45 = fn_pick_repl( w_repl_cand4, w_repl_cand5 );
-	wire	[8:0]	w_repl_n67 = fn_pick_repl( w_repl_cand6, w_repl_cand7 );
-	wire	[8:0]	w_repl_n03 = fn_pick_repl( w_repl_n01, w_repl_n23 );
-	wire	[8:0]	w_repl_n47 = fn_pick_repl( w_repl_n45, w_repl_n67 );
-	wire	[8:0]	w_repl_sel = fn_pick_repl( w_repl_n03, w_repl_n47 );
+	wire	[6:0]	w_repl_n01 = fn_pick_repl( w_repl_cand0, w_repl_cand1 );
+	wire	[6:0]	w_repl_n23 = fn_pick_repl( w_repl_cand2, w_repl_cand3 );
+	wire	[6:0]	w_repl_n45 = fn_pick_repl( w_repl_cand4, w_repl_cand5 );
+	wire	[6:0]	w_repl_n67 = fn_pick_repl( w_repl_cand6, w_repl_cand7 );
+	wire	[6:0]	w_repl_n03 = fn_pick_repl( w_repl_n01, w_repl_n23 );
+	wire	[6:0]	w_repl_n47 = fn_pick_repl( w_repl_n45, w_repl_n67 );
+	wire	[6:0]	w_repl_sel = fn_pick_repl( w_repl_n03, w_repl_n47 );
 
-	assign	w_repl_way			= w_repl_sel[3:0];
-	assign	w_repl_need_evict	= w_repl_sel[8] && ff_tag_dirty[w_repl_sel[3:0]];
+	assign	w_repl_way			= w_repl_sel[2:0];
+	assign	w_repl_need_evict	= w_repl_sel[6] && ff_tag_dirty[w_repl_sel[2:0]];
 
 	always @* begin
 		w_any_hit = 1'b0;
-		w_hit_way = 4'd0;
+		w_hit_way = 3'd0;
 		for( i = 0; i < 8; i = i + 1 ) begin
 			if( !w_any_hit && ff_tag_valid[i] && (ff_tag_key[i] == w_lookup_key) ) begin
 				w_any_hit = 1'b1;
@@ -291,7 +291,7 @@ module cache (
 	cache_line u_cache_line0 (
 		.clk			( clk				),
 		.oe_n			( ff_line_oe_n		),
-		.we_n			( ff_line0_we_n	),
+		.we_n			( ff_line0_we_n		),
 		.address		( ff_line_address	),
 		.wdata			( ff_line0_wdata	),
 		.rdata			( w_line0_rdata		)
@@ -300,7 +300,7 @@ module cache (
 	cache_line u_cache_line1 (
 		.clk			( clk				),
 		.oe_n			( ff_line_oe_n		),
-		.we_n			( ff_line1_we_n	),
+		.we_n			( ff_line1_we_n		),
 		.address		( ff_line_address	),
 		.wdata			( ff_line1_wdata	),
 		.rdata			( w_line1_rdata		)
@@ -317,8 +317,8 @@ module cache (
 			ff_key <= 18'd0;
 			ff_word_index <= 3'd0;
 			ff_half_select <= 1'b0;
-			ff_selected_way <= 4'd0;
-			ff_selected_prio <= 4'd0;
+			ff_selected_way <= 3'd0;
+			ff_selected_priority <= 3'd0;
 			ff_refill_partial <= 1'b0;
 			ff_line0_read <= 18'd0;
 			ff_line1_read <= 18'd0;
@@ -329,8 +329,8 @@ module cache (
 			ff_prescan_index <= 3'd0;
 			ff_prescan_valid0_bits <= 8'd0;
 			ff_prescan_valid1_bits <= 8'd0;
-			ff_flush_way <= 4'd0;
-			ff_flush_scan_index <= 4'd0;
+			ff_flush_way <= 3'd0;
+			ff_flush_scan_index <= 3'd0;
 			ff_flush_scan_remaining <= 5'd0;
 			ff_evict_key <= 18'd0;
 			ff_evict_index <= 3'd0;
@@ -356,8 +356,8 @@ module cache (
 			ff_commit_set_dirty <= 1'b0;
 			ff_commit_keep_dirty <= 1'b0;
 			ff_lookup_any_hit <= 1'b0;
-			ff_lookup_hit_way <= 4'd0;
-			ff_lookup_repl_way <= 4'd0;
+			ff_lookup_hit_way <= 3'd0;
+			ff_lookup_repl_way <= 3'd0;
 			ff_lookup_repl_need_evict <= 1'b0;
 			ff_evict_data0 <= 32'd0;
 			ff_evict_data1 <= 32'd0;
@@ -377,7 +377,7 @@ module cache (
 			ff_evict_mask7 <= 4'd0;
 			for( i = 0; i < 8; i = i + 1 ) begin
 				ff_tag_key[i] <= 18'd0;
-				ff_tag_prio[i] <= 4'd0;
+				ff_tag_priority[i] <= 3'd0;
 				ff_tag_valid[i] <= 1'b0;
 				ff_tag_dirty[i] <= 1'b0;
 			end
@@ -412,7 +412,7 @@ module cache (
 					ff_word_index <= cache_address[4:2];
 					ff_half_select <= cache_address[1];
 					if( cache_flush ) begin
-						ff_flush_scan_index <= 4'd0;
+						ff_flush_scan_index <= 3'd0;
 						ff_flush_scan_remaining <= 5'd8;
 						ff_state <= c_state_flush_find_dirty;
 					end
@@ -434,7 +434,7 @@ module cache (
 				if( ff_req_write ) begin
 					if( ff_lookup_any_hit ) begin
 						ff_selected_way <= ff_lookup_hit_way;
-						ff_selected_prio <= ff_tag_prio[ff_lookup_hit_way];
+						ff_selected_priority <= ff_tag_priority[ff_lookup_hit_way];
 						ff_line_address <= fn_line_addr( ff_lookup_hit_way, ff_word_index );
 						if( ff_half_select ) begin
 							ff_line1_wdata <= { 1'b1, 1'b1, ff_req_wdata };
@@ -451,7 +451,7 @@ module cache (
 					end
 					else begin
 						ff_selected_way <= ff_lookup_repl_way;
-						ff_selected_prio <= ff_tag_prio[ff_lookup_repl_way];
+						ff_selected_priority <= ff_tag_priority[ff_lookup_repl_way];
 						if( ff_lookup_repl_need_evict ) begin
 							ff_evict_key <= ff_tag_key[ff_lookup_repl_way];
 							ff_evict_index <= 3'd0;
@@ -467,12 +467,12 @@ module cache (
 				else begin
 					if( ff_lookup_any_hit ) begin
 						ff_selected_way <= ff_lookup_hit_way;
-						ff_selected_prio <= ff_tag_prio[ff_lookup_hit_way];
+						ff_selected_priority <= ff_tag_priority[ff_lookup_hit_way];
 						ff_state <= c_state_read_hit_line_req;
 					end
 					else begin
 						ff_selected_way <= ff_lookup_repl_way;
-						ff_selected_prio <= ff_tag_prio[ff_lookup_repl_way];
+						ff_selected_priority <= ff_tag_priority[ff_lookup_repl_way];
 						if( ff_lookup_repl_need_evict ) begin
 							ff_evict_key <= ff_tag_key[ff_lookup_repl_way];
 							ff_evict_index <= 3'd0;
@@ -575,10 +575,10 @@ module cache (
 						ff_tag_key[i] <= ff_key;
 						ff_tag_valid[i] <= ff_commit_set_valid;
 						ff_tag_dirty[i] <= ff_commit_keep_dirty ? ff_tag_dirty[i] : ff_commit_set_dirty;
-						ff_tag_prio[i] <= 4'd7;
+						ff_tag_priority[i] <= 3'd7;
 					end
-					else if( ff_tag_valid[i] && (ff_tag_prio[i] > ff_selected_prio) ) begin
-						ff_tag_prio[i] <= ff_tag_prio[i] - 4'd1;
+					else if( ff_tag_valid[i] && (ff_tag_priority[i] > ff_selected_priority) ) begin
+						ff_tag_priority[i] <= ff_tag_priority[i] - 3'd1;
 					end
 				end
 				if( ff_req_write )
@@ -715,7 +715,7 @@ module cache (
 					ff_flush_way <= ff_flush_scan_index;
 					if( ff_tag_valid[ff_flush_scan_index] && ff_tag_dirty[ff_flush_scan_index] ) begin
 						ff_selected_way <= ff_flush_scan_index;
-						ff_selected_prio <= ff_tag_prio[ff_flush_scan_index];
+						ff_selected_priority <= ff_tag_priority[ff_flush_scan_index];
 						ff_evict_key <= ff_tag_key[ff_flush_scan_index];
 						ff_evict_index <= 3'd0;
 						ff_evict_post_state <= c_post_evict_flush;
@@ -726,17 +726,17 @@ module cache (
 					end
 				end
 				else begin
-					ff_flush_scan_index <= ff_flush_scan_index + 4'd1;
+					ff_flush_scan_index <= ff_flush_scan_index + 3'd1;
 					ff_flush_scan_remaining <= ff_flush_scan_remaining - 5'd1;
 				end
 			end
 
 			c_state_flush_tag_clear: begin
 				ff_tag_key[ff_flush_way] <= 18'd0;
-				ff_tag_prio[ff_flush_way] <= 4'd0;
+				ff_tag_priority[ff_flush_way] <= 3'd0;
 				ff_tag_valid[ff_flush_way] <= 1'b0;
 				ff_tag_dirty[ff_flush_way] <= 1'b0;
-				ff_flush_scan_index <= ff_flush_scan_index + 4'd1;
+				ff_flush_scan_index <= ff_flush_scan_index + 3'd1;
 				ff_flush_scan_remaining <= ff_flush_scan_remaining - 5'd1;
 				ff_state <= c_state_flush_find_dirty;
 			end

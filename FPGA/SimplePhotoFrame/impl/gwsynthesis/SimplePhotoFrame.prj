@@ -8,7 +8,6 @@
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\BusSelector\bus_selector.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_line.v" type="verilog"/>
-        <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\Cache\cache_tag.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_controller.v" type="verilog"/>
         <File path="C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\DisplayController\display_fillcolor_generator.v" type="verilog"/>
