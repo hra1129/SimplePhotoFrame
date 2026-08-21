@@ -1,9 +1,9 @@
--d C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg
+-d C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg
 -p GW2AR-18C-QFN88-8
 -pn GW2AR-LV18QN88C8/I7
--cst C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst
--cfg C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\device.cfg
--sdc C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.sdc
+-cst C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst
+-cfg C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\pnr\device.cfg
+-sdc C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.sdc
 -bit
 -tr
 -ph

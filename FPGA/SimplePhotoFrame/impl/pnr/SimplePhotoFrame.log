@@ -1,7 +1,7 @@
-Reading netlist file: "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg"
-Parsing netlist file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg" completed
+Reading netlist file: "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg"
+Parsing netlist file "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\gwsynthesis\SimplePhotoFrame.vg" completed
 Processing netlist completed
-Reading constraint file: "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst"
+Reading constraint file: "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\SimplePhotoFrame.cst"
 Physical Constraint parsed completed
 Running placement......
 [10%] Placement Phase 0 completed
@@ -21,10 +21,10 @@ Bitstream generation in progress......
 Bitstream generation completed
 Running power analysis......
 [100%] Power analysis completed
-Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.power.html" completed
-Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.pin.html" completed
-Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.rpt.html" completed
-Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.rpt.txt" completed
-Generate file "C:\Users\hra\Documents\github\HRA_product\CQ_GOWIN_FPGA_Vol6\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.tr.html" completed
-Wed Aug 19 07:43:29 2026
+Generate file "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.power.html" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.pin.html" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.rpt.html" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.rpt.txt" completed
+Generate file "C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\impl\pnr\SimplePhotoFrame.tr.html" completed
+Sat Aug 22 08:02:33 2026
 
