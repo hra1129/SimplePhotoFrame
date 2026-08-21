@@ -4418,7 +4418,7 @@ Disassembly of section .text:
 10002ea4:	2500      	movs	r5, #0
 10002ea6:	e7f9      	b.n	10002e9c <fpga_io_init+0xe0>
 10002ea8:	40080000 	.word	0x40080000
-10002eac:	042c1d80 	.word	0x042c1d80
+10002eac:	02faf080 	.word	0x02faf080
 10002eb0:	40083000 	.word	0x40083000
 10002eb4:	40081000 	.word	0x40081000
 10002eb8:	40082000 	.word	0x40082000
