@@ -1,5 +1,5 @@
 
-/mnt/c/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/SOFTWARE/build/simple_photo_frame.elf:     file format elf32-littlearm
+/mnt/c/Users/hra/Documents/github/HRA_product/SimplePhotoFrame/SOFTWARE/build/simple_photo_frame.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -47,16 +47,16 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  21 .debug_rnglists 00008bfd  00000000  00000000  000d8c20  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line   00041131  00000000  00000000  000e181d  2**0
+ 22 .debug_line   0004111b  00000000  00000000  000e181d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 23 .debug_str    0000eb26  00000000  00000000  0012294e  2**0
+ 23 .debug_str    0000eb10  00000000  00000000  00122938  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 24 .debug_frame  00005bcc  00000000  00000000  00131474  2**2
+ 24 .debug_frame  00005bcc  00000000  00000000  00131448  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 25 .debug_line_str 00000255  00000000  00000000  00137040  2**0
+ 25 .debug_line_str 00000253  00000000  00000000  00137014  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
-/mnt/c/Users/hra/Documents/github/HRA_product/CQ_GOWIN_FPGA_Vol6/SOFTWARE/build/simple_photo_frame.elf:     file format elf32-littlearm
+/mnt/c/Users/hra/Documents/github/HRA_product/SimplePhotoFrame/SOFTWARE/build/simple_photo_frame.elf:     file format elf32-littlearm
 
 
 Disassembly of section .text:

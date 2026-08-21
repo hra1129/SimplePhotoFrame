@@ -259,7 +259,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x13 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
  .debug_line    0x00000000      0x3ee CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
- .debug_str     0x00000000      0x415 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
+ .debug_str     0x00000000      0x413 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
  .debug_frame   0x00000000       0x28 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
  .ARM.attributes
@@ -335,7 +335,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x13 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
  .debug_line    0x00000000      0x1b5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
- .debug_str     0x00000000      0x217 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
+ .debug_str     0x00000000      0x215 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
  .debug_frame   0x00000000       0x20 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2350/pico_platform/platform.c.o
  .ARM.attributes
@@ -348,7 +348,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
  .debug_line    0x00000000       0x7f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
- .debug_str     0x00000000      0x1d0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
+ .debug_str     0x00000000      0x1ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
@@ -492,7 +492,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x67 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
  .debug_line    0x00000000      0x4c6 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
- .debug_str     0x00000000      0x412 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
+ .debug_str     0x00000000      0x410 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
  .debug_frame   0x00000000       0x6c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/timeout_helper.c.o
  .ARM.attributes
@@ -578,7 +578,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x31 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
  .debug_line    0x00000000      0x293 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
- .debug_str     0x00000000      0x2cf CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
+ .debug_str     0x00000000      0x2cd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
  .debug_frame   0x00000000       0x98 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/datetime.c.o
  .ARM.attributes
@@ -620,7 +620,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x45d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
  .debug_line    0x00000000     0x12e2 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
- .debug_str     0x00000000      0x417 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
+ .debug_str     0x00000000      0x415 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
  .debug_frame   0x00000000      0x1b4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/pheap.c.o
  .ARM.attributes
@@ -653,7 +653,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x1e8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
  .debug_line    0x00000000      0xcf6 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
- .debug_str     0x00000000      0x477 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
+ .debug_str     0x00000000      0x475 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
  .debug_frame   0x00000000       0xe4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_util/queue.c.o
  .ARM.attributes
@@ -688,7 +688,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x241 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
  .debug_line    0x00000000      0xeca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
- .debug_str     0x00000000      0xe6f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
+ .debug_str     0x00000000      0xe6d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
  .debug_frame   0x00000000       0xfc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
  .ARM.attributes
@@ -751,7 +751,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x4c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
  .debug_line    0x00000000      0x3db CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
- .debug_str     0x00000000      0x72e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
+ .debug_str     0x00000000      0x72c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
  .debug_frame   0x00000000       0x40 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
  .ARM.attributes
@@ -839,7 +839,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x4f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
  .debug_line    0x00000000      0x46f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
- .debug_str     0x00000000      0x87d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
+ .debug_str     0x00000000      0x87b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
  .debug_frame   0x00000000       0xbc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_flash/flash.c.o
  .ARM.attributes
@@ -861,7 +861,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
  .debug_line    0x00000000      0x122 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
- .debug_str     0x00000000      0x1f9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
+ .debug_str     0x00000000      0x1f7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_divider/divider.c.o
@@ -890,7 +890,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x13 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
  .debug_line    0x00000000       0xe0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
- .debug_str     0x00000000      0x225 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
+ .debug_str     0x00000000      0x223 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
  .debug_frame   0x00000000       0x20 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
  .ARM.attributes
@@ -903,12 +903,12 @@ Discarded input sections
  .text.ctzdi    0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .debug_line    0x00000000       0x75 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .debug_line_str
-                0x00000000       0xae CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
+                0x00000000       0xac CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .debug_aranges
                 0x00000000       0x30 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
- .debug_str     0x00000000       0xba CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
+ .debug_str     0x00000000       0xb8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .debug_rnglists
                 0x00000000       0x1f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
  .ARM.attributes
@@ -965,7 +965,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x196 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
  .debug_line    0x00000000      0x777 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
- .debug_str     0x00000000      0x48a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
+ .debug_str     0x00000000      0x488 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
  .debug_frame   0x00000000      0x1bc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_divider/divider_compiler.c.o
  .ARM.attributes
@@ -1046,7 +1046,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x5d7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
  .debug_line    0x00000000     0x2bd6 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
- .debug_str     0x00000000      0x50d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
+ .debug_str     0x00000000      0x50b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
  .debug_frame   0x00000000      0x510 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_math.c.o
  .ARM.attributes
@@ -1095,12 +1095,12 @@ Discarded input sections
                 0x00000000       0x6a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .debug_line    0x00000000      0x1f1 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .debug_line_str
-                0x00000000       0xae CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
+                0x00000000       0xac CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .debug_aranges
                 0x00000000       0x30 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
- .debug_str     0x00000000       0xba CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
+ .debug_str     0x00000000       0xb8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .debug_rnglists
                 0x00000000       0x20 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_fma_dcp.S.o
  .ARM.attributes
@@ -1126,12 +1126,12 @@ Discarded input sections
                 0x00000000      0x320 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .debug_line    0x00000000      0x4a7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .debug_line_str
-                0x00000000       0xae CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
+                0x00000000       0xac CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .debug_aranges
                 0x00000000       0x58 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
- .debug_str     0x00000000       0xba CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
+ .debug_str     0x00000000       0xb8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .debug_rnglists
                 0x00000000       0x41 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_sci_m33.S.o
  .ARM.attributes
@@ -1151,12 +1151,12 @@ Discarded input sections
                 0x00000000       0x72 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .debug_line    0x00000000      0x1ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .debug_line_str
-                0x00000000       0xaf CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
+                0x00000000       0xad CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .debug_aranges
                 0x00000000       0x40 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
- .debug_str     0x00000000       0xbb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
+ .debug_str     0x00000000       0xb9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .debug_rnglists
                 0x00000000       0x2d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_conv_m33.S.o
  .ARM.attributes
@@ -1238,7 +1238,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x41e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
  .debug_line    0x00000000     0x24ef CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
- .debug_str     0x00000000      0x4d8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
+ .debug_str     0x00000000      0x4d6 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
  .debug_frame   0x00000000      0x404 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_math.c.o
  .ARM.attributes
@@ -1264,12 +1264,12 @@ Discarded input sections
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .debug_line    0x00000000       0xe1 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .debug_line_str
-                0x00000000       0xaf CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
+                0x00000000       0xad CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .debug_aranges
                 0x00000000       0x58 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
- .debug_str     0x00000000       0xbb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
+ .debug_str     0x00000000       0xb9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .debug_rnglists
                 0x00000000       0x3d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_conv32_vfp.S.o
  .ARM.attributes
@@ -1289,12 +1289,12 @@ Discarded input sections
                 0x00000000       0x68 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .debug_line    0x00000000      0x19e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .debug_line_str
-                0x00000000       0xaf CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
+                0x00000000       0xad CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .debug_aranges
                 0x00000000       0x40 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
- .debug_str     0x00000000       0xbb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
+ .debug_str     0x00000000       0xb9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .debug_rnglists
                 0x00000000       0x2d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_common_m33.S.o
  .ARM.attributes
@@ -1316,12 +1316,12 @@ Discarded input sections
                 0x00000000      0x2cc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .debug_line    0x00000000      0x263 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .debug_line_str
-                0x00000000       0xb0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+                0x00000000       0xae CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .debug_info    0x00000000       0x23 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .debug_abbrev  0x00000000       0x12 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .debug_aranges
                 0x00000000       0x48 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
- .debug_str     0x00000000       0xbc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+ .debug_str     0x00000000       0xba CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .debug_rnglists
                 0x00000000       0x35 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
  .ARM.attributes
@@ -1348,7 +1348,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x49 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
  .debug_line    0x00000000      0x29b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
- .debug_str     0x00000000      0x270 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
+ .debug_str     0x00000000      0x26e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
  .debug_frame   0x00000000       0x6c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
  .ARM.attributes
@@ -1395,7 +1395,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x283 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
  .debug_line    0x00000000     0x1113 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
- .debug_str     0x00000000      0x4ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
+ .debug_str     0x00000000      0x4cc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
  .debug_frame   0x00000000      0x1bc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
  .ARM.attributes
@@ -1418,7 +1418,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x31 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
  .debug_line    0x00000000      0x1d4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
- .debug_str     0x00000000      0x3b5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+ .debug_str     0x00000000      0x3b3 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
  .debug_frame   0x00000000       0x70 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
  .ARM.attributes
@@ -1567,7 +1567,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x1f6 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
  .debug_line    0x00000000     0x1106 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
- .debug_str     0x00000000      0x96b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
+ .debug_str     0x00000000      0x969 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
  .debug_frame   0x00000000      0x244 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
  .ARM.attributes
@@ -1596,7 +1596,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x31 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
  .debug_line    0x00000000      0x305 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
- .debug_str     0x00000000      0x35d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+ .debug_str     0x00000000      0x35b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
  .debug_frame   0x00000000       0x70 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
  .ARM.attributes
@@ -1695,7 +1695,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
  .debug_line    0x00000000       0x7d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
- .debug_str     0x00000000      0x1ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
+ .debug_str     0x00000000      0x1cc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/audio/audio_device.c.o
@@ -1726,7 +1726,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
  .debug_line    0x00000000       0x79 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
- .debug_str     0x00000000      0x1ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
+ .debug_str     0x00000000      0x1c8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_device.c.o
@@ -1738,7 +1738,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
  .debug_line    0x00000000       0x7c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
- .debug_str     0x00000000      0x1cd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
+ .debug_str     0x00000000      0x1cb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
@@ -1750,7 +1750,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
  .debug_line    0x00000000       0x79 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
- .debug_str     0x00000000      0x1ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
+ .debug_str     0x00000000      0x1c8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.o
@@ -1762,7 +1762,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
  .debug_line    0x00000000       0x7b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
- .debug_str     0x00000000      0x1cc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
+ .debug_str     0x00000000      0x1ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.o
@@ -1774,7 +1774,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
  .debug_line    0x00000000       0x79 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
- .debug_str     0x00000000      0x1ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
+ .debug_str     0x00000000      0x1c8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/msc/msc_device.c.o
@@ -1786,7 +1786,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
  .debug_line    0x00000000       0x7f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
- .debug_str     0x00000000      0x1d0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
+ .debug_str     0x00000000      0x1ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
@@ -1798,7 +1798,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
  .debug_line    0x00000000       0x79 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
- .debug_str     0x00000000      0x1ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
+ .debug_str     0x00000000      0x1c8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/net/ncm_device.c.o
@@ -1810,7 +1810,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
  .debug_line    0x00000000       0x7f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
- .debug_str     0x00000000      0x1d0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
+ .debug_str     0x00000000      0x1ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
@@ -1841,7 +1841,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
  .debug_line    0x00000000       0x7d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
- .debug_str     0x00000000      0x1ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
+ .debug_str     0x00000000      0x1cc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/video/video_device.c.o
@@ -1901,7 +1901,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x13 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
  .debug_line    0x00000000       0xbd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
- .debug_str     0x00000000      0x21b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
+ .debug_str     0x00000000      0x219 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
  .debug_frame   0x00000000       0x20 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
  .ARM.attributes
@@ -1962,7 +1962,7 @@ Discarded input sections
  .data          0x00000000        0x0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
  .bss           0x00000000        0x0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
  .debug_line    0x00000000        0x0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
- .debug_str     0x00000000      0x144 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
+ .debug_str     0x00000000      0x142 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_poll.c.o
@@ -1977,7 +1977,7 @@ Discarded input sections
  .data          0x00000000        0x0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
  .bss           0x00000000        0x0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
  .debug_line    0x00000000        0x0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
- .debug_str     0x00000000      0x148 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
+ .debug_str     0x00000000      0x146 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_freertos.c.o
@@ -2146,7 +2146,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x13 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
  .debug_line    0x00000000       0xb7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
- .debug_str     0x00000000      0x1ff CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
+ .debug_str     0x00000000      0x1fd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
  .debug_frame   0x00000000       0x28 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_stats.c.o
  .ARM.attributes
@@ -2159,7 +2159,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
  .debug_line    0x00000000       0x74 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
- .debug_str     0x00000000      0x1d0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
+ .debug_str     0x00000000      0x1ce CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
  .ARM.attributes
                 0x00000000       0x38 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_lwip.c.o
@@ -2250,7 +2250,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0xb9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
  .debug_line    0x00000000      0x891 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
- .debug_str     0x00000000      0xbd9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
+ .debug_str     0x00000000      0xbd7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
  .debug_frame   0x00000000       0xb4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus.c.o
  .ARM.attributes
@@ -2305,7 +2305,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000      0x295 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
  .debug_line    0x00000000     0x104d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
- .debug_str     0x00000000      0xd3b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
+ .debug_str     0x00000000      0xd39 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
  .debug_frame   0x00000000      0x1e4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/cybt_shared_bus_driver.c.o
  .ARM.attributes
@@ -2416,7 +2416,7 @@ Discarded input sections
  .debug_rnglists
                 0x00000000       0x52 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
  .debug_line    0x00000000      0x56e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
- .debug_str     0x00000000      0x578 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
+ .debug_str     0x00000000      0x576 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
  .comment       0x00000000       0x27 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
  .debug_frame   0x00000000       0x88 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_exception/exception.c.o
  .ARM.attributes
@@ -6065,172 +6065,172 @@ LOAD linker stubs
  .debug_rnglists
                 0x00008bc3       0x3a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__call_atexit.o)
 
-.debug_line     0x00000000    0x41131
- .debug_line    0x00000000     0x1032 CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.o
- .debug_line    0x00001032      0x854 CMakeFiles/simple_photo_frame.dir/lcd_console.c.o
- .debug_line    0x00001886     0x12be CMakeFiles/simple_photo_frame.dir/sdcard.c.o
- .debug_line    0x00002b44      0x3ec CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.o
- .debug_line    0x00002f30     0x2503 CMakeFiles/simple_photo_frame.dir/tjpgd.c.o
- .debug_line    0x00005433      0xaed CMakeFiles/simple_photo_frame.dir/fpga_io.c.o
- .debug_line    0x00005f20      0x1af CMakeFiles/simple_photo_frame.dir/vram_accessor.c.o
- .debug_line    0x000060cf      0x87a CMakeFiles/simple_photo_frame.dir/display_controller.c.o
- .debug_line    0x00006949      0x541 CMakeFiles/simple_photo_frame.dir/button.c.o
- .debug_line    0x00006e8a       0xa7 CMakeFiles/simple_photo_frame.dir/font.c.o
- .debug_line    0x00006f31     0x7b29 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
- .debug_line    0x0000ea5a      0x2cb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
- .debug_line    0x0000ed25     0x1bb9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
- .debug_line    0x000108de      0x22c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
- .debug_line    0x00010b0a      0x82a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
- .debug_line    0x00011334      0x3e5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
- .debug_line    0x00011719      0x372 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
- .debug_line    0x00011a8b     0x178e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
- .debug_line    0x00013219      0xa4e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
- .debug_line    0x00013c67      0x22f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
- .debug_line    0x00013e96     0x127d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
- .debug_line    0x00015113      0x38e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
- .debug_line    0x000154a1     0x2e5c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
- .debug_line    0x000182fd     0x1e53 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
- .debug_line    0x0001a150     0x1eb7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
- .debug_line    0x0001c007      0x4d7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
- .debug_line    0x0001c4de      0x9f0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
- .debug_line    0x0001cece      0x308 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
- .debug_line    0x0001d1d6      0xb01 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
- .debug_line    0x0001dcd7      0x3ab CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
- .debug_line    0x0001e082      0x3f5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
- .debug_line    0x0001e477      0x33c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
- .debug_line    0x0001e7b3      0x2d8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
- .debug_line    0x0001ea8b      0x701 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
- .debug_line    0x0001f18c      0x5ab CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
- .debug_line    0x0001f737      0x28f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
- .debug_line    0x0001f9c6      0x1a5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
- .debug_line    0x0001fb6b     0x198a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
- .debug_line    0x000214f5       0x9e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
- .debug_line    0x00021593      0x87a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
- .debug_line    0x00021e0d     0x14e5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
- .debug_line    0x000232f2      0x4fb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
- .debug_line    0x000237ed     0x11da CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
- .debug_line    0x000249c7      0x39b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
- .debug_line    0x00024d62      0x6ab CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
- .debug_line    0x0002540d     0x1eb3 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
- .debug_line    0x000272c0      0xc93 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
- .debug_line    0x00027f53     0x2693 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
- .debug_line    0x0002a5e6      0x65a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
- .debug_line    0x0002ac40     0x1007 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
- .debug_line    0x0002bc47      0xa34 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
- .debug_line    0x0002c67b     0x12f3 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
- .debug_line    0x0002d96e     0x188e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
- .debug_line    0x0002f1fc     0x11d4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
- .debug_line    0x000303d0      0xd98 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
- .debug_line    0x00031168      0x5d0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
- .debug_line    0x00031738     0x37e0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
- .debug_line    0x00034f18     0x4a90 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
- .debug_line    0x000399a8     0x1809 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
- .debug_line    0x0003b1b1     0x1dd4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
- .debug_line    0x0003cf85      0x736 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
- .debug_line    0x0003d6bb      0xe56 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
- .debug_line    0x0003e511      0xdd2 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
- .debug_line    0x0003f2e3      0x829 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
- .debug_line    0x0003fb0c       0x4e /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_aeabi_uldivmod.o)
- .debug_line    0x0003fb5a      0x55e /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_udivmoddi4.o)
- .debug_line    0x000400b8       0x4a /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_dvmd_tls.o)
- .debug_line    0x00040102      0x1b6 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memset.o)
- .debug_line    0x000402b8      0x1d9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strchr.o)
- .debug_line    0x00040491       0xdd /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
- .debug_line    0x0004056e      0x106 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-stpcpy.o)
- .debug_line    0x00040674      0x16c /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcmp.o)
- .debug_line    0x000407e0       0xe8 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strrchr.o)
- .debug_line    0x000408c8       0xbd /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
- .debug_line    0x00040985       0x97 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-ctype_.o)
- .debug_line    0x00040a1c       0xc3 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-atexit.o)
- .debug_line    0x00040adf       0xf4 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strlen-stub.o)
- .debug_line    0x00040bd3       0xb9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcpy.o)
- .debug_line    0x00040c8c       0xd2 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-fini.o)
- .debug_line    0x00040d5e      0x154 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__atexit.o)
- .debug_line    0x00040eb2      0x27f /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__call_atexit.o)
+.debug_line     0x00000000    0x4111b
+ .debug_line    0x00000000     0x1030 CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.o
+ .debug_line    0x00001030      0x852 CMakeFiles/simple_photo_frame.dir/lcd_console.c.o
+ .debug_line    0x00001882     0x12bc CMakeFiles/simple_photo_frame.dir/sdcard.c.o
+ .debug_line    0x00002b3e      0x3ea CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.o
+ .debug_line    0x00002f28     0x2501 CMakeFiles/simple_photo_frame.dir/tjpgd.c.o
+ .debug_line    0x00005429      0xaeb CMakeFiles/simple_photo_frame.dir/fpga_io.c.o
+ .debug_line    0x00005f14      0x1ad CMakeFiles/simple_photo_frame.dir/vram_accessor.c.o
+ .debug_line    0x000060c1      0x878 CMakeFiles/simple_photo_frame.dir/display_controller.c.o
+ .debug_line    0x00006939      0x53f CMakeFiles/simple_photo_frame.dir/button.c.o
+ .debug_line    0x00006e78       0xa5 CMakeFiles/simple_photo_frame.dir/font.c.o
+ .debug_line    0x00006f1d     0x7b29 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
+ .debug_line    0x0000ea46      0x2cb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
+ .debug_line    0x0000ed11     0x1bb9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
+ .debug_line    0x000108ca      0x22c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
+ .debug_line    0x00010af6      0x82a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
+ .debug_line    0x00011320      0x3e5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
+ .debug_line    0x00011705      0x372 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+ .debug_line    0x00011a77     0x178e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
+ .debug_line    0x00013205      0xa4e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
+ .debug_line    0x00013c53      0x22f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
+ .debug_line    0x00013e82     0x127d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
+ .debug_line    0x000150ff      0x38e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
+ .debug_line    0x0001548d     0x2e5c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
+ .debug_line    0x000182e9     0x1e53 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
+ .debug_line    0x0001a13c     0x1eb7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
+ .debug_line    0x0001bff3      0x4d7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
+ .debug_line    0x0001c4ca      0x9f0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
+ .debug_line    0x0001ceba      0x308 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
+ .debug_line    0x0001d1c2      0xb01 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
+ .debug_line    0x0001dcc3      0x3ab CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+ .debug_line    0x0001e06e      0x3f5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+ .debug_line    0x0001e463      0x33c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
+ .debug_line    0x0001e79f      0x2d8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
+ .debug_line    0x0001ea77      0x701 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
+ .debug_line    0x0001f178      0x5ab CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+ .debug_line    0x0001f723      0x28f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+ .debug_line    0x0001f9b2      0x1a5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+ .debug_line    0x0001fb57     0x198a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
+ .debug_line    0x000214e1       0x9e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
+ .debug_line    0x0002157f      0x87a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+ .debug_line    0x00021df9     0x14e5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
+ .debug_line    0x000232de      0x4fb CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+ .debug_line    0x000237d9     0x11da CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+ .debug_line    0x000249b3      0x39b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+ .debug_line    0x00024d4e      0x6ab CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
+ .debug_line    0x000253f9     0x1eb3 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+ .debug_line    0x000272ac      0xc93 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+ .debug_line    0x00027f3f     0x2693 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
+ .debug_line    0x0002a5d2      0x65a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
+ .debug_line    0x0002ac2c     0x1007 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
+ .debug_line    0x0002bc33      0xa34 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
+ .debug_line    0x0002c667     0x12f3 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
+ .debug_line    0x0002d95a     0x188e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
+ .debug_line    0x0002f1e8     0x11d4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
+ .debug_line    0x000303bc      0xd98 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
+ .debug_line    0x00031154      0x5d0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
+ .debug_line    0x00031724     0x37de CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
+ .debug_line    0x00034f02     0x4a90 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
+ .debug_line    0x00039992     0x1809 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
+ .debug_line    0x0003b19b     0x1dd4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
+ .debug_line    0x0003cf6f      0x736 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
+ .debug_line    0x0003d6a5      0xe56 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
+ .debug_line    0x0003e4fb      0xdd2 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
+ .debug_line    0x0003f2cd      0x829 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
+ .debug_line    0x0003faf6       0x4e /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_aeabi_uldivmod.o)
+ .debug_line    0x0003fb44      0x55e /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_udivmoddi4.o)
+ .debug_line    0x000400a2       0x4a /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_dvmd_tls.o)
+ .debug_line    0x000400ec      0x1b6 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memset.o)
+ .debug_line    0x000402a2      0x1d9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strchr.o)
+ .debug_line    0x0004047b       0xdd /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
+ .debug_line    0x00040558      0x106 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-stpcpy.o)
+ .debug_line    0x0004065e      0x16c /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcmp.o)
+ .debug_line    0x000407ca       0xe8 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strrchr.o)
+ .debug_line    0x000408b2       0xbd /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
+ .debug_line    0x0004096f       0x97 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-ctype_.o)
+ .debug_line    0x00040a06       0xc3 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-atexit.o)
+ .debug_line    0x00040ac9       0xf4 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strlen-stub.o)
+ .debug_line    0x00040bbd       0xb9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcpy.o)
+ .debug_line    0x00040c76       0xd2 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-fini.o)
+ .debug_line    0x00040d48      0x154 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__atexit.o)
+ .debug_line    0x00040e9c      0x27f /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__call_atexit.o)
 
-.debug_str      0x00000000     0xeb26
- .debug_str     0x00000000     0xeb26 CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.o
-                               0x104e (size before relaxing)
- .debug_str     0x0000eb26      0x9b1 CMakeFiles/simple_photo_frame.dir/lcd_console.c.o
- .debug_str     0x0000eb26      0xef5 CMakeFiles/simple_photo_frame.dir/sdcard.c.o
- .debug_str     0x0000eb26      0x6c1 CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.o
- .debug_str     0x0000eb26      0x3d2 CMakeFiles/simple_photo_frame.dir/tjpgd.c.o
- .debug_str     0x0000eb26      0x9bb CMakeFiles/simple_photo_frame.dir/fpga_io.c.o
- .debug_str     0x0000eb26      0x263 CMakeFiles/simple_photo_frame.dir/vram_accessor.c.o
- .debug_str     0x0000eb26      0x505 CMakeFiles/simple_photo_frame.dir/display_controller.c.o
- .debug_str     0x0000eb26      0x511 CMakeFiles/simple_photo_frame.dir/button.c.o
- .debug_str     0x0000eb26      0x1c4 CMakeFiles/simple_photo_frame.dir/font.c.o
- .debug_str     0x0000eb26      0x854 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
- .debug_str     0x0000eb26      0x21a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
- .debug_str     0x0000eb26      0xd33 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
- .debug_str     0x0000eb26      0x238 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
- .debug_str     0x0000eb26      0x395 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
- .debug_str     0x0000eb26      0x340 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
- .debug_str     0x0000eb26      0xbe1 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
- .debug_str     0x0000eb26      0xc42 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
- .debug_str     0x0000eb26      0x503 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
- .debug_str     0x0000eb26      0x23d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
- .debug_str     0x0000eb26      0x8dc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
- .debug_str     0x0000eb26      0x306 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
- .debug_str     0x0000eb26     0x12ef CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
- .debug_str     0x0000eb26      0xb9f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
- .debug_str     0x0000eb26      0xb8d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
- .debug_str     0x0000eb26      0x4b7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
- .debug_str     0x0000eb26      0x74d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
- .debug_str     0x0000eb26      0x2e4 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
- .debug_str     0x0000eb26      0x969 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
- .debug_str     0x0000eb26      0x2cc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
- .debug_str     0x0000eb26      0x2aa CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
- .debug_str     0x0000eb26      0x25d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
- .debug_str     0x0000eb26      0x2be CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
- .debug_str     0x0000eb26     0x1237 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
- .debug_str     0x0000eb26      0x4ff CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
- .debug_str     0x0000eb26       0xbc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
- .debug_str     0x0000eb26      0x40e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
- .debug_str     0x0000eb26      0x4ba CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
- .debug_str     0x0000eb26       0xae CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
- .debug_str     0x0000eb26      0x8c9 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
- .debug_str     0x0000eb26      0xc4b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
- .debug_str     0x0000eb26      0xf64 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
- .debug_str     0x0000eb26     0x1042 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
- .debug_str     0x0000eb26     0x111d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
- .debug_str     0x0000eb26      0x2b1 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
- .debug_str     0x0000eb26     0x13d8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
- .debug_str     0x0000eb26      0xbcf CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
- .debug_str     0x0000eb26     0x1c6a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
- .debug_str     0x0000eb26      0x806 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
- .debug_str     0x0000eb26     0x1883 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
- .debug_str     0x0000eb26      0xf65 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
- .debug_str     0x0000eb26      0xf4d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
- .debug_str     0x0000eb26      0x636 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
- .debug_str     0x0000eb26      0x77a CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
- .debug_str     0x0000eb26      0xf75 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
- .debug_str     0x0000eb26      0xbff CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
- .debug_str     0x0000eb26     0x2096 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
- .debug_str     0x0000eb26     0x15ea CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
- .debug_str     0x0000eb26     0x1359 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
- .debug_str     0x0000eb26     0x11b2 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
- .debug_str     0x0000eb26      0x677 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
- .debug_str     0x0000eb26     0x102f CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
- .debug_str     0x0000eb26     0x1044 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
- .debug_str     0x0000eb26      0x600 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
- .debug_str     0x0000eb26       0xa9 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_aeabi_uldivmod.o)
- .debug_str     0x0000eb26      0x691 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_udivmoddi4.o)
- .debug_str     0x0000eb26       0xc9 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_dvmd_tls.o)
- .debug_str     0x0000eb26      0x1b6 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memset.o)
- .debug_str     0x0000eb26      0x1ad /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strchr.o)
- .debug_str     0x0000eb26       0xad /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
- .debug_str     0x0000eb26      0x1b3 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-stpcpy.o)
- .debug_str     0x0000eb26      0x1a2 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcmp.o)
- .debug_str     0x0000eb26      0x1a9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strrchr.o)
- .debug_str     0x0000eb26       0xad /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
- .debug_str     0x0000eb26      0x19b /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-ctype_.o)
- .debug_str     0x0000eb26      0x1df /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-atexit.o)
- .debug_str     0x0000eb26      0x1ac /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strlen-stub.o)
- .debug_str     0x0000eb26      0x1a0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcpy.o)
- .debug_str     0x0000eb26      0x1d9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-fini.o)
- .debug_str     0x0000eb26      0x24a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__atexit.o)
- .debug_str     0x0000eb26      0x26c /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__call_atexit.o)
+.debug_str      0x00000000     0xeb10
+ .debug_str     0x00000000     0xeb10 CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.o
+                               0x104a (size before relaxing)
+ .debug_str     0x0000eb10      0x9ad CMakeFiles/simple_photo_frame.dir/lcd_console.c.o
+ .debug_str     0x0000eb10      0xef1 CMakeFiles/simple_photo_frame.dir/sdcard.c.o
+ .debug_str     0x0000eb10      0x6bd CMakeFiles/simple_photo_frame.dir/jpeg_decoder.c.o
+ .debug_str     0x0000eb10      0x3ce CMakeFiles/simple_photo_frame.dir/tjpgd.c.o
+ .debug_str     0x0000eb10      0x9b7 CMakeFiles/simple_photo_frame.dir/fpga_io.c.o
+ .debug_str     0x0000eb10      0x25f CMakeFiles/simple_photo_frame.dir/vram_accessor.c.o
+ .debug_str     0x0000eb10      0x501 CMakeFiles/simple_photo_frame.dir/display_controller.c.o
+ .debug_str     0x0000eb10      0x50d CMakeFiles/simple_photo_frame.dir/button.c.o
+ .debug_str     0x0000eb10      0x1c0 CMakeFiles/simple_photo_frame.dir/font.c.o
+ .debug_str     0x0000eb10      0x852 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ff.c.o
+ .debug_str     0x0000eb10      0x218 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/lib/fatfs/source/ffunicode.c.o
+ .debug_str     0x0000eb10      0xd31 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
+ .debug_str     0x0000eb10      0x236 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
+ .debug_str     0x0000eb10      0x393 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/hardware_claim/claim.c.o
+ .debug_str     0x0000eb10      0x33e CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
+ .debug_str     0x0000eb10      0xbdf CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+ .debug_str     0x0000eb10      0xc40 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
+ .debug_str     0x0000eb10      0x501 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/sem.c.o
+ .debug_str     0x0000eb10      0x23b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/lock_core.c.o
+ .debug_str     0x0000eb10      0x8da CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/mutex.c.o
+ .debug_str     0x0000eb10      0x304 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_sync/critical_section.c.o
+ .debug_str     0x0000eb10     0x12ed CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/common/pico_time/time.c.o
+ .debug_str     0x0000eb10      0xb9d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
+ .debug_str     0x0000eb10      0xb8b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
+ .debug_str     0x0000eb10      0x4b5 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
+ .debug_str     0x0000eb10      0x74b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
+ .debug_str     0x0000eb10      0x2e2 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
+ .debug_str     0x0000eb10      0x967 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
+ .debug_str     0x0000eb10      0x2ca CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+ .debug_str     0x0000eb10      0x2a8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+ .debug_str     0x0000eb10      0x25b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
+ .debug_str     0x0000eb10      0x2bc CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
+ .debug_str     0x0000eb10     0x1235 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
+ .debug_str     0x0000eb10      0x4fd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+ .debug_str     0x0000eb10       0xba CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+ .debug_str     0x0000eb10      0x40c CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+ .debug_str     0x0000eb10      0x4b8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_printf/printf.c.o
+ .debug_str     0x0000eb10       0xac CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
+ .debug_str     0x0000eb10      0x8c7 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+ .debug_str     0x0000eb10      0xc49 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
+ .debug_str     0x0000eb10      0xf62 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+ .debug_str     0x0000eb10     0x1040 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+ .debug_str     0x0000eb10     0x111b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+ .debug_str     0x0000eb10      0x2af CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
+ .debug_str     0x0000eb10     0x13d6 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+ .debug_str     0x0000eb10      0xbcd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+ .debug_str     0x0000eb10     0x1c68 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd.c.o
+ .debug_str     0x0000eb10      0x804 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/device/usbd_control.c.o
+ .debug_str     0x0000eb10     0x1881 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.o
+ .debug_str     0x0000eb10      0xf63 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.o
+ .debug_str     0x0000eb10      0xf4b CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/tusb.c.o
+ .debug_str     0x0000eb10      0x634 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.o
+ .debug_str     0x0000eb10      0x778 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
+ .debug_str     0x0000eb10      0xf73 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch.c.o
+ .debug_str     0x0000eb10      0xbfd CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_arch/cyw43_arch_threadsafe_background.c.o
+ .debug_str     0x0000eb10     0x2094 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_bus_pio_spi.c.o
+ .debug_str     0x0000eb10     0x15e8 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ll.c.o
+ .debug_str     0x0000eb10     0x1357 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/lib/cyw43-driver/src/cyw43_ctrl.c.o
+ .debug_str     0x0000eb10     0x11b0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
+ .debug_str     0x0000eb10      0x675 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
+ .debug_str     0x0000eb10     0x102d CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
+ .debug_str     0x0000eb10     0x1042 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
+ .debug_str     0x0000eb10      0x5fe CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
+ .debug_str     0x0000eb10       0xa9 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_aeabi_uldivmod.o)
+ .debug_str     0x0000eb10      0x691 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_udivmoddi4.o)
+ .debug_str     0x0000eb10       0xc9 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_dvmd_tls.o)
+ .debug_str     0x0000eb10      0x1b6 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memset.o)
+ .debug_str     0x0000eb10      0x1ad /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strchr.o)
+ .debug_str     0x0000eb10       0xad /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
+ .debug_str     0x0000eb10      0x1b3 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-stpcpy.o)
+ .debug_str     0x0000eb10      0x1a2 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcmp.o)
+ .debug_str     0x0000eb10      0x1a9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strrchr.o)
+ .debug_str     0x0000eb10       0xad /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
+ .debug_str     0x0000eb10      0x19b /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-ctype_.o)
+ .debug_str     0x0000eb10      0x1df /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-atexit.o)
+ .debug_str     0x0000eb10      0x1ac /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strlen-stub.o)
+ .debug_str     0x0000eb10      0x1a0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcpy.o)
+ .debug_str     0x0000eb10      0x1d9 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-fini.o)
+ .debug_str     0x0000eb10      0x24a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__atexit.o)
+ .debug_str     0x0000eb10      0x26c /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__call_atexit.o)
 
 .debug_frame    0x00000000     0x5bcc
  .debug_frame   0x00000000      0x1b8 CMakeFiles/simple_photo_frame.dir/simple_photo_frame.c.o
@@ -6309,17 +6309,17 @@ LOAD linker stubs
  .debug_frame   0x00005b78       0x54 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-__call_atexit.o)
 
 .debug_line_str
-                0x00000000      0x255
+                0x00000000      0x253
  .debug_line_str
-                0x00000000      0x255 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
-                                 0xb0 (size before relaxing)
+                0x00000000      0x253 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+                                 0xae (size before relaxing)
  .debug_line_str
-                0x00000255       0xa2 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
+                0x00000253       0xa0 CMakeFiles/simple_photo_frame.dir/mnt/c/Users/hra/Documents/github/OTHERS/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
  .debug_line_str
-                0x00000255       0x9d /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_aeabi_uldivmod.o)
+                0x00000253       0x9d /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_aeabi_uldivmod.o)
  .debug_line_str
-                0x00000255       0xa1 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_dvmd_tls.o)
+                0x00000253       0xa1 /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_dvmd_tls.o)
  .debug_line_str
-                0x00000255       0x9a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
+                0x00000253       0x9a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
  .debug_line_str
-                0x00000255       0x9a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
+                0x00000253       0x9a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
