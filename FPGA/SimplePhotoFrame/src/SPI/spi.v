@@ -72,7 +72,6 @@ module spi (
 	wire			w_spi_start;
 	wire			w_spi_shift;
 	reg		[7:0]	ff_spi_data;
-//	reg		[7:0]	ff_spi_data_c1;
 
 	//	TX load event CDC (clk_serial -> clk)
 	reg				ff_tx_load_toggle_serial;
@@ -145,7 +144,7 @@ module spi (
 	end
 
 	assign spi_ready		= ff_spi_ready;
-	assign spi_rdata		= ff_spi_data;	//_c1;
+	assign spi_rdata		= ff_spi_data;
 	assign spi_rdata_en		= w_byte_finished & ~ff_send;
 
 	assign w_spi_tx_load_event = w_spi_start & ff_send;
@@ -218,11 +217,9 @@ module spi (
 	always @( posedge clk_serial ) begin
 		if( !reset_n ) begin
 			ff_spi_data <= 8'd0;
-//			ff_spi_data_c1 <= 8'd0;
 		end
 		else if( ff_spi_cs_n ) begin
 			ff_spi_data <= 8'd0;
-//			ff_spi_data_c1 <= 8'd0;
 		end
 		else if( w_spi_start ) begin
 			ff_spi_data <= ff_send_data;
@@ -234,7 +231,6 @@ module spi (
 			end
 			else if( !ff_send && w_spi_clk_rising_edge ) begin
 				//	受信モード
-//				ff_spi_data_c1 <= { ff_spi_data_c1[6:0], ff_spi_mosi };
 				ff_spi_data <= { ff_spi_data[6:0], ff_spi_mosi };
 			end
 		end

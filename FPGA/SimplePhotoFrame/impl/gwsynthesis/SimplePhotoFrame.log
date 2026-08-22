@@ -5,7 +5,7 @@ Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\SimplePhotoFra
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\Cache\cache.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\Cache\cache_line.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v'
-Undeclared symbol 'w_issue_accept', assumed default net type 'wire'("C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v":103)
+Undeclared symbol 'w_issue_accept', assumed default net type 'wire'("C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\DisplayController\display_address_generator.v":102)
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\DisplayController\display_controller.v'
 Analyzing Verilog file 'C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\DisplayController\display_fillcolor_generator.v'
 WARN  (EX3792) : Literal value 'd8 truncated to fit in 3 bits("C:\Users\hra\Documents\github\HRA_product\SimplePhotoFrame\FPGA\SimplePhotoFrame\src\DisplayController\display_fillcolor_generator.v":25)

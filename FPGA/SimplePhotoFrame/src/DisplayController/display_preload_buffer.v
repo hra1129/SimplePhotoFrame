@@ -75,7 +75,7 @@ module display_preload_buffer #(
 	//	書き込みポインタ / 読み出しポインタ
 	//	bit[10:1]: SRAM アドレス, bit[0]: SRAM0/1 選択
 	// -------------------------------------------------------------------------
-	reg		[10:0]	ff_wr_ptr;						/* synthesis syn_preserve = 1 */	// {wrap, addr[9:0]}	偶奇で SRAM0/1 を選択
+	reg		[10:0]	ff_wr_ptr;					/* synthesis syn_preserve = 1 */	// {wrap, addr[9:0]}	偶奇で SRAM0/1 を選択
 	reg		[10:0]	ff_wr_ptr_c1;				/* synthesis syn_preserve = 1 */
 	reg		[10:0]	ff_rd_ptr;					// 同上
 	reg		[11:0]	ff_count;

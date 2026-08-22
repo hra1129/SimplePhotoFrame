@@ -92,14 +92,13 @@ module display_address_generator (
 	reg		[22:5]	ff_base_address;
 	reg				ff_base_address_valid;
 	reg				ff_display_on;
-	reg				ff_frame_head_holdoff;
 	reg				ff_wait_frame_sync;
 	reg				reg_frame_end_wait;
 	wire			w_issue_enable;
 	wire			w_valid;
 	wire	[22:5]	w_sdram_address;
 
-	assign w_issue_enable		= ~ff_frame_head_holdoff && ~ff_wait_frame_sync;
+	assign w_issue_enable		= ~ff_wait_frame_sync;
 	assign w_issue_accept		= w_issue_enable && sdram_address_ready;
 	assign w_valid				= w_issue_enable;
 	assign w_sdram_address		= ff_base_address + { ff_v_counter, 6'd0 } + ff_h_counter;
@@ -232,18 +231,6 @@ module display_address_generator (
 					ff_v_counter <= ff_v_counter + V_COUNTER_ONE;
 				end
 			end 
-		end
-	end
-
-	always @( posedge clk ) begin
-		if( reset ) begin
-			ff_frame_head_holdoff <= 1'b0;
-		end
-		else if( ff_frame_head_holdoff ) begin
-			ff_frame_head_holdoff <= 1'b0;
-		end
-		else if( w_issue_accept && (ff_h_counter == H_COUNTER_MAX) && (ff_v_counter == V_COUNTER_MAX) && reg_display_on ) begin
-			ff_frame_head_holdoff <= 1'b1;
 		end
 	end
 
